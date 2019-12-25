@@ -24,25 +24,16 @@ SOFTWARE.
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace EasyCardFileProfessional
+namespace EasyCardFileProfessional.Database.Entity
 {
-    static class Program
+    /// <summary>
+    /// An interface for an entity.
+    /// </summary>
+    interface IEntity
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// Gets or sets the identifier for the entity.
         /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
-        }
+        int Id { get; set; }
     }
 }

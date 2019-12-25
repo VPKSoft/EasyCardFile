@@ -24,25 +24,32 @@ SOFTWARE.
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.ComponentModel.DataAnnotations;
 
-namespace EasyCardFileProfessional
+namespace EasyCardFileProfessional.Database.Entity.Entities
 {
-    static class Program
+    /// <summary>
+    /// A class to save the license of the software to the database.
+    /// Implements the <see cref="IEntity" />
+    /// </summary>
+    public class SoftwareLicense: IEntity
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// Gets or sets the identifier for the entity.
         /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
-        }
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the license text.
+        /// </summary>
+        [Required]
+        public string LicenseText { get; set; }
+
+        /// <summary>
+        /// Gets or sets the license SPDX identifier.
+        /// See: https://spdx.org/licenses/
+        /// </summary>
+        [Required]
+        public string LicenseSpdxIdentifier { get; set; }
     }
 }

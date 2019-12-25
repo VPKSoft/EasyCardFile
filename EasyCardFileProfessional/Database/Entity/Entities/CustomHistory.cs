@@ -25,24 +25,36 @@ SOFTWARE.
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using SQLite.CodeFirst;
 
-namespace EasyCardFileProfessional
+namespace EasyCardFileProfessional.Database.Entity.Entities
 {
-    static class Program
+    /// <summary>
+    /// A history class which was used in a sample from the SQLite CodeFirst sample (https://github.com/msallin/SQLiteCodeFirst/tree/master/SQLite.CodeFirst.Console).
+    /// The use of this class is unknown to me an I'll let it be that way.
+    /// Implements the <see cref="SQLite.CodeFirst.IHistory" />
+    /// </summary>
+    /// <seealso cref="SQLite.CodeFirst.IHistory" />
+    public class CustomHistory: IHistory
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// Gets or sets the identifier for the entity.
         /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
-        }
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the change (?) hash algorithm value as string.
+        /// </summary>
+        public string Hash { get; set; }
+
+        /// <summary>
+        /// Gets or sets the database context type name (SQLiteEntityFramework.SQLiteDbContext).
+        /// </summary>
+        public string Context { get; set; }
+
+        /// <summary>
+        /// Gets or sets the create date.
+        /// </summary>
+        public DateTime CreateDate { get; set; }
     }
 }

@@ -24,25 +24,28 @@ SOFTWARE.
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace EasyCardFileProfessional
+namespace EasyCardFileProfessional.Database.Entity.Entities
 {
-    static class Program
+    /// <summary>
+    /// A class representing a single template for a card file card in the database.
+    /// Implements the <see cref="EasyCardFileProfessional.Database.Entity.IEntity" />
+    /// </summary>
+    /// <seealso cref="EasyCardFileProfessional.Database.Entity.IEntity" />
+    public class CardTemplate: IEntity
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// Gets or sets the identifier for the entity.
         /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
-        }
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the card template.
+        /// </summary>
+        public string CardTemplateName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the card template contents in RTF format.
+        /// </summary>
+        public byte [] CardTemplateContents { get; set; }
     }
 }

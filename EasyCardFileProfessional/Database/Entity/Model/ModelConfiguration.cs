@@ -24,25 +24,37 @@ SOFTWARE.
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Data.Entity;
+using EasyCardFileProfessional.Database.Entity.Entities;
 
-namespace EasyCardFileProfessional
+namespace EasyCardFileProfessional.Database.Entity.Model
 {
-    static class Program
+    /// <summary>
+    /// A class to configure the Code First Entity Framework model.
+    /// </summary>
+    public class ModelConfiguration
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// Configures the specified model builder.
         /// </summary>
-        [STAThread]
-        static void Main()
+        /// <param name="modelBuilder">The model builder.</param>
+        public static void Configure(DbModelBuilder modelBuilder)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
+            ConfigureSimpleEntity<CardFile>(modelBuilder);
+            ConfigureSimpleEntity<Card>(modelBuilder);
+            ConfigureSimpleEntity<CardType>(modelBuilder);
+            ConfigureSimpleEntity<CardTemplate>(modelBuilder);
+            ConfigureSimpleEntity<SoftwareLicense>(modelBuilder);
+        }
+
+        /// <summary>
+        /// Configures a simple entity.
+        /// </summary>
+        /// <typeparam name="T">The entity type.</typeparam>
+        /// <param name="modelBuilder">The model builder to use for the configuration.</param>
+        private static void ConfigureSimpleEntity<T>(DbModelBuilder modelBuilder) where T : class
+        {
+            modelBuilder.Entity<T>();
         }
     }
 }

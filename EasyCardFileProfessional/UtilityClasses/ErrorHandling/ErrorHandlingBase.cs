@@ -25,24 +25,17 @@ SOFTWARE.
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace EasyCardFileProfessional
+namespace EasyCardFileProfessional.UtilityClasses.ErrorHandling
 {
-    static class Program
+    /// <summary>
+    /// A class from which a classes logging errors should be derived from.
+    /// </summary>
+    public class ErrorHandlingBase
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// Gets or sets the action to be used to log an exception.
         /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
-        }
+        public static Action<Exception> ExceptionLogAction { get; set; } = null;
     }
 }

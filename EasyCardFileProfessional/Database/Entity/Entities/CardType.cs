@@ -24,25 +24,25 @@ SOFTWARE.
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using SQLite.CodeFirst;
 
-namespace EasyCardFileProfessional
+namespace EasyCardFileProfessional.Database.Entity.Entities
 {
-    static class Program
+    /// <summary>
+    /// A class representing a single card type in the database.
+    /// Implements the <see cref="IEntity" />
+    /// </summary>
+    public class CardType: IEntity
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// Gets or sets the identifier for the entity.
         /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
-        }
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the card type.
+        /// </summary>
+        [Unique]
+        public string CardTypeName { get; set; }
     }
 }
