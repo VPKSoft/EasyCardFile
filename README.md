@@ -7,3 +7,8 @@ This should replace an already discontinued software called [Easy Cardfile Profe
 
 *An early screenshot*
 ![image](https://user-images.githubusercontent.com/40712699/71476632-a6a8c700-27ee-11ea-8ed0-273c264ef072.png)
+
+### Thanks to
+* JetBrains for their open source license(s)
+
+![JetBrains](http://www.vpksoft.net/site/External/JetBrains/jetbrains.svg)
