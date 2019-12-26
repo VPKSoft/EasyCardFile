@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("LegacySupportQTVersion")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A support library for the old Easy Cardfile Professional from year 2008.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("VPKSoft")]
 [assembly: AssemblyProduct("LegacySupportQTVersion")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCopyright("Copyright © VPKSoft 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

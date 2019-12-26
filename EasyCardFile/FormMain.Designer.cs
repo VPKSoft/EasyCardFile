@@ -137,12 +137,12 @@
             // 
             // odCardFileLegacy
             // 
-            this.odCardFileLegacy.Filter = "Eeasy CardFile Professional legacy files|*.ecfp";
+            this.odCardFileLegacy.Filter = "Eeasy Cardfile Professional legacy files|*.ecfp";
             // 
             // sdCardFile
             // 
             this.sdCardFile.DefaultExt = "*.ecfpf";
-            this.sdCardFile.Filter = "Easy CardFile Professional files|*.ecfpf";
+            this.sdCardFile.Filter = "Easy CardFile files|*.ecff";
             this.sdCardFile.SupportMultiDottedExtensions = true;
             // 
             // odCardFile
