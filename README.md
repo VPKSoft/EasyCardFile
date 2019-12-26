@@ -1,7 +1,8 @@
 # EasyCardFile
 A Card file software renewed.
 
-## This should replace an already discontinued software called [Easy Cardfile Professional](https://www.vpksoft.net/2015-03-31-13-33-28/2015-04-06-13-11-50/easy-cardfile-professional) from the beginning of the year 2008. So about 12 years old software.
+## About
+This should replace an already discontinued software called [Easy Cardfile Professional](https://www.vpksoft.net/2015-03-31-13-33-28/2015-04-06-13-11-50/easy-cardfile-professional) from the beginning of the year 2008. So about 12 years old software.
 * This is in alpha phase, thus useless at the time.
 
 *An early screenshot*
