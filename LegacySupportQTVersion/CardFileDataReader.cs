@@ -294,7 +294,6 @@ namespace LegacySupportQTVersion
                                     cardType,
                                     HtmlToRtfConverter.ConvertHtmlToRtf(Encoding.UTF8.GetString(cardContents)),
                                     reader.GetInt32(3) == 1);
-
                             }
                             else
                             {

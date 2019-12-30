@@ -25,14 +25,12 @@ SOFTWARE.
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity;
 using System.Data.SQLite;
 using System.Linq;
 using EasyCardFile.Database.Entity.Entities;
 using EasyCardFile.Database.Entity.Model;
-using EasyCardFile.Database.Entity.ModelHelpers;
 using EasyCardFile.UtilityClasses.ErrorHandling;
 
 namespace EasyCardFile.Database.Entity.Context
@@ -183,10 +181,10 @@ namespace EasyCardFile.Database.Entity.Context
         public DbSet<CardFile> CardFiles { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="Card"/> instances in the database.
+        /// Gets the card file.
         /// </summary>
-        public DbSet<Card> Cards { get; set; }
-
+        public CardFile CardFile => CardFiles.FirstOrDefault();
+        
         /// <summary>
         /// Gets or sets the <see cref="CardTemplate"/> instances in the database.
         /// </summary>
@@ -196,17 +194,5 @@ namespace EasyCardFile.Database.Entity.Context
         /// Gets or sets the <see cref="CardType"/> instances in the database.
         /// </summary>
         public DbSet<CardType> CardTypes { get; set; }
-
-        /// <summary>
-        /// Gets the card name and the identifier.
-        /// </summary>
-        /// <returns>IEnumerable&lt;NameIdPair&gt; containing the requested values.</returns>
-        public IEnumerable<NameIdOrdering> GetCardNameId()
-        {
-            foreach (var card in Cards.Select(f => new { f.Id, f.CardName, f.Ordering}).OrderBy(f => f.Ordering))
-            {
-                yield return new NameIdOrdering {Id = card.Id, Name = card.CardName, Ordering = card.Ordering};
-            }
-        }
     }
 }

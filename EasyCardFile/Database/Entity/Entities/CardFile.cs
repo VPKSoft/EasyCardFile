@@ -48,7 +48,7 @@ namespace EasyCardFile.Database.Entity.Entities
         /// <summary>
         /// Gets or sets the cards belonging to the card file.
         /// </summary>
-        public ICollection<Card> Cards { get; set; }
+        public virtual ICollection<Card> Cards { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the card file is encrypted.

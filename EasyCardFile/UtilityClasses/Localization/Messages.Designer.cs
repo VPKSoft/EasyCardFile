@@ -61,6 +61,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Card type:|A description text for a card type selection combo box..
+        /// </summary>
+        internal static string msgCardTypeDescription {
+            get {
+                return ResourceManager.GetString("msgCardTypeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The file is encrypted, please give a password.|A message indicating file encryption. A password is requested from the user..
         /// </summary>
         internal static string msgEncryptionGiveAPassword {
@@ -75,6 +84,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         internal static string msgError {
             get {
                 return ResourceManager.GetString("msgError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [•]|An indicator text to be used with the card file&apos;s file name to indicate that the file has been changed..
+        /// </summary>
+        internal static string msgFileChangedIndicatorText {
+            get {
+                return ResourceManager.GetString("msgFileChangedIndicatorText", resourceCulture);
             }
         }
         

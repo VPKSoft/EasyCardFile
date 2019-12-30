@@ -24,6 +24,10 @@ SOFTWARE.
 */
 #endregion
 
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
+using System.Windows.Forms;
+
 namespace EasyCardFile.Database.Entity.Entities
 {
     /// <summary>
@@ -48,6 +52,46 @@ namespace EasyCardFile.Database.Entity.Entities
         /// </summary>
         public byte [] CardContents { get; set; }
 
+        private string cardContentsPlain;
+
+        /// <summary>
+        /// Gets the card contents as plain text for searching purposes.
+        /// </summary>
+        /// <returns>A string containing the cards contents as plain text.</returns>
+        public string GetCardContentsPlain()
+        {
+            return GetCardContentsPlain(false);
+        }
+
+
+        /// <summary>
+        /// Gets the card contents as plain text for searching purposes.
+        /// </summary>
+        /// <returns>A string containing the cards contents as plain text.</returns>
+        public string GetCardContentsPlain(bool reset)
+        {
+            if (cardContentsPlain == null || reset)
+            {
+                if (RichTextBoxConvert == null)
+                {
+                    RichTextBoxConvert = new RichTextBox();
+                }
+
+                RichTextBoxConvert.Rtf = Encoding.UTF8.GetString(CardContents);
+                cardContentsPlain = RichTextBoxConvert.Text;
+                RichTextBoxConvert.Clear();
+                RichTextBoxConvert.ClearUndo();
+            }
+
+            return cardContentsPlain;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="Card"/> has been changed.
+        /// </summary>
+        [NotMapped]
+        public bool Changed { get; set; }
+
         /// <summary>
         /// Gets or sets the type of the card.
         /// </summary>
@@ -59,6 +103,16 @@ namespace EasyCardFile.Database.Entity.Entities
         public int Ordering { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to use word wrap while displaying the card contents.
+        /// </summary>
+        public bool WordWrap { get; set; }
+
+        /// <summary>
+        /// Gets or sets the card file the card belongs to.
+        /// </summary>
+        public virtual CardFile CardFile { get; set; }
+
+        /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
@@ -66,5 +120,7 @@ namespace EasyCardFile.Database.Entity.Entities
         {
             return CardName;
         }
+
+        private static RichTextBox RichTextBoxConvert { get; set; }
     }
 }

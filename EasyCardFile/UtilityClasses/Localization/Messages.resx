@@ -117,11 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="msgCardTypeDescription" xml:space="preserve">
+    <value>Card type:|A description text for a card type selection combo box.</value>
+  </data>
   <data name="msgEncryptionGiveAPassword" xml:space="preserve">
     <value>The file is encrypted, please give a password.|A message indicating file encryption. A password is requested from the user.</value>
   </data>
   <data name="msgError" xml:space="preserve">
     <value>Error|A message describing that some kind of error occurred.</value>
+  </data>
+  <data name="msgFileChangedIndicatorText" xml:space="preserve">
+    <value>[•]|An indicator text to be used with the card file's file name to indicate that the file has been changed.</value>
   </data>
   <data name="msgInvalidPassword" xml:space="preserve">
     <value>The given password was invalid|The user gave an invalid password checked by the software's verification logic.</value>

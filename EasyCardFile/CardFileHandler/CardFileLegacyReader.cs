@@ -25,6 +25,7 @@ SOFTWARE.
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -85,6 +86,11 @@ namespace EasyCardFile.CardFileHandler
                             }
                         }
 
+                        if (File.Exists(saveFileDialog.FileName))
+                        {
+                            File.Delete(saveFileDialog.FileName);
+                        }
+
                         var legacyReader = new CardFileDataReader(openFileDialog.FileName, password);
 
                         var cardFileEntry = legacyReader.GetCardFileData();
@@ -96,8 +102,9 @@ namespace EasyCardFile.CardFileHandler
                         {
                             cardFileNew.CardTypes.Add(new CardType {CardTypeName = cardType});
                         }
+                        cardFileNew.SaveChanges();
 
-                        cardFileNew.CardFiles.Add(new CardFile
+                        var cardFile = new CardFile
                         {
                             Name = cardFileEntry.databaseName,
                             CardNamingInstruction = cardFileEntry.autoLabelInstructions,
@@ -106,22 +113,39 @@ namespace EasyCardFile.CardFileHandler
                             DefaultCardType =
                                 cardFileNew.CardTypes.FirstOrDefault(f =>
                                     f.CardTypeName == cardFileEntry.defaultCardType),
-                        });
+                        };
+
+                        cardFileNew.CardFiles.Add(cardFile);
+
+                        cardFileNew.SaveChanges();
+
+                        cardFile = cardFileNew.CardFiles.FirstOrDefault();
 
                         var ordering = 0;
 
-                        var cards = legacyReader.GetCards();
-                        foreach (var card in cards)
+                        if (cardFile != null)
                         {
-                            cardFileNew.Cards.Add(
-                                new Card
+                            cardFile.Cards = new List<Card>();
+
+                            var cards = legacyReader.GetCards();
+                            foreach (var card in cards)
+                            {
+                                var cardNew = new Card
                                 {
                                     CardName = card.name,
                                     CardType = cardFileNew.CardTypes.FirstOrDefault(f => f.CardTypeName == card.type),
                                     Ordering = ordering++,
                                     CardContents = Encoding.UTF8.GetBytes(card.cardContents),
-                                });
+                                    WordWrap = card.wordWrap,
+                                    CardFile = cardFile,
+                                };
+
+                                //cardFileNew.Cards.Add(cardNew);
+                                cardFile.Cards.Add(cardNew);
+                            }
                         }
+
+                        cardFileNew.SaveChanges();
 
                         var templates = legacyReader.GetTemplates();
                         foreach (var template in templates)

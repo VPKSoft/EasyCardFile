@@ -73,7 +73,7 @@ namespace EasyCardFile.Database.Encryption
                 {
                     using (var reader = new BinaryReader(dataToEncrypt))
                     {
-                        var buffer = new byte [1000000]; // a megabyte should be enough..
+                        var buffer = new byte [BufferSize]; // a megabyte should be enough..
                         int bufferLength;
 
                         writer.Write(aes.IV.Length);
@@ -97,6 +97,52 @@ namespace EasyCardFile.Database.Encryption
         }
 
         /// <summary>
+        /// Encrypts the given data <see cref="byte"/> array.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="dataToEncrypt">The data to encrypt.</param>
+        /// <param name="encoding">The encoding to use with the <paramref name="key"/>.</param>
+        /// <returns>The byte array containing the encrypted data if the operation was successful; otherwise null.</returns>
+        public static byte[] EncryptData(string key, byte[] dataToEncrypt, Encoding encoding)
+        {
+            try
+            {
+                using (var streamToEncrypt = new MemoryStream(dataToEncrypt))
+                {
+                    using (var outputStream = new MemoryStream())
+                    {
+                        return ((MemoryStream) EncryptData(key, streamToEncrypt, outputStream, encoding)).ToArray();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // report the exception..
+                ExceptionLogAction?.Invoke(ex);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Encrypts the given data <see cref="byte"/> array. UTF-8 Encoding is used with the key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="dataToEncrypt">The data to encrypt.</param>
+        /// <returns>The byte array containing the encrypted data if the operation was successful; otherwise null.</returns>
+        public static byte[] EncryptData(string key, byte[] dataToEncrypt)
+        {
+            using (var streamToEncrypt = new MemoryStream(dataToEncrypt))
+            {
+                using (var outputStream = new MemoryStream())
+                {
+                    return ((MemoryStream) EncryptData(key, streamToEncrypt, outputStream, Encoding.UTF8))
+                        .ToArray();
+                }
+            }
+        }
+
+        /// <summary>
         /// Decrypts the given data <see cref="Stream"/>.
         /// The method uses <see cref="Aes"/> encryption with <see cref="SHA512"/> hash algorithm to the password.
         /// The IV (Initialization Vector) is expected to be in the stream starting position.
@@ -104,7 +150,7 @@ namespace EasyCardFile.Database.Encryption
         /// <param name="key">The key.</param>
         /// <param name="dataToDecrypt">The data to decrypt.</param>
         /// <param name="outputStream">The output stream.</param>
-        /// <param name="encoding">The encoding.</param>
+        /// <param name="encoding">The encoding to use with the <paramref name="key"/>.</param>
         /// <returns>The <paramref name="outputStream"/> with the encrypted data if the operation was successful; otherwise null.</returns>
         public static Stream DecryptData(string key, Stream dataToDecrypt, Stream outputStream, Encoding encoding)
         {
@@ -123,7 +169,7 @@ namespace EasyCardFile.Database.Encryption
                 {
                     using (var reader = new BinaryReader(dataToDecrypt))
                     {
-                        var buffer = new byte [1000000]; // a megabyte should be enough..
+                        var buffer = new byte [BufferSize]; // a megabyte should be enough..
                         int bufferLength;
 
                         // get the initialization vector..
@@ -144,6 +190,55 @@ namespace EasyCardFile.Database.Encryption
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Decrypts the given data <see cref="byte"/> array.
+        /// The method uses <see cref="Aes"/> encryption with <see cref="SHA512"/> hash algorithm to the password.
+        /// The IV (Initialization Vector) is expected to be in data area's starting position.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="dataToDecrypt">The data to decrypt.</param>
+        /// <param name="encoding">The encoding to use with the <paramref name="key"/>.</param>
+        /// <returns>The byte array containing the decrypted data if the operation was successful; otherwise null.</returns>
+        public static byte[] DecryptData(string key, byte[] dataToDecrypt, Encoding encoding)
+        {
+            try
+            {
+                using (var streamToDecrypt = new MemoryStream(dataToDecrypt))
+                {
+                    using (var outputStream = new MemoryStream())
+                    {
+                        return ((MemoryStream) DecryptData(key, streamToDecrypt, outputStream, encoding)).ToArray();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // report the exception..
+                ExceptionLogAction?.Invoke(ex);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Decrypts the given data <see cref="byte"/> array. UTF-8 Encoding is used with the key.
+        /// The method uses <see cref="Aes"/> encryption with <see cref="SHA512"/> hash algorithm to the password.
+        /// The IV (Initialization Vector) is expected to be in data area's starting position.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="dataToDecrypt">The data to decrypt.</param>
+        /// <returns>The byte array containing the decrypted data if the operation was successful; otherwise null.</returns>
+        public static byte[] DecryptData(string key, byte[] dataToDecrypt)
+        {
+            using (var streamToDecrypt = new MemoryStream(dataToDecrypt))
+            {
+                using (var outputStream = new MemoryStream())
+                {
+                    return ((MemoryStream) DecryptData(key, streamToDecrypt, outputStream, Encoding.UTF8)).ToArray();
+                }
+            }
         }
     }
 }

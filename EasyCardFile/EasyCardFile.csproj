@@ -48,6 +48,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.2.0.246, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.1.2.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="PagedControl, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedControl.2.2.0\lib\net35\PagedControl.dll</HintPath>
     </Reference>
@@ -97,6 +100,7 @@
   <ItemGroup>
     <Compile Include="CardFileHandler\CardFileLegacyReader.cs" />
     <Compile Include="CardFileHandler\CardFileUiWrapper.cs" />
+    <Compile Include="Database\Compression\DatabaseCompressionHelper.cs" />
     <Compile Include="Database\Encryption\DatabaseEncryptionHelper.cs" />
     <Compile Include="Database\Entity\Context\CardFileDbContext.cs" />
     <Compile Include="Database\Entity\Context\CardFileDbInitializer.cs" />
@@ -107,7 +111,6 @@
     <Compile Include="Database\Entity\Entities\SoftwareLicense.cs" />
     <Compile Include="Database\Entity\IEntity.cs" />
     <Compile Include="Database\Entity\Entities\CustomHistory.cs" />
-    <Compile Include="Database\Entity\ModelHelpers\NameIdOrdering.cs" />
     <Compile Include="Database\Entity\Model\ModelConfiguration.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
@@ -117,6 +120,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="UtilityClasses\ErrorHandling\ErrorHandlingBase.cs" />
     <Compile Include="UtilityClasses\Localization\Messages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -128,14 +136,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="UtilityClasses\Localization\Messages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.Designer.cs</LastGenOutput>
@@ -158,6 +161,11 @@
   <ItemGroup>
     <Content Include="62941cardfilebox_109271.ico" />
     <Content Include="DBLocalization.exe" />
+    <None Include="Resources\import_document.png" />
+    <None Include="Resources\folder-database.png" />
+    <None Include="Resources\New document.png" />
+    <None Include="Resources\Delete.png" />
+    <None Include="Resources\new card.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LegacySupportQTVersion\LegacySupportQTVersion.csproj">
@@ -165,7 +173,9 @@
       <Name>LegacySupportQTVersion</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Database\Entity\ModelHelpers\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
