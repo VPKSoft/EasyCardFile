@@ -24,21 +24,34 @@ SOFTWARE.
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace EasyCardFile.Database.Compression
 {
+    /// <summary>
+    /// A helper class for strings for dealing with base64 encoding and compression.
+    /// </summary>
     public static class StringCompressionBase64Helper
     {
+        /// <summary>
+        /// Compresses a string using the given <see cref="Encoding"/> using
+        /// BZip2 (<see cref="ICSharpCode.SharpZipLib.BZip2"/>) compression.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="encoding">The encoding to get the bytes from the string.</param>
+        /// <returns>A base64 encoded data containing the compressed string value.</returns>
         public static string CompressToBase64(this string str, Encoding encoding)
         {
             return DatabaseCompressionHelper.CompressDataToBase64(str, encoding);
         }
 
+        /// <summary>
+        /// Decompresses a base64 encoded data using BZip2 (<see cref="ICSharpCode.SharpZipLib.BZip2"/>) and returns
+        /// the decompressed data as a string encoded with the given <see cref="Encoding"/>.
+        /// </summary>
+        /// <param name="str">The base64-encoded string containing the data to to decompress.</param>
+        /// <param name="encoding">The encoding to use to get a string from the decompressed bytes.</param>
+        /// <returns>System.String.</returns>
         public static string DecompressFromBase64(this string str, Encoding encoding)
         {
             return DatabaseCompressionHelper.DecompressDataToString(str, encoding);

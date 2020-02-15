@@ -58,7 +58,10 @@ namespace EasyCardFile.CardFileHandler
         public CardFileUiWrapper(string fileName, TabControl tabControl)
         {
             FileName = fileName;
-            OpenCardFile(fileName);
+            if (!OpenCardFile(fileName))
+            {
+                throw new InvalidOperationException("Failed to open the card file.");
+            }
             CreateTabControls(tabControl);
             UiWrappers.Add(this);
         }
@@ -162,6 +165,7 @@ namespace EasyCardFile.CardFileHandler
                 {
                     if (!CardFileDb.LoadWithCompression(Encoding.UTF8))
                     {
+                        CardFileDbContext.ReleaseDbContext(CardFileDb, false);
                         return false;
                     }
                 }
@@ -170,6 +174,7 @@ namespace EasyCardFile.CardFileHandler
                 {
                     if (!CardFileDb.LoadWithEncryption(Encoding.UTF8, Application.OpenForms[0]))
                     {
+                        CardFileDbContext.ReleaseDbContext(CardFileDb, false);
                         return false;
                     }
                 }
@@ -179,6 +184,7 @@ namespace EasyCardFile.CardFileHandler
             {
                 // report the exception..
                 ExceptionLogAction?.Invoke(ex);
+                CardFileDbContext.ReleaseDbContext(CardFileDb, false);
                 return false;
             }
         }
@@ -284,6 +290,11 @@ namespace EasyCardFile.CardFileHandler
         /// Gets or sets the card file database context.
         /// </summary>
         public CardFileDbContext CardFileDb { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to save the changes on the card file upon closing it.
+        /// </summary>
+        public bool SaveChangesOnClose { get; set; }
 
         private bool changed;
 
@@ -547,7 +558,7 @@ namespace EasyCardFile.CardFileHandler
                 RichTextBox.TextChanged -= RichTextBox_TextChanged;
                 SearchTextBox.TextChanged -= SearchTextBox_TextChanged;
                 ListBoxCards.SelectedValueChanged -= ListBoxCards_SelectedValueChanged;
-                CardFileDbContext.ReleaseDbContext(CardFileDb, false, true);
+                CardFileDbContext.ReleaseDbContext(CardFileDb, !IsTemporary && SaveChangesOnClose, true);
 
                 try
                 {

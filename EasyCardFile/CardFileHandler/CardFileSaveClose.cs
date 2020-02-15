@@ -143,10 +143,7 @@ namespace EasyCardFile.CardFileHandler
             {
                 using (cardFile)
                 {
-                    if (!cardFile.IsTemporary && saveChanges)
-                    {
-                        cardFile.CardFileDb.SaveChanges();
-                    }
+                    cardFile.SaveChangesOnClose = saveChanges;
                 }
 
                 return true;

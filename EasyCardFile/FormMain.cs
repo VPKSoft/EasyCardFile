@@ -38,7 +38,9 @@ using EasyCardFile.Database.Entity.Context;
 using EasyCardFile.Database.Entity.Context.ContextCompression;
 using EasyCardFile.Database.Entity.Context.ContextEncryption;
 using EasyCardFile.UtilityClasses.Localization;
+using VPKSoft.ErrorLogger;
 using VPKSoft.LangLib;
+using VPKSoft.MessageBoxExtended;
 using VU = VPKSoft.Utils;
 
 // Icon (C): https://icon-icons.com/icon/card-file-box/109271, Apache 2.0
@@ -103,14 +105,29 @@ namespace EasyCardFile
         {
             if (odCardFile.ShowDialog() == DialogResult.OK)
             {
-                // ReSharper disable once ObjectCreationAsStatement
-                new CardFileUiWrapper(odCardFile.FileName, tcCardFiles);
+                try
+                {
+                    // ReSharper disable once ObjectCreationAsStatement
+                    new CardFileUiWrapper(odCardFile.FileName, tcCardFiles);
+                }
+                catch (Exception ex)
+                {
+                    // log the exception..
+                    ExceptionLogger.LogError(ex);
+                    MessageBoxExtended.Show(this,
+                        DBLangEngine.GetMessage("msgCardFileFailedOpen",
+                            "Failed to open the card file: '{0}'.|A message for a message dialog that the card file failed to open",
+                            odCardFile.FileName),
+                        DBLangEngine.GetMessage("msgError",
+                            "Error|A message describing that some kind of error occurred."),
+                        MessageBoxButtonsExtended.OK, MessageBoxIcon.Error, true);
+                }
             }
         }
 
         private void tcCardFiles_CloseTabButtonClick(object sender, Manina.Windows.Forms.CancelTabEventArgs e)
         {
-            CardFileSaveClose.CloseCardFile(false, e.Tab);
+            CardFileSaveClose.CloseCardFile(true, e.Tab);
         }
 
         private void mnuTest_Click(object sender, EventArgs e)

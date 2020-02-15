@@ -96,8 +96,8 @@
     <Reference Include="VPKSoft.TextEditIcons, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.TextEditIcons.1.0.0\lib\net45\VPKSoft.TextEditIcons.dll</HintPath>
     </Reference>
-    <Reference Include="VPKSoft.Utils, Version=1.0.4.3, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VPKSoft.Utils.1.0.4.3\lib\net45\VPKSoft.Utils.dll</HintPath>
+    <Reference Include="VPKSoft.Utils, Version=1.0.4.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VPKSoft.Utils.1.0.4.4\lib\net45\VPKSoft.Utils.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
