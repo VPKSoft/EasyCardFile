@@ -37,7 +37,7 @@ using LegacySupportQTVersion;
 using VPKSoft.LangLib;
 using VPKSoft.MessageBoxExtended;
 
-namespace EasyCardFile.CardFileHandler
+namespace EasyCardFile.CardFileHandler.LegacyCardFile
 {
     /// <summary>
     /// A class to convert legacy card files (v.2008, 12 years old) files to the new format.
@@ -97,25 +97,30 @@ namespace EasyCardFile.CardFileHandler
 
                         var cardFileNew = CardFileDbContext.InitializeDbContext(saveFileDialog.FileName);
 
-                        var cardTypes = legacyReader.GetCardTypes();
-                        foreach (var cardType in cardTypes)
-                        {
-                            cardFileNew.CardTypes.Add(new CardType {CardTypeName = cardType});
-                        }
-                        cardFileNew.SaveChanges();
-
                         var cardFile = new CardFile
                         {
                             Name = cardFileEntry.databaseName,
                             CardNamingInstruction = cardFileEntry.autoLabelInstructions,
                             Compressed = false,
-                            Encrypted = false,
-                            DefaultCardType =
-                                cardFileNew.CardTypes.FirstOrDefault(f =>
-                                    f.CardTypeName == cardFileEntry.defaultCardType),
+                            Encrypted = false, 
                         };
 
                         cardFileNew.CardFiles.Add(cardFile);
+
+                        cardFileNew.SaveChanges();
+
+                        var cardTypes = legacyReader.GetCardTypes();
+                        cardFile.CardTypes = new List<CardType>();
+                        foreach (var cardType in cardTypes)
+                        {
+                            var cardTypeNew = new CardType {CardTypeName = cardType, CardFile = cardFile};
+//                            cardFileNew.CardTypes.Add(cardTypeNew);
+                            cardFile.CardTypes.Add(cardTypeNew);
+                        }
+
+                        cardFile.DefaultCardType =
+                            cardFile.CardTypes?.FirstOrDefault(f =>
+                                f.CardTypeName == cardFileEntry.defaultCardType);
 
                         cardFileNew.SaveChanges();
 
@@ -133,7 +138,7 @@ namespace EasyCardFile.CardFileHandler
                                 var cardNew = new Card
                                 {
                                     CardName = card.name,
-                                    CardType = cardFileNew.CardTypes.FirstOrDefault(f => f.CardTypeName == card.type),
+                                    CardType = cardFile.CardTypes.FirstOrDefault(f => f.CardTypeName == card.type),
                                     Ordering = ordering++,
                                     CardContents = Encoding.UTF8.GetBytes(card.cardContents),
                                     WordWrap = card.wordWrap,

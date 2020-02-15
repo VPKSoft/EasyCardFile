@@ -70,11 +70,56 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The card type name must be unique and can not be an empty string!|A message indicating that the name of the card type must be unique compared to other card types. Also the card type name can not be an empty string..
+        /// </summary>
+        internal static string msgCardTypeNameUniqueError {
+            get {
+                return ResourceManager.GetString("msgCardTypeNameUniqueError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm the password to protect the card file.|A user is asked for a confirmation for a password in a dialog (the second time).
+        /// </summary>
+        internal static string msgConfirmAPassword {
+            get {
+                return ResourceManager.GetString("msgConfirmAPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm the password|A user is asked for a confirmation for a password in a dialog (the second time).
+        /// </summary>
+        internal static string msgConfirmAPasswordTitle {
+            get {
+                return ResourceManager.GetString("msgConfirmAPasswordTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The file is encrypted, please give a password.|A message indicating file encryption. A password is requested from the user..
         /// </summary>
         internal static string msgEncryptionGiveAPassword {
             get {
                 return ResourceManager.GetString("msgEncryptionGiveAPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Give a password|A message querying a password from the user with the card file protection.
+        /// </summary>
+        internal static string msgEnterPassword {
+            get {
+                return ResourceManager.GetString("msgEnterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm the password|A message querying a password confirmation from the user with the card file protection.
+        /// </summary>
+        internal static string msgEnterPasswordConfirm {
+            get {
+                return ResourceManager.GetString("msgEnterPasswordConfirm", resourceCulture);
             }
         }
         
@@ -93,6 +138,42 @@ namespace EasyCardFile.UtilityClasses.Localization {
         internal static string msgFileChangedIndicatorText {
             get {
                 return ResourceManager.GetString("msgFileChangedIndicatorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Give a password to protect the card file.|A user is asked for a password in a dialog.
+        /// </summary>
+        internal static string msgGiveAPassword {
+            get {
+                return ResourceManager.GetString("msgGiveAPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Give a password to open the card file.|A user is asked for a password in a dialog to open an encrypted card file.
+        /// </summary>
+        internal static string msgGiveAPasswordOpen {
+            get {
+                return ResourceManager.GetString("msgGiveAPasswordOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Give a password|A user is asked for a password in a dialog title to open an encrypted card file.
+        /// </summary>
+        internal static string msgGiveAPasswordOpenTitle {
+            get {
+                return ResourceManager.GetString("msgGiveAPasswordOpenTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Give a password|A user is asked for a password in a dialog.
+        /// </summary>
+        internal static string msgGiveAPasswordTitle {
+            get {
+                return ResourceManager.GetString("msgGiveAPasswordTitle", resourceCulture);
             }
         }
         
@@ -124,11 +205,74 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The given password is invalid. Please try again.|The user-given password is invalid so do complain via a dialog.
+        /// </summary>
+        internal static string msgPasswordInvalid {
+            get {
+                return ResourceManager.GetString("msgPasswordInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid password|The user-given password is invalid so do complain via a dialog title.
+        /// </summary>
+        internal static string msgPasswordInvalidTitle {
+            get {
+                return ResourceManager.GetString("msgPasswordInvalidTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The entered passwords mismatch. Please try again.|The user entered two different passwords so an error message is displayed..
+        /// </summary>
+        internal static string msgPasswordMisMach {
+            get {
+                return ResourceManager.GetString("msgPasswordMisMach", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The given passwords mismatch. Please try again.|The user-given password are different so do complain via a dialog.
+        /// </summary>
+        internal static string msgPasswordMismatch {
+            get {
+                return ResourceManager.GetString("msgPasswordMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password mismatch|The user-given password are different so do complain via a dialog title.
+        /// </summary>
+        internal static string msgPasswordMismatchTitle {
+            get {
+                return ResourceManager.GetString("msgPasswordMismatchTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password is required|A short message indicating that some operation requires a valid password for the some operation to continue successfully..
         /// </summary>
         internal static string msgPasswordRequired {
             get {
                 return ResourceManager.GetString("msgPasswordRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a password to protect the card file|A message querying the user to enter a password for the first time to protect the card file.
+        /// </summary>
+        internal static string msgQueryPassword1 {
+            get {
+                return ResourceManager.GetString("msgQueryPassword1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Re-enter the password for confirmation|A message querying the user to enter a password for the second time for confirmation purpose.
+        /// </summary>
+        internal static string msgQueryPassword2 {
+            get {
+                return ResourceManager.GetString("msgQueryPassword2", resourceCulture);
             }
         }
         

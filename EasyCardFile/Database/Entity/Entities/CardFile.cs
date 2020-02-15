@@ -25,6 +25,7 @@ SOFTWARE.
 #endregion
 
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EasyCardFile.Database.Entity.Entities
 {
@@ -51,6 +52,11 @@ namespace EasyCardFile.Database.Entity.Entities
         public virtual ICollection<Card> Cards { get; set; }
 
         /// <summary>
+        /// Gets or sets the card types belonging to the card file.
+        /// </summary>
+        public virtual ICollection<CardType> CardTypes { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the card file is encrypted.
         /// </summary>
         public bool Encrypted { get; set; }
@@ -64,6 +70,17 @@ namespace EasyCardFile.Database.Entity.Entities
         /// Gets or sets the card naming instruction.
         /// </summary>
         public string CardNamingInstruction { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether a card can be named alphabetically between other cards.
+        /// </summary>
+        public bool CardNamingDropBetween { get; set; }
+
+        /// <summary>
+        /// Gets or sets the password hash as a base64 encoded string.
+        /// </summary>
+        [NotMapped]
+        public string PasswordHash { get; set; }
 
         /// <summary>
         /// Gets or sets the default type of the card.
@@ -80,6 +97,5 @@ namespace EasyCardFile.Database.Entity.Entities
         /// value of unencrypted <see cref="EncryptionPasswordValidationRandomizedBase64"/> property value. This is Base64 encoded binary data.
         /// </summary>
         public string EncryptionHashAlgorithmValueBase64 { get; set; }
-
     }
 }

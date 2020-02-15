@@ -29,6 +29,9 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Data.SQLite;
 using System.Linq;
+using System.Text;
+using EasyCardFile.Database.Entity.Context.ContextCompression;
+using EasyCardFile.Database.Entity.Context.ContextEncryption;
 using EasyCardFile.Database.Entity.Entities;
 using EasyCardFile.Database.Entity.Model;
 using EasyCardFile.UtilityClasses.ErrorHandling;
@@ -93,6 +96,28 @@ namespace EasyCardFile.Database.Entity.Context
         private SQLiteConnection SqLiteConnection { get; set; }
 
         /// <summary>
+        /// Performs the SQLite Vacuum command to the underlying database connection.
+        /// </summary>
+        /// <returns>True if the operation was successful; otherwise false.</returns>
+        public bool VacuumDatabase()
+        {
+            try
+            {
+                using (SQLiteCommand command = new SQLiteCommand("VACUUM;", SqLiteConnection))
+                {
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                // log the exception.
+                ErrorHandlingBase.ExceptionLogAction?.Invoke(ex);
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
         /// Releases the database <see cref="CardFileDbContext"/> context.
         /// </summary>
         /// <param name="context">An instance to a <see cref="CardFileDbContext"/> class to dispose of.</param>
@@ -111,12 +136,24 @@ namespace EasyCardFile.Database.Entity.Context
                     {
                         if (save) // ..if set to save, then save..
                         {
+                            if (context.CardFile.Encrypted)
+                            {
+                                context.SaveWithEncryption();
+                            }
+
+                            if (context.CardFile.Compressed)
+                            {
+                                context.SaveWithCompression(Encoding.UTF8);
+                            }
+
                             context.SaveChanges();
                         }
                     }
 
                     using (connection)
                     {
+                        context.VacuumDatabase();
+
                         connection.Close();
                         if (forceGarbageCollection)
                         {
@@ -133,6 +170,70 @@ namespace EasyCardFile.Database.Entity.Context
                 ErrorHandlingBase.ExceptionLogAction?.Invoke(ex);
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Copies the specified old database context to a new one and disposes the old database context without saving the changes.
+        /// </summary>
+        /// <param name="dbContextOld">The old database context.</param>
+        /// <param name="fileName">Name of the file of the new database context.</param>
+        /// <returns>The new copied database context.</returns>
+        public static CardFileDbContext Copy(CardFileDbContext dbContextOld, string fileName)
+        {
+            CardFile cardFileEntityNew = null;
+            var dbContextNew = InitializeDbContext(fileName);
+
+            foreach (var cardFile in dbContextOld.CardFiles)
+            {
+                cardFileEntityNew = new CardFile
+                {
+                    Name = cardFile.Name, Compressed = cardFile.Compressed,
+                    CardNamingInstruction = cardFile.CardNamingInstruction,
+                    DefaultCardType = 
+                        cardFile.CardTypes?.FirstOrDefault(f =>
+                            f.CardTypeName == cardFile.DefaultCardType.CardTypeName),
+                    Encrypted = cardFile.Encrypted,
+                    EncryptionHashAlgorithmValueBase64 = cardFile.EncryptionHashAlgorithmValueBase64,
+                    EncryptionPasswordValidationRandomizedBase64 =
+                        cardFile.EncryptionPasswordValidationRandomizedBase64,
+                };
+
+                dbContextNew.CardFiles.Add(cardFileEntityNew);
+            }
+
+            foreach (var cardType in dbContextOld.CardFile.CardTypes)
+            {
+                cardFileEntityNew?.CardTypes.Add(new CardType
+                    {CardTypeName = cardType.CardTypeName, CardFile = cardFileEntityNew});
+            }
+
+            foreach (var cardFileCard in dbContextOld.CardFile.Cards)
+            {
+                dbContextNew.CardFile.Cards.Add(new Card
+                {
+                    CardName = cardFileCard.CardName, 
+                    CardContents = cardFileCard.CardContents,
+                    CardType = 
+                        cardFileEntityNew?.CardTypes.FirstOrDefault(f =>
+                            f.CardTypeName == cardFileCard.CardType.CardTypeName), 
+                    CardFile = dbContextNew.CardFile, 
+                    WordWrap = cardFileCard.WordWrap, 
+                    Ordering = cardFileCard.Ordering,
+                });
+            }
+
+            foreach (var cardTemplate in dbContextOld.CardTemplates)
+            {
+                dbContextNew.CardTemplates.Add(new CardTemplate
+                {
+                    CardTemplateName = cardTemplate.CardTemplateName,
+                    CardTemplateContents = cardTemplate.CardTemplateContents,
+                });
+            }
+
+            ReleaseDbContext(dbContextOld, false, true);
+
+            return dbContextNew;
         }
 
         /// <summary>
@@ -189,10 +290,5 @@ namespace EasyCardFile.Database.Entity.Context
         /// Gets or sets the <see cref="CardTemplate"/> instances in the database.
         /// </summary>
         public DbSet<CardTemplate> CardTemplates { get; set; }
-
-        /// <summary>
-        /// Gets or sets the <see cref="CardType"/> instances in the database.
-        /// </summary>
-        public DbSet<CardType> CardTypes { get; set; }
     }
 }

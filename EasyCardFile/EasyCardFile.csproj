@@ -81,11 +81,14 @@
     <Reference Include="TabControl, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\TabControl.2.1.2\lib\net35\TabControl.dll</HintPath>
     </Reference>
+    <Reference Include="VPKSoft.ErrorLogger, Version=1.0.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VPKSoft.ErrorLogger.1.0.0.6\lib\net45\VPKSoft.ErrorLogger.dll</HintPath>
+    </Reference>
     <Reference Include="VPKSoft.LangLib, Version=1.0.1.9, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.LangLib.1.0.1.9\lib\net461\VPKSoft.LangLib.dll</HintPath>
     </Reference>
-    <Reference Include="VPKSoft.MessageBoxExtended, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VPKSoft.MessageBoxExtended.1.0.0.1\lib\net47\VPKSoft.MessageBoxExtended.dll</HintPath>
+    <Reference Include="VPKSoft.MessageBoxExtended, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VPKSoft.MessageBoxExtended.1.0.0.3\lib\net47\VPKSoft.MessageBoxExtended.dll</HintPath>
     </Reference>
     <Reference Include="VPKSoft.RichTextEdit, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.RichTextEdit.1.0.0.2\lib\net47\VPKSoft.RichTextEdit.dll</HintPath>
@@ -98,12 +101,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CardFileHandler\CardFileLegacyReader.cs" />
+    <Compile Include="CardFileHandler\CardFileNaming\CardNaming.cs" />
+    <Compile Include="CardFileHandler\CardFileNaming\FormDialogCardFileNaming.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CardFileHandler\CardFileNaming\FormDialogCardFileNaming.Designer.cs">
+      <DependentUpon>FormDialogCardFileNaming.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CardFileHandler\CardFilePreferences\FormDialogCardFilePreferences.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CardFileHandler\CardFilePreferences\FormDialogCardFilePreferences.Designer.cs">
+      <DependentUpon>FormDialogCardFilePreferences.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CardFileHandler\LegacyCardFile\CardFileLegacyReader.cs" />
+    <Compile Include="CardFileHandler\CardFileSaveClose.cs" />
     <Compile Include="CardFileHandler\CardFileUiWrapper.cs" />
+    <Compile Include="CardFileHandler\LegacyCardFile\CardNamingOld.cs" />
     <Compile Include="Database\Compression\DatabaseCompressionHelper.cs" />
+    <Compile Include="Database\Compression\StringCompressionBase64Helper.cs" />
     <Compile Include="Database\Encryption\DatabaseEncryptionHelper.cs" />
+    <Compile Include="Database\Encryption\StringEncryptionBase64Helper.cs" />
     <Compile Include="Database\Entity\Context\CardFileDbContext.cs" />
     <Compile Include="Database\Entity\Context\CardFileDbInitializer.cs" />
+    <Compile Include="Database\Entity\Context\ContextCompression\ContextCompressionHelper.cs" />
+    <Compile Include="Database\Entity\Context\ContextEncryption\ContextEncryptDecryptHelper.cs" />
     <Compile Include="Database\Entity\Entities\Card.cs" />
     <Compile Include="Database\Entity\Entities\CardFile.cs" />
     <Compile Include="Database\Entity\Entities\CardTemplate.cs" />
@@ -126,11 +148,25 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="UtilityClasses\ErrorHandling\ErrorHandlingBase.cs" />
+    <Compile Include="UtilityClasses\Localization\LocalizeStaticProperties.cs" />
     <Compile Include="UtilityClasses\Localization\Messages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
+    <Compile Include="UtilityClasses\ProjectControls\TextBoxButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UtilityClasses\ProjectControls\TextBoxButton.Designer.cs">
+      <DependentUpon>TextBoxButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UtilityClasses\TextUtility\RegexMatchLengthReplace.cs" />
+    <EmbeddedResource Include="CardFileHandler\CardFileNaming\FormDialogCardFileNaming.resx">
+      <DependentUpon>FormDialogCardFileNaming.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CardFileHandler\CardFilePreferences\FormDialogCardFilePreferences.resx">
+      <DependentUpon>FormDialogCardFilePreferences.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -142,6 +178,9 @@
     <EmbeddedResource Include="UtilityClasses\Localization\Messages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UtilityClasses\ProjectControls\TextBoxButton.resx">
+      <DependentUpon>TextBoxButton.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="EasyCardfile.licenseheader" />
     <None Include="packages.config" />
@@ -161,6 +200,12 @@
   <ItemGroup>
     <Content Include="62941cardfilebox_109271.ico" />
     <Content Include="DBLocalization.exe" />
+    <None Include="Resources\edit-delete-6.png" />
+    <None Include="Resources\Delete.bmp" />
+    <None Include="Resources\edit-add-2.png" />
+    <None Include="Resources\textfield-rename.png" />
+    <None Include="Resources\card_file_preferences.png" />
+    <None Include="Resources\Save.png" />
     <None Include="Resources\import_document.png" />
     <None Include="Resources\folder-database.png" />
     <None Include="Resources\New document.png" />

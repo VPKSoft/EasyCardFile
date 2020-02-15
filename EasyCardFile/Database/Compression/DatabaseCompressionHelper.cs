@@ -26,6 +26,7 @@ SOFTWARE.
 
 using System;
 using System.IO;
+using System.Text;
 using EasyCardFile.UtilityClasses.ErrorHandling;
 using ICSharpCode.SharpZipLib.BZip2;
 
@@ -77,11 +78,37 @@ namespace EasyCardFile.Database.Compression
         }
 
         /// <summary>
+        /// Compresses the data to base64 encoded string.
+        /// </summary>
+        /// <param name="dataToCompress">The text data to compress.</param>
+        /// <param name="encoding">The encoding to use to get the bytes from the <paramref name="dataToCompress"/> string.</param>
+        /// <returns>A base64 encoded value containing the compressed data.</returns>
+        public static string CompressDataToBase64(string dataToCompress, Encoding encoding)
+        {
+            var bytes = encoding.GetBytes(dataToCompress);
+            bytes = CompressData(bytes);
+            return Convert.ToBase64String(bytes);
+        }
+
+        /// <summary>
+        /// Decompresses a base64 encoded compressed data string to an uncompressed string.
+        /// </summary>
+        /// <param name="base64Compressed">The base64 encoded compressed data string.</param>
+        /// <param name="encoding">The encoding to use to get the correct string data from the uncompressed bytes.</param>
+        /// <returns>Uncompressed string value using the given encoding.</returns>
+        public static string DecompressDataToString(string base64Compressed, Encoding encoding)
+        {
+            var bytes = Convert.FromBase64String(base64Compressed);
+            bytes = DecompressData(bytes);
+            return encoding.GetString(bytes);
+        }
+
+        /// <summary>
         /// Compresses the given <see cref="byte"/> array using the BZip2 compression algorithm.
         /// </summary>
         /// <param name="dataToCompress">The data to compress.</param>
         /// <returns>The byte array containing the compressed data if the operation was successful; otherwise null.</returns>
-        public static byte[] CompressData(byte dataToCompress)
+        public static byte[] CompressData(byte [] dataToCompress)
         {
             try
             {

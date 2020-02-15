@@ -25,9 +25,19 @@ SOFTWARE.
 #endregion
 
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using EasyCardFile.CardFileHandler;
+using EasyCardFile.CardFileHandler.CardFileNaming;
+using EasyCardFile.CardFileHandler.CardFilePreferences;
+using EasyCardFile.CardFileHandler.LegacyCardFile;
+using EasyCardFile.Database.Encryption;
+using EasyCardFile.Database.Entity.Context;
+using EasyCardFile.Database.Entity.Context.ContextCompression;
+using EasyCardFile.Database.Entity.Context.ContextEncryption;
+using EasyCardFile.UtilityClasses.Localization;
 using VPKSoft.LangLib;
 using VU = VPKSoft.Utils;
 
@@ -72,12 +82,16 @@ namespace EasyCardFile
                 Directory.CreateDirectory(temporaryPath);
             }
             CardFileUiWrapper.TemporaryPath = temporaryPath;
+
+            LocalizeStaticProperties.LocalizeStatic();
+
+            mnuTest.Visible = Debugger.IsAttached;
         }
 
         private void mnuNew_Click(object sender, EventArgs e)
         {
             // ReSharper disable once ObjectCreationAsStatement
-            new CardFileUiWrapper(tcCardFiles);
+            var cardFile = new CardFileUiWrapper(tcCardFiles);
         }
 
         private void mnuImportPrevious_Click(object sender, EventArgs e)
@@ -92,6 +106,47 @@ namespace EasyCardFile
                 // ReSharper disable once ObjectCreationAsStatement
                 new CardFileUiWrapper(odCardFile.FileName, tcCardFiles);
             }
+        }
+
+        private void tcCardFiles_CloseTabButtonClick(object sender, Manina.Windows.Forms.CancelTabEventArgs e)
+        {
+            CardFileSaveClose.CloseCardFile(false, e.Tab);
+        }
+
+        private void mnuTest_Click(object sender, EventArgs e)
+        {
+            
+            var cardFile = CardFileUiWrapper.GetActiveDbContext(tcCardFiles);
+            cardFile.EnableEncryption(Encoding.UTF8, this);
+            cardFile.CardFile.Compressed = true;
+            cardFile.SaveWithEncryption();
+            cardFile.SaveWithCompression(Encoding.UTF8);
+            cardFile.VacuumDatabase();
+
+            //cardFile.EnableEncryption(Encoding.UTF8, this);
+
+            //CardFileDbContext.CompressCardFile(cardFile, Encoding.UTF8);
+
+            /*
+            var randomBase64 = DatabaseEncryptionHelper.GenerateRandomBase64Data(150, 200);
+            var encryptedBase64 = DatabaseEncryptionHelper.EncryptData("helevetti", randomBase64, Encoding.UTF8);
+            var decryptedBase64 = encryptedBase64.DecryptBase64("helevetti", Encoding.UTF8);
+
+            return;
+
+
+/*            var value = "testitekstiä jonniin verran";
+
+            var encrypted = value.EncryptBase64("helevetti", Encoding.UTF8);
+            var decrypted = encrypted.DecryptBase64("helevetti", Encoding.UTF8);
+
+            MessageBox.Show(decrypted);
+            return;*/
+            //var cardFile = CardFileUiWrapper.GetActiveDbContext(tcCardFiles);
+
+            //CardFileDbContext.SaveEncryptedCardFile(cardFile, "helevetti", Encoding.UTF8);
+
+//            CardFileDbContext.DecryptCardFile(cardFile, "helevetti", Encoding.UTF8);
         }
     }
 }

@@ -25,10 +25,10 @@ SOFTWARE.
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows.Forms;
+using VPKSoft.ErrorLogger;
+using VPKSoft.Utils;
 
 namespace EasyCardFile
 {
@@ -40,9 +40,38 @@ namespace EasyCardFile
         [STAThread]
         static void Main()
         {
+            Paths.MakeAppSettingsFolder(); // ensure there is an application settings folder..
+
+            if (!Debugger.IsAttached) // this is too efficient, the exceptions aren't caught by the ide :-)
+            {
+                ExceptionLogger.Bind(); // bind before any visual objects are created
+                ExceptionLogger.ApplicationCrashData += ExceptionLogger_ApplicationCrashData;
+            }
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMain());
+
+            if (!Debugger.IsAttached)
+            {
+                ExceptionLogger.UnBind(); // unbind so the truncate thread is stopped successfully..
+            }
+        }
+
+        private static void ExceptionLogger_ApplicationCrashData(ApplicationCrashEventArgs e)
+        {
+            // unsubscribe this event handler..
+            ExceptionLogger.ApplicationCrashData -= ExceptionLogger_ApplicationCrashData;
+
+            if (!Debugger.IsAttached)
+            {
+                ExceptionLogger.UnBind(); // unbind the exception logger..
+            }
+
+            // kill self as the native inter-op libraries may have some issues of keeping the process alive..
+            Process.GetCurrentProcess().Kill();
+
+            // This is the end..
         }
     }
 }

@@ -31,6 +31,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EasyCardFile.Database.Entity.Context;
+using EasyCardFile.Database.Entity.Context.ContextCompression;
+using EasyCardFile.Database.Entity.Context.ContextEncryption;
 using EasyCardFile.Database.Entity.Entities;
 using EasyCardFile.UtilityClasses.ErrorHandling;
 using Manina.Windows.Forms;
@@ -47,6 +49,7 @@ namespace EasyCardFile.CardFileHandler
     /// <seealso cref="EasyCardFile.UtilityClasses.ErrorHandling.ErrorHandlingBase" />
     public class CardFileUiWrapper: ErrorHandlingBase, IDisposable
     {
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CardFileUiWrapper"/> class.
         /// </summary>
@@ -54,6 +57,7 @@ namespace EasyCardFile.CardFileHandler
         /// <param name="tabControl">The tab control where the card file visually is located.</param>
         public CardFileUiWrapper(string fileName, TabControl tabControl)
         {
+            FileName = fileName;
             OpenCardFile(fileName);
             CreateTabControls(tabControl);
             UiWrappers.Add(this);
@@ -65,16 +69,18 @@ namespace EasyCardFile.CardFileHandler
         /// <param name="tabControl">The tab control where the card file visually is located.</param>
         public CardFileUiWrapper(TabControl tabControl)
         {
-            string fileName = Path.Combine(TemporaryPath, Path.GetRandomFileName());
-            OpenCardFile(fileName);
+            IsTemporary = true;
+            FileName = Path.Combine(TemporaryPath, Path.GetRandomFileName());
+            OpenCardFile(FileName);
             var cardType = new CardType {CardTypeName = NewCardTypeDescription};
-            CardFileDb.CardTypes.Add(cardType);
+            CardFileDb.CardFile.CardTypes.Add(cardType);
             CardFileDb.CardFiles.Add(new CardFile
                 {Name = string.Format(NewFileDescription, NewCounter++), DefaultCardType = cardType});
             CardFileDb.SaveChanges();
             CreateTabControls(tabControl);
             UiWrappers.Add(this);
         }
+        #endregion
 
         #region Localization
         /// <summary>
@@ -130,11 +136,7 @@ namespace EasyCardFile.CardFileHandler
         }
         #endregion
 
-        /// <summary>
-        /// Gets or sets the card file database context.
-        /// </summary>
-        public CardFileDbContext CardFileDb { get; set; }
-
+        #region StaticProperties
         /// <summary>
         /// Gets or sets the current instances of the <see cref="CardFileUiWrapper"/> class.
         /// </summary>
@@ -144,6 +146,7 @@ namespace EasyCardFile.CardFileHandler
         /// Gets or sets the temporary path to store new files before saving.
         /// </summary>
         internal static string TemporaryPath { get; set; }
+        #endregion
 
         /// <summary>
         /// Opens an existing card file.
@@ -155,6 +158,21 @@ namespace EasyCardFile.CardFileHandler
             try
             {
                 CardFileDb = CardFileDbContext.InitializeDbContext(fileName);
+                if (CardFileDb.CardFile.Compressed)
+                {
+                    if (!CardFileDb.LoadWithCompression(Encoding.UTF8))
+                    {
+                        return false;
+                    }
+                }
+
+                if (CardFileDb.CardFile.Encrypted)
+                {
+                    if (!CardFileDb.LoadWithEncryption(Encoding.UTF8, Application.OpenForms[0]))
+                    {
+                        return false;
+                    }
+                }
                 return true;
             }
             catch (Exception ex)
@@ -165,6 +183,7 @@ namespace EasyCardFile.CardFileHandler
             }
         }
 
+        #region GUI
         /// <summary>
         /// Performs the creation and the layout for a single card file tab to the <see cref="Manina.Windows.Forms.TabControl"/>
         /// </summary>
@@ -172,7 +191,7 @@ namespace EasyCardFile.CardFileHandler
         internal void CreateTabControls(TabControl tabControl)
         {
             // create a tab for the card file..
-            var tab = new Tab {Text = CardFileDb.CardFiles.FirstOrDefault()?.Name};
+            Tab = new Tab {Text = CardFileDb.CardFiles.FirstOrDefault()?.Name};
 
             // create a split container for the card file container..
             var splitContainer = new SplitContainer {Dock = DockStyle.Fill,};
@@ -201,7 +220,7 @@ namespace EasyCardFile.CardFileHandler
             tableLayoutPanel.SetColumnSpan(ListBoxCards, 2);
 
             // add the cards within the card file to the list box..
-            if (CardFileDb != null)
+            if (CardFileDb.CardFile.Cards != null)
             {
                 foreach (var card in CardFileDb.CardFile.Cards)
                 {
@@ -225,7 +244,7 @@ namespace EasyCardFile.CardFileHandler
             CardTypeComboBox.SelectedValueChanged += ComboBoxCardType_SelectedValueChanged;
 
             tableLayoutPanel.Controls.Add(CardTypeComboBox, 1, 2);
-            foreach (var cardType in CardFileDb.CardTypes)
+            foreach (var cardType in CardFileDb.CardFile.CardTypes)
             {
                 CardTypeComboBox.Items.Add(cardType);
             }
@@ -254,15 +273,40 @@ namespace EasyCardFile.CardFileHandler
             // add the controls to right split panel..
             splitContainer.Panel2.Controls.Add(tableLayoutPanel);
 
-            tab.Controls.Add(splitContainer);
-            tabControl.Tabs.Add(tab);
+            Tab.Controls.Add(splitContainer);
+            tabControl.Tabs.Add(Tab);
             splitContainer.SplitterDistance = splitContainer.Width * 25 / 100; // size about 25%..
         }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets the card file database context.
+        /// </summary>
+        public CardFileDbContext CardFileDb { get; set; }
+
+        private bool changed;
 
         /// <summary>
         /// Gets or sets a cardEntity indicating whether the <see cref="CardFileDb"/> database context representing this card file has been changed.
         /// </summary>
-        internal bool Changed { get; set; }
+        internal bool Changed
+        {
+            get => changed;
+
+            set
+            {
+                foreach (var card in CardFileDb.CardFile.Cards)
+                {
+                    if (!value)
+                    {
+                        card.Changed = false;
+                    }
+                }
+
+                changed = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a cardEntity indicating whether the controls manipulating the <see cref="Card"/> card file card should be tracking the selected card content changes.
@@ -270,73 +314,21 @@ namespace EasyCardFile.CardFileHandler
         internal bool SuspendCardChanged { get; set; }
 
         /// <summary>
-        /// Sets the <see cref="RichTextBoxWithToolStrip.Rtf"/> cardEntity without indicating that the card contents has been changed.
+        /// Gets or set the file name of the card file.
         /// </summary>
-        /// <param name="rtf"></param>
-        // ReSharper disable once UnusedMember.Local
-        private void SetRtfNoChange(string rtf)
-        {
-            SuspendCardChanged = true;
-            RichTextBox.Rtf = rtf;
-            SuspendCardChanged = false;
-        }
+        internal string FileName { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this card file is saved into a temporary file.
+        /// </summary>
+        internal bool IsTemporary { get; set; }
+        #endregion
 
         #region EventHandlers
         private void ListBoxCards_SelectedValueChanged(object sender, EventArgs e)
         {
             DisplayCard(((ListBox) sender).SelectedItem);
         }
-
-        private void DisplayCard(object cardEntity)
-        {
-            var card = (Card) cardEntity;
-            if (card != null)
-            {
-                SuspendCardChanged = true;
-                RichTextBox.Rtf = Encoding.UTF8.GetString(card.CardContents);
-                CardTypeComboBox.SelectedItem = card.CardType;
-                SuspendCardChanged = false;
-            }
-        }
-
-        private void SetCardChanges(object cardEntity, object cardTypeEntity, bool? wordWrap = null)
-        {
-            try
-            {
-                if (SuspendCardChanged)
-                {
-                    return;
-                }
-
-                var card = (Card) cardEntity;
-
-                var cardType = (CardType) cardTypeEntity;
-
-                if (card != null)
-                {
-                    if (wordWrap != null)
-                    {
-                        card.WordWrap = (bool) wordWrap;
-                    }
-
-                    card.CardContents = Encoding.UTF8.GetBytes(RichTextBox.Rtf);
-
-                    if (cardTypeEntity != null)
-                    {
-                        card.CardType = cardType;
-                    }
-
-                    card.Changed = true;
-                    Changed = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                // report the exception..
-                ExceptionLogAction?.Invoke(ex);
-            }
-        }
-
 
         private void RichTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -376,7 +368,137 @@ namespace EasyCardFile.CardFileHandler
         /// The <see cref="ComboBox"/> control to select and indicate the selected card type from the card list within the card file.
         /// </summary>
         private ComboBox CardTypeComboBox { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Manina.Windows.Forms.Tab"/> to which this <see cref="CardFileDb"/> belongs to.
+        /// </summary>
+        private Tab Tab { get; set; }
         #endregion
+
+        #region HeplerMethods
+        /// <summary>
+        /// Refreshes the UI if the was saved as or a non-existing file was saved.
+        /// </summary>
+        internal void RefreshUi()
+        {
+            var index = ListBoxCards.SelectedIndex;
+
+            ListBoxCards.Items.Clear();
+
+            // add the cards within the card file to the list box..
+            if (CardFileDb.CardFile.Cards != null)
+            {
+                foreach (var card in CardFileDb.CardFile.Cards)
+                {
+                    ListBoxCards.Items.Add(card);
+                }
+            }
+
+            ListBoxCards.SelectedIndex = index;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="CardFileUiWrapper"/> associated with the tab control.
+        /// </summary>
+        /// <param name="tab">The <see cref="Manina.Windows.Forms.Tab"/> instance which associated UI wrapper to get.</param>
+        /// <returns>An instance to a <see cref="CardFileUiWrapper"/> class if one was found associated to the given tab; null otherwise.</returns>
+        internal static CardFileUiWrapper GetWrapperByTab(Tab tab)
+        {
+            foreach (var wrapper in UiWrappers)
+            {
+                if (wrapper.Tab.Equals(tab))
+                {
+                    return wrapper;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the active card file in the tab control.
+        /// </summary>
+        /// <param name="tabControl">The tab control.</param>
+        /// <returns>An instance to a <see cref="CardFile"/> entity.</returns>
+        internal static CardFile GetActiveCardFile(TabControl tabControl)
+        {
+            var tab = tabControl.SelectedTab;
+
+            return tab == null ? null : GetWrapperByTab(tab).CardFileDb.CardFile;
+        }
+
+        /// <summary>
+        /// Gets the active database context for the card file.
+        /// </summary>
+        /// <param name="tabControl">The tab control.</param>
+        /// <returns>An instance to a <see cref="CardFileDbContext"/> class.</returns>
+        internal static CardFileDbContext GetActiveDbContext(TabControl tabControl)
+        {
+            var tab = tabControl.SelectedTab;
+
+            return tab == null ? null : GetWrapperByTab(tab).CardFileDb;
+        }
+
+        /// <summary>
+        /// Displays the card's contents suspending the changed event handlers so the displayed card doesn't flag it self as changed.
+        /// </summary>
+        /// <param name="cardEntity"></param>
+        private void DisplayCard(object cardEntity)
+        {
+            var card = (Card) cardEntity;
+            if (card != null)
+            {
+                SuspendCardChanged = true;
+                RichTextBox.Rtf = Encoding.UTF8.GetString(card.CardContents);
+                CardTypeComboBox.SelectedItem = card.CardType;
+                SuspendCardChanged = false;
+            }
+        }
+
+        /// <summary>
+        /// Updates the changes to a card file card if the changes have not been suspended setting the <see cref="SuspendCardChanged"/> property value to true.
+        /// </summary>
+        /// <param name="cardEntity"></param>
+        /// <param name="cardTypeEntity"></param>
+        /// <param name="wordWrap"></param>
+        private void SetCardChanges(object cardEntity, object cardTypeEntity, bool? wordWrap = null)
+        {
+            try
+            {
+                if (SuspendCardChanged)
+                {
+                    return;
+                }
+
+                var card = (Card) cardEntity;
+
+                var cardType = (CardType) cardTypeEntity;
+
+                if (card != null)
+                {
+                    if (wordWrap != null)
+                    {
+                        card.WordWrap = (bool) wordWrap;
+                    }
+
+                    card.CardContents = Encoding.UTF8.GetBytes(RichTextBox.Rtf);
+
+                    if (cardTypeEntity != null)
+                    {
+                        card.CardType = cardType;
+                    }
+
+                    card.Changed = true;
+                    Changed = true;
+                    Tab.Text = CardFileDb.CardFiles.FirstOrDefault()?.Name + FileChangedIndicator;
+                }
+            }
+            catch (Exception ex)
+            {
+                // report the exception..
+                ExceptionLogAction?.Invoke(ex);
+            }
+        }
 
         /// <summary>
         /// Filters the card file list box <see cref="ListBoxCards"/> contents based on the given <paramref name="filterText"/> text.
@@ -399,7 +521,8 @@ namespace EasyCardFile.CardFileHandler
                     foreach (var card in CardFileDb.CardFile.Cards)
                     {
                         if (card.CardName.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) != -1 ||
-                            card.GetCardContentsPlain().IndexOf(filterText, StringComparison.OrdinalIgnoreCase) != -1)
+                            card.GetCardContentsPlain().IndexOf(filterText, StringComparison.OrdinalIgnoreCase) != -1 ||
+                            card.CardType.CardTypeName.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) != -1)
                         {
                             ListBoxCards.Items.Add(card);
                         }
@@ -407,19 +530,37 @@ namespace EasyCardFile.CardFileHandler
                 }
             }
         }
+        #endregion
 
+        #region Dispose
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
+            // no need to store this in the static instance list..
+            UiWrappers.Remove(this);
+
             if (disposing)
             {
                 RichTextBox.TextChanged -= RichTextBox_TextChanged;
                 SearchTextBox.TextChanged -= SearchTextBox_TextChanged;
                 ListBoxCards.SelectedValueChanged -= ListBoxCards_SelectedValueChanged;
                 CardFileDbContext.ReleaseDbContext(CardFileDb, false, true);
+
+                try
+                {
+                    if (IsTemporary && File.Exists(FileName))
+                    {
+                        File.Delete(FileName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // report the exception..
+                    ExceptionLogAction?.Invoke(ex);
+                }
             }
         }
 
@@ -431,5 +572,6 @@ namespace EasyCardFile.CardFileHandler
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+        #endregion
     }
 }

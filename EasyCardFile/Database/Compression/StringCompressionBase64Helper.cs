@@ -24,39 +24,24 @@ SOFTWARE.
 */
 #endregion
 
-using SQLite.CodeFirst;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace EasyCardFile.Database.Entity.Entities
+namespace EasyCardFile.Database.Compression
 {
-    /// <summary>
-    /// A class representing a single card type in the database.
-    /// Implements the <see cref="IEntity" />
-    /// </summary>
-    public class CardType: IEntity
+    public static class StringCompressionBase64Helper
     {
-        /// <summary>
-        /// Gets or sets the identifier for the entity.
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the card type.
-        /// </summary>
-        [Unique]
-        public string CardTypeName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the card file the card type belongs to.
-        /// </summary>
-        public virtual CardFile CardFile { get; set; }
-
-        /// <summary>
-        /// Returns a <see cref="System.String"/> that represents this instance.
-        /// </summary>
-        /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
-        public override string ToString()
+        public static string CompressToBase64(this string str, Encoding encoding)
         {
-            return CardTypeName;
+            return DatabaseCompressionHelper.CompressDataToBase64(str, encoding);
+        }
+
+        public static string DecompressFromBase64(this string str, Encoding encoding)
+        {
+            return DatabaseCompressionHelper.DecompressDataToString(str, encoding);
         }
     }
 }
