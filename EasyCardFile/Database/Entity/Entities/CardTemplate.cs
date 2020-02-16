@@ -2,7 +2,7 @@
 /*
 MIT License
 
-Copyright(c) 2019 Petteri Kautonen
+Copyright(c) 2020 Petteri Kautonen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -47,5 +47,10 @@ namespace EasyCardFile.Database.Entity.Entities
         /// Gets or sets the card template contents in RTF format.
         /// </summary>
         public byte [] CardTemplateContents { get; set; }
+
+        /// <summary>
+        /// Gets or sets the additional data 1. This property is currently not in use and is intended to be used if there are some missing properties with the model.
+        /// </summary>
+        public string AdditionalData1 { get; set; }
     }
 }

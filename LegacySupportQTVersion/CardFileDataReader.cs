@@ -325,7 +325,7 @@ namespace LegacySupportQTVersion
                 connection.Open();
                 string sql = string.Join(Environment.NewLine, 
                     "SELECT DatabaseName, AutoLabelInstructions, CardDefaultType,",
-                    "WordWrapDefault, Encrypted, Compressed",
+                    "IFNULL(WordWrapDefault, 0), IFNULL(Encrypted, 0), IFNULL(Compressed, 0)",
                     "FROM Properties;");
 
 #pragma warning disable CA2100 // Review SQL queries for security vulnerabilities

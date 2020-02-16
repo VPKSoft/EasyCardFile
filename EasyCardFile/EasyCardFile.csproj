@@ -96,8 +96,8 @@
     <Reference Include="VPKSoft.TextEditIcons, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.TextEditIcons.1.0.0\lib\net45\VPKSoft.TextEditIcons.dll</HintPath>
     </Reference>
-    <Reference Include="VPKSoft.Utils, Version=1.0.4.4, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VPKSoft.Utils.1.0.4.4\lib\net45\VPKSoft.Utils.dll</HintPath>
+    <Reference Include="VPKSoft.Utils, Version=1.0.4.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VPKSoft.Utils.1.0.4.6\lib\net45\VPKSoft.Utils.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +147,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Settings\FormDialogSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Settings\FormDialogSettings.Designer.cs">
+      <DependentUpon>FormDialogSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Settings\TypeConverters\TypeConverterPrimitiveGenericList.cs" />
     <Compile Include="UtilityClasses\ErrorHandling\ErrorHandlingBase.cs" />
     <Compile Include="UtilityClasses\Localization\LocalizeStaticProperties.cs" />
     <Compile Include="UtilityClasses\Localization\Messages.Designer.cs">
@@ -175,6 +183,9 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Settings\FormDialogSettings.resx">
+      <DependentUpon>FormDialogSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UtilityClasses\Localization\Messages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.Designer.cs</LastGenOutput>
@@ -200,6 +211,7 @@
   <ItemGroup>
     <Content Include="62941cardfilebox_109271.ico" />
     <Content Include="DBLocalization.exe" />
+    <None Include="Resources\system-settings-2.png" />
     <None Include="Resources\edit-delete-6.png" />
     <None Include="Resources\Delete.bmp" />
     <None Include="Resources\edit-add-2.png" />

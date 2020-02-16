@@ -2,7 +2,7 @@
 /*
 MIT License
 
-Copyright(c) 2019 Petteri Kautonen
+Copyright(c) 2020 Petteri Kautonen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -111,6 +111,11 @@ namespace EasyCardFile.Database.Entity.Entities
         /// Gets or sets the card file the card belongs to.
         /// </summary>
         public virtual CardFile CardFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the additional data 1. This property is currently not in use and is intended to be used if there are some missing properties with the model.
+        /// </summary>
+        public string AdditionalData1 { get; set; }
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.

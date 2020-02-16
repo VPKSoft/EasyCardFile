@@ -2,7 +2,7 @@
 /*
 MIT License
 
-Copyright(c) 2019 Petteri Kautonen
+Copyright(c) 2020 Petteri Kautonen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -281,7 +281,18 @@ namespace EasyCardFile.CardFileHandler
 
             Tab.Controls.Add(splitContainer);
             tabControl.Tabs.Add(Tab);
-            splitContainer.SplitterDistance = splitContainer.Width * 25 / 100; // size about 25%..
+            tabControl.SelectedTab = Tab;
+            var splitterDistance = tabControl.ClientSize.Width * 25 / 100; // size about 25%..
+
+            try
+            {
+                splitContainer.SplitterDistance = splitterDistance;
+            }
+            catch (Exception ex)
+            {
+                // log the exception..
+                ExceptionLogAction?.Invoke(ex);
+            }
         }
         #endregion
 

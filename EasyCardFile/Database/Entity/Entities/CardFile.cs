@@ -2,7 +2,7 @@
 /*
 MIT License
 
-Copyright(c) 2019 Petteri Kautonen
+Copyright(c) 2020 Petteri Kautonen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -97,5 +97,15 @@ namespace EasyCardFile.Database.Entity.Entities
         /// value of unencrypted <see cref="EncryptionPasswordValidationRandomizedBase64"/> property value. This is Base64 encoded binary data.
         /// </summary>
         public string EncryptionHashAlgorithmValueBase64 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the additional data 1. This property is currently not in use and is intended to be used if there are some missing properties with the model.
+        /// </summary>
+        public string AdditionalData1 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the additional data 2. This property is currently not in use and is intended to be used if there are some missing properties with the model.
+        /// </summary>
+        public string AdditionalData2 { get; set; }
     }
 }

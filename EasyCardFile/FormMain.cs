@@ -2,7 +2,7 @@
 /*
 MIT License
 
-Copyright(c) 2019 Petteri Kautonen
+Copyright(c) 2020 Petteri Kautonen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,22 +25,23 @@ SOFTWARE.
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using EasyCardFile.CardFileHandler;
-using EasyCardFile.CardFileHandler.CardFileNaming;
-using EasyCardFile.CardFileHandler.CardFilePreferences;
 using EasyCardFile.CardFileHandler.LegacyCardFile;
-using EasyCardFile.Database.Encryption;
-using EasyCardFile.Database.Entity.Context;
 using EasyCardFile.Database.Entity.Context.ContextCompression;
 using EasyCardFile.Database.Entity.Context.ContextEncryption;
+using EasyCardFile.Settings;
+using EasyCardFile.Settings.TypeConverters;
 using EasyCardFile.UtilityClasses.Localization;
 using VPKSoft.ErrorLogger;
 using VPKSoft.LangLib;
 using VPKSoft.MessageBoxExtended;
+using VPKSoft.Utils.XmlSettingsMisc;
 using VU = VPKSoft.Utils;
 
 // Icon (C): https://icon-icons.com/icon/card-file-box/109271, Apache 2.0
@@ -88,40 +89,52 @@ namespace EasyCardFile
             LocalizeStaticProperties.LocalizeStatic();
 
             mnuTest.Visible = Debugger.IsAttached;
+
+            Settings = new Settings.Settings();
+            Settings.RequestTypeConverter += Settings_RequestTypeConverter;
+
+            Settings.Load(PathHandler.GetSettingsFile(Assembly.GetEntryAssembly(), ".xml",
+                Environment.SpecialFolder.LocalApplicationData));
+        }
+
+        private Settings.Settings Settings { get; }
+
+        #region InternalEvents
+        private void Settings_RequestTypeConverter(object sender, RequestTypeConverterEventArgs e)
+        {
+            try
+            {
+                if (e.TypeToConvert == typeof(List<string>))
+                {
+                    e.TypeConverter = new TypeConverterPrimitiveGenericList<string>();
+                }
+            }
+            catch (Exception ex)
+            {
+                // log the exception..
+                ExceptionLogger.LogError(ex);
+            }
         }
 
         private void mnuNew_Click(object sender, EventArgs e)
         {
             // ReSharper disable once ObjectCreationAsStatement
-            var cardFile = new CardFileUiWrapper(tcCardFiles);
+            new CardFileUiWrapper(tcCardFiles);
         }
 
         private void mnuImportPrevious_Click(object sender, EventArgs e)
         {
-            CardFileLegacyReader.Convert(odCardFileLegacy, sdCardFile, this);
+            if (CardFileLegacyReader.Convert(odCardFileLegacy, sdCardFile, this))
+            {
+                OpenCardFile(sdCardFile.FileName);
+            }
         }
 
         private void mnuOpen_Click(object sender, EventArgs e)
         {
             if (odCardFile.ShowDialog() == DialogResult.OK)
             {
-                try
-                {
-                    // ReSharper disable once ObjectCreationAsStatement
-                    new CardFileUiWrapper(odCardFile.FileName, tcCardFiles);
-                }
-                catch (Exception ex)
-                {
-                    // log the exception..
-                    ExceptionLogger.LogError(ex);
-                    MessageBoxExtended.Show(this,
-                        DBLangEngine.GetMessage("msgCardFileFailedOpen",
-                            "Failed to open the card file: '{0}'.|A message for a message dialog that the card file failed to open",
-                            odCardFile.FileName),
-                        DBLangEngine.GetMessage("msgError",
-                            "Error|A message describing that some kind of error occurred."),
-                        MessageBoxButtonsExtended.OK, MessageBoxIcon.Error, true);
-                }
+                OpenCardFile(odCardFile.FileName, true);
             }
         }
 
@@ -165,5 +178,120 @@ namespace EasyCardFile
 
 //            CardFileDbContext.DecryptCardFile(cardFile, "helevetti", Encoding.UTF8);
         }
+
+        private void FormMain_Shown(object sender, EventArgs e)
+        {
+            RestoreSession();
+        }
+
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Settings.SessionFiles = new List<string>();
+
+            foreach (var tab in tcCardFiles.Tabs)
+            {
+                var wrapper = CardFileUiWrapper.GetWrapperByTab(tab);
+
+                if (wrapper == null)
+                {
+                    continue;
+                }
+
+                if (!wrapper.IsTemporary)
+                {
+                    Settings.SessionFiles.Add(wrapper.FileName);
+                }
+            }
+
+            Settings.SessionActiveTabIndex = tcCardFiles.SelectedIndex;
+
+            Settings.Save(PathHandler.GetSettingsFile(Assembly.GetEntryAssembly(), ".xml",
+                Environment.SpecialFolder.LocalApplicationData));
+
+            Settings.RequestTypeConverter -= Settings_RequestTypeConverter;
+        }
+
+        private void mnuSettings_Click(object sender, EventArgs e)
+        {
+            FormDialogSettings.ShowDialog(this, Settings);
+        }
+        #endregion
+
+        #region PrivateProperties
+        private bool SessionRestored { get; set; }
+        #endregion
+
+        #region PrivateMethods        
+        /// <summary>
+        /// Opens the card file.
+        /// </summary>
+        /// <param name="fileName">Name of the file of the card file.</param>
+        /// <param name="displayLoadErrorDialog">if set to <c>true</c> a dialog is displayed in case of an error loading the card file.</param>
+        /// <returns><c>true</c> if the card file was opened successfully, <c>false</c> otherwise.</returns>
+        private bool OpenCardFile(string fileName, bool displayLoadErrorDialog = false)
+        {
+            if (!File.Exists(fileName))
+            {
+                return false;
+            }
+
+            try
+            {
+                // don't allow a database to be re-opened..
+                foreach (var tab in tcCardFiles.Tabs)
+                {
+                    var wrapper = CardFileUiWrapper.GetWrapperByTab(tab);
+                    if (wrapper.FileName == fileName)
+                    {
+                        tcCardFiles.SelectedTab = tab;
+                        return false;
+
+                    }
+                }
+
+                // ReSharper disable once ObjectCreationAsStatement
+                new CardFileUiWrapper(fileName, tcCardFiles);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // log the exception..
+                ExceptionLogger.LogError(ex);
+                if (displayLoadErrorDialog)
+                {
+                    MessageBoxExtended.Show(this,
+                        DBLangEngine.GetMessage("msgCardFileFailedOpen",
+                            "Failed to open the card file: '{0}'.|A message for a message dialog that the card file failed to open",
+                            odCardFile.FileName),
+                        DBLangEngine.GetMessage("msgError",
+                            "Error|A message describing that some kind of error occurred."),
+                        MessageBoxButtonsExtended.OK, MessageBoxIcon.Error, true);
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Restores the previous session.
+        /// </summary>
+        private void RestoreSession()
+        {
+            if (Settings.RestoreSessionOnStartup && !SessionRestored)
+            {
+                foreach (var sessionFile in Settings.SessionFiles)
+                {
+                    OpenCardFile(sessionFile);
+                }
+
+                SessionRestored = true;
+            }
+
+            if (Settings.SessionActiveTabIndex >= 0 && Settings.SessionActiveTabIndex < tcCardFiles.Tabs.Count)
+            {
+                tcCardFiles.SelectedIndex = Settings.SessionActiveTabIndex;
+            }
+        }
+        #endregion
     }
 }

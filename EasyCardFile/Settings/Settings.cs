@@ -24,44 +24,41 @@ SOFTWARE.
 */
 #endregion
 
-using SQLite.CodeFirst;
+using System.Collections.Generic;
+using VPKSoft.Utils;
+using VPKSoft.Utils.XmlSettingsMisc;
 
-namespace EasyCardFile.Database.Entity.Entities
+namespace EasyCardFile.Settings
 {
     /// <summary>
-    /// A class representing a single card type in the database.
-    /// Implements the <see cref="IEntity" />
+    /// A class for the application settings.
+    /// Implements the <see cref="VPKSoft.Utils.XmlSettings" />
     /// </summary>
-    public class CardType: IEntity
+    /// <seealso cref="VPKSoft.Utils.XmlSettings" />
+    public class Settings: XmlSettings
     {
         /// <summary>
-        /// Gets or sets the identifier for the entity.
+        /// Gets or sets a value indicating whether the existing card files are auto saved upon software close.
         /// </summary>
-        public int Id { get; set; }
+        [IsSetting(DefaultValue = true)]
+        public bool AutoSave { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the card type.
+        /// Gets or sets the session files.
         /// </summary>
-        [Unique]
-        public string CardTypeName { get; set; }
+        [IsSetting]
+        public List<string> SessionFiles { get; set; }
 
         /// <summary>
-        /// Gets or sets the card file the card type belongs to.
+        /// Gets or sets a value indicating whether to restore the session on application startup.
         /// </summary>
-        public virtual CardFile CardFile { get; set; }
+        [IsSetting(DefaultValue = true)]
+        public bool RestoreSessionOnStartup { get; set; }
 
         /// <summary>
-        /// Gets or sets the additional data 1. This property is currently not in use and is intended to be used if there are some missing properties with the model.
+        /// Gets or sets the index of the session active tab.
         /// </summary>
-        public string AdditionalData1 { get; set; }
-
-        /// <summary>
-        /// Returns a <see cref="System.String"/> that represents this instance.
-        /// </summary>
-        /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
-        public override string ToString()
-        {
-            return CardTypeName;
-        }
+        [IsSetting]
+        public int SessionActiveTabIndex { get; set; }
     }
 }
