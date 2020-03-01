@@ -77,8 +77,10 @@
             // 
             // FormDialogAddRenameCard
             // 
+            this.AcceptButton = this.btOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btCancel;
             this.ClientSize = new System.Drawing.Size(534, 80);
             this.Controls.Add(this.btCancel);
             this.Controls.Add(this.btOk);
@@ -89,6 +91,7 @@
             this.MinimizeBox = false;
             this.Name = "FormDialogAddRenameCard";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Enter a name for the card";
             this.ResumeLayout(false);
             this.PerformLayout();

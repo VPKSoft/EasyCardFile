@@ -162,6 +162,7 @@
     </Compile>
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Settings\TypeConverters\TypeConverterPrimitiveGenericList.cs" />
+    <Compile Include="UtilityClasses\Constants\EasyCardFileConstants.cs" />
     <Compile Include="UtilityClasses\ErrorHandling\ErrorHandlingBase.cs" />
     <Compile Include="UtilityClasses\Localization\LocalizeStaticProperties.cs" />
     <Compile Include="UtilityClasses\Localization\Messages.Designer.cs">

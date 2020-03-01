@@ -32,6 +32,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EasyCardFile.Database.Entity.Entities;
 using EasyCardFile.UtilityClasses.ErrorHandling;
+using EasyCardFile.UtilityClasses.Localization;
 using EasyCardFile.UtilityClasses.TextUtility;
 using VPKSoft.ErrorLogger;
 
@@ -85,6 +86,11 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
         public static string NameCard(CardFile cardFile, DateTime dateTime, char padCharacter = '0')
         {
             var cardNaming = cardFile.CardNamingInstruction;
+
+            if (cardNaming == null) // not defined..
+            {
+                return string.Empty;
+            }
 
             if (cardFile.Cards == null)
             {

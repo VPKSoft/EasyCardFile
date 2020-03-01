@@ -66,28 +66,52 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
             DBLangEngine.InitializeLanguage("EasyCardFile.UtilityClasses.Localization.Messages");
         }
 
+        /// <summary>
+        /// Gets or sets the card file the ShowMethod was called with.
+        /// </summary>
+        /// <value>The card file.</value>
         private CardFile CardFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the added card if the dialog was accepted without validation errors.
+        /// </summary>
+        private Card AddedCard { get; set; }
 
         /// <summary>
         /// <summary>Shows the form as a modal dialog box with the specified owner.</summary>
         /// </summary>
         /// <param name="owner">Any object that implements <see cref="T:System.Windows.Forms.IWin32Window" /> that represents the top-level window that will own the modal dialog box. </param>
         /// <param name="cardFile">The card file fow which a card is to be renamed or a new card to be added.</param>
+        /// <param name="addedCard"></param>
         /// <returns>One of the <see cref="T:System.Windows.Forms.DialogResult" /> values.</returns>
         /// <exception cref="T:System.ArgumentException">The form specified in the <paramref name="owner" /> parameter is the same as the form being shown.</exception>
         /// <exception cref="T:System.InvalidOperationException">The form being shown is already visible.-or- The form being shown is disabled.-or- The form being shown is not a top-level window.-or- The form being shown as a dialog box is already a modal form.-or-The current process is not running in user interactive mode (for more information, see <see cref="P:System.Windows.Forms.SystemInformation.UserInteractive" />).</exception>
-        public static DialogResult ShowDialog(IWin32Window owner, CardFile cardFile)
+        public static DialogResult ShowDialog(IWin32Window owner, CardFile cardFile, out Card addedCard)
         {
             var form = new FormDialogAddRenameCard
             {
                 tbCardName = {Text = CardNaming.NameCard(cardFile, DateTime.Now)}, CardFile = cardFile
             };
-            return form.ShowDialog();
+
+            var result = form.ShowDialog();
+
+            addedCard = form.AddedCard;
+
+            return result;
         }
 
         private void btOk_Click(object sender, EventArgs e)
         {
-            CardFile.Cards.Add(new Card { CardName = tbCardName.Text, CardType = CardFile.DefaultCardType, });
+            if (CardFile.Cards == null)
+            {
+                CardFile.Cards = new List<Card>();
+            }
+
+            AddedCard = new Card {CardName = tbCardName.Text, CardType = CardFile.DefaultCardType,};
+
+            CardFile.Cards.Add(AddedCard);
+
+            DialogResult = DialogResult.OK;
         }
     }
 }

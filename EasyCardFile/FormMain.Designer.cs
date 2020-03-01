@@ -251,13 +251,13 @@
             // 
             // sdCardFile
             // 
-            this.sdCardFile.DefaultExt = "*.ecfpf";
+            this.sdCardFile.DefaultExt = "*.ecff";
             this.sdCardFile.Filter = "Easy CardFile files|*.ecff";
             this.sdCardFile.SupportMultiDottedExtensions = true;
             // 
             // odCardFile
             // 
-            this.odCardFile.DefaultExt = "*.ecfpf";
+            this.odCardFile.DefaultExt = "*.ecff";
             this.odCardFile.Filter = "Easy CardFile file|*.ecff";
             // 
             // tcCardFiles

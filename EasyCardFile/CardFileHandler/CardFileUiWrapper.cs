@@ -75,10 +75,27 @@ namespace EasyCardFile.CardFileHandler
             IsTemporary = true;
             FileName = Path.Combine(TemporaryPath, Path.GetRandomFileName());
             OpenCardFile(FileName);
+
             var cardType = new CardType {CardTypeName = NewCardTypeDescription};
+
+            var cardName = string.Format(NewFileDescription, ++NewCounter);
+
+            while (UiWrappers.Any(f => f.CardFileDb.CardFile.Name == cardName))
+            {
+                cardName = string.Format(NewFileDescription, NewCounter++);
+            }
+
+            var cardFile = new CardFile
+                {Name = cardName, DefaultCardType = cardType};
+
+            CardFileDb.CardFiles.Add(cardFile);
+            CardFileDb.SaveChanges();
+
+            if (CardFileDb.CardFile.CardTypes == null)
+            {
+                CardFileDb.CardFile.CardTypes = new List<CardType>();
+            }
             CardFileDb.CardFile.CardTypes.Add(cardType);
-            CardFileDb.CardFiles.Add(new CardFile
-                {Name = string.Format(NewFileDescription, NewCounter++), DefaultCardType = cardType});
             CardFileDb.SaveChanges();
             CreateTabControls(tabControl);
             UiWrappers.Add(this);
@@ -161,7 +178,7 @@ namespace EasyCardFile.CardFileHandler
             try
             {
                 CardFileDb = CardFileDbContext.InitializeDbContext(fileName);
-                if (CardFileDb.CardFile.Compressed)
+                if (CardFileDb.CardFile != null && CardFileDb.CardFile.Compressed)
                 {
                     if (!CardFileDb.LoadWithCompression(Encoding.UTF8))
                     {
@@ -170,7 +187,7 @@ namespace EasyCardFile.CardFileHandler
                     }
                 }
 
-                if (CardFileDb.CardFile.Encrypted)
+                if (CardFileDb.CardFile != null && CardFileDb.CardFile.Encrypted)
                 {
                     if (!CardFileDb.LoadWithEncryption(Encoding.UTF8, Application.OpenForms[0]))
                     {
@@ -303,6 +320,16 @@ namespace EasyCardFile.CardFileHandler
         public CardFileDbContext CardFileDb { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to save the file in the application closing state.
+        /// </summary>
+        public bool SaveFile { get; set; }
+
+        /// <summary>
+        /// A new file name if the card file is supposed to be renamed.
+        /// </summary>
+        public string NewFileName { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to save the changes on the card file upon closing it.
         /// </summary>
         public bool SaveChangesOnClose { get; set; }
@@ -401,7 +428,8 @@ namespace EasyCardFile.CardFileHandler
         /// <summary>
         /// Refreshes the UI if the was saved as or a non-existing file was saved.
         /// </summary>
-        internal void RefreshUi()
+        /// <param name="selectCard">An optional instance to a <see cref="Card"/> to select from the list box.</param>
+        internal void RefreshUi(Card selectCard = null)
         {
             var index = ListBoxCards.SelectedIndex;
 
@@ -416,7 +444,14 @@ namespace EasyCardFile.CardFileHandler
                 }
             }
 
-            ListBoxCards.SelectedIndex = index;
+            if (selectCard != null)
+            {
+                ListBoxCards.SelectedItem = selectCard;
+            }
+            else
+            {
+                ListBoxCards.SelectedIndex = index;
+            }
         }
 
         /// <summary>
@@ -450,6 +485,18 @@ namespace EasyCardFile.CardFileHandler
         }
 
         /// <summary>
+        /// Gets the active UI wrapper of the tab control.
+        /// </summary>
+        /// <param name="tabControl">The tab control to get the active UI wrapper from.</param>
+        /// <returns>An instance to a <see cref="CardFileUiWrapper"/> class if the operation was successful; otherwise false.</returns>
+        internal static CardFileUiWrapper GetActiveUiWrapper(TabControl tabControl)
+        {
+            var tab = tabControl.SelectedTab;
+
+            return tab == null ? null : GetWrapperByTab(tab);
+        }
+
+        /// <summary>
         /// Gets the active database context for the card file.
         /// </summary>
         /// <param name="tabControl">The tab control.</param>
@@ -471,7 +518,10 @@ namespace EasyCardFile.CardFileHandler
             if (card != null)
             {
                 SuspendCardChanged = true;
-                RichTextBox.Rtf = Encoding.UTF8.GetString(card.CardContents);
+                if (card.CardContents != null)
+                {
+                    RichTextBox.Rtf = Encoding.UTF8.GetString(card.CardContents);
+                }
                 CardTypeComboBox.SelectedItem = card.CardType;
                 SuspendCardChanged = false;
             }

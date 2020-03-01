@@ -38,8 +38,10 @@ using EasyCardFile.CardFileHandler.LegacyCardFile;
 using EasyCardFile.Database.Entity.Context;
 using EasyCardFile.Database.Entity.Context.ContextCompression;
 using EasyCardFile.Database.Entity.Context.ContextEncryption;
+using EasyCardFile.Database.Entity.Entities;
 using EasyCardFile.Settings;
 using EasyCardFile.Settings.TypeConverters;
+using EasyCardFile.UtilityClasses.Constants;
 using EasyCardFile.UtilityClasses.Localization;
 using VPKSoft.ErrorLogger;
 using VPKSoft.LangLib;
@@ -98,6 +100,8 @@ namespace EasyCardFile
 
             Settings.Load(PathHandler.GetSettingsFile(Assembly.GetEntryAssembly(), ".xml",
                 Environment.SpecialFolder.LocalApplicationData));
+
+            LocalizeFileDialogs();
         }
 
         private Settings.Settings Settings { get; }
@@ -152,6 +156,21 @@ namespace EasyCardFile
             FormDialogCardFilePreferences.ShowDialog(this, wrapper);
         }
 
+        /// <summary>
+        /// Localizes the file dialogs.
+        /// </summary>
+        private void LocalizeFileDialogs()
+        {
+            odCardFile.DefaultExt = EasyCardFileConstants.FileExtensionFileDialog;
+            sdCardFile.DefaultExt = EasyCardFileConstants.FileExtensionFileDialog;
+
+            sdCardFile.Filter = LocalizeStaticProperties.EasyCardFileDialogExtension + @"|" +
+                                EasyCardFileConstants.FileExtensionFileDialog;
+
+            odCardFile.Filter = LocalizeStaticProperties.EasyCardFileDialogExtension + @"|" +
+                                EasyCardFileConstants.FileExtensionFileDialog;
+        }
+
         private void mnuTest_Click(object sender, EventArgs e)
         {
             
@@ -200,9 +219,36 @@ namespace EasyCardFile
                 var wrapper = CardFileUiWrapper.GetWrapperByTab(tab);
                 if (wrapper.CardFileDb.ChangeTracker.HasChanges())
                 {
-                    if (Settings.AutoSave)
+                    wrapper.SaveFile = false;
+                    wrapper.NewFileName = default;
+
+                    if (wrapper.IsTemporary)
                     {
-                        CardFileDbContext.ReleaseDbContext(wrapper.CardFileDb, true, true);
+                        var result = MessageBoxExtended.Show(this,
+                            DBLangEngine.GetMessage("msgCardFileSaveChangesQuery",
+                                "The card file {0} has changed. Save the changes?", wrapper.CardFileDb?.CardFile?.Name),
+                            DBLangEngine.GetMessage("msgCardFileSaveChangesQueryTitle",
+                                "Save changes to the card file?"), MessageBoxButtonsExtended.YesNoCancel,
+                            MessageBoxIcon.Question, true);
+
+                        if (result == DialogResultExtended.Cancel)
+                        {
+                            e.Cancel = true;
+                            return;
+                        }
+
+                        sdCardFile.FileName = wrapper.CardFileDb?.CardFile?.Name + EasyCardFileConstants.FileExtension;
+
+                        if (result == DialogResultExtended.Yes && sdCardFile.ShowDialog() == DialogResult.OK)
+                        {
+                            wrapper.SaveFile = true;
+                            wrapper.NewFileName = sdCardFile.FileName;
+                            wrapper.IsTemporary = false;
+                        }
+                    }
+                    else if (Settings.AutoSave)
+                    {
+                        wrapper.SaveFile = true;
                     }
                     else
                     {
@@ -212,20 +258,33 @@ namespace EasyCardFile
                             DBLangEngine.GetMessage("msgCardFileSaveChangesQueryTitle",
                                 "Save changes to the card file?"), MessageBoxButtonsExtended.YesNoCancel,
                             MessageBoxIcon.Question, true);
+
                         if (result == DialogResultExtended.Cancel)
                         {
                             e.Cancel = true;
                             return;
                         }
 
-                        if (result == DialogResultExtended.Yes)
-                        {
-                            CardFileDbContext.ReleaseDbContext(wrapper.CardFileDb, true, true);
-                        }
+                        wrapper.SaveFile = result == DialogResultExtended.Yes;
                     }
                 }
             }
 
+            foreach (var tab in tcCardFiles.Tabs)
+            {
+                var wrapper = CardFileUiWrapper.GetWrapperByTab(tab);
+                if (wrapper.CardFileDb.ChangeTracker.HasChanges())
+                {
+                    if (CardFileDbContext.ReleaseDbContext(wrapper.CardFileDb, wrapper.SaveFile, true,
+                        wrapper.NewFileName))
+                    {
+                        if (!string.IsNullOrEmpty(wrapper.NewFileName))
+                        {
+                            wrapper.FileName = wrapper.NewFileName;
+                        }
+                    }
+                }
+            }
 
             Settings.SessionFiles = new List<string>();
 
@@ -337,7 +396,14 @@ namespace EasyCardFile
 
         private void tsbNewCard_Click(object sender, EventArgs e)
         {
-            FormDialogAddRenameCard.ShowDialog(this, CardFileUiWrapper.GetActiveCardFile(tcCardFiles));
+            var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
+            if (wrapper != null)
+            {
+                if (FormDialogAddRenameCard.ShowDialog(this, wrapper.CardFileDb.CardFile, out var card) == DialogResult.OK)
+                {
+                    wrapper.RefreshUi(card);
+                }
+            }
         }
     }
 }

@@ -143,6 +143,10 @@ namespace EasyCardFile.UtilityClasses.Localization
         /// </summary>
         public static string CartTypeSelectTypeNewForDeleted { get; set; }
 
+        /// <summary>
+        /// Gets or sets the localized Easy CardFile file dialog extension text.
+        /// </summary>
+        public static string EasyCardFileDialogExtension { get; set; }
 
         /// <summary>
         /// Localizes the static texts used by the software.
@@ -215,6 +219,9 @@ namespace EasyCardFile.UtilityClasses.Localization
             CardType.NewCardTypeNameLocalized =
                 DBLangEngine.GetStatMessage("msgNewCardTypeName",
                     "New card type|A localized default name for a new card type");
+
+            EasyCardFileDialogExtension = DBLangEngine.GetStatMessage("msgEasyCardFileDialogExtension",
+                "Easy CardFile file|A text for a file dialog to describe the Easy CardFile file extension.");
         }
     }
 }

@@ -28,6 +28,7 @@ using System;
 using System.Data.Common;
 using System.Data.Entity;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Text;
 using EasyCardFile.Database.Entity.Context.ContextCompression;
@@ -81,6 +82,7 @@ namespace EasyCardFile.Database.Entity.Context
                 return new CardFileDbContext(connection, false)
                 {
                     SqLiteConnection = connection,
+                    FileName = fileName,
                 };
             }
             catch (Exception ex) // report the exception and return false..
@@ -94,6 +96,12 @@ namespace EasyCardFile.Database.Entity.Context
         /// Gets or sets the SQLite connection for the Entity Framework Code First database.
         /// </summary>
         private SQLiteConnection SqLiteConnection { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the file of this card file database context.
+        /// </summary>
+        /// <value>The name of the file.</value>
+        internal string FileName { get; set; }
 
         /// <summary>
         /// Performs the SQLite Vacuum command to the underlying database connection.
@@ -151,18 +159,38 @@ namespace EasyCardFile.Database.Entity.Context
         }
 
         /// <summary>
+        /// Saves the <see cref="CardFileDbContext"/> with a new file name.
+        /// </summary>
+        /// <param name="context">The context to save as new file name.</param>
+        /// <param name="fileName">Name of the file to save the .</param>
+        /// <returns><c>true</c> if the file was saved successfully with a new file name, <c>false</c> otherwise.</returns>
+        public static bool SaveFileAs(ref CardFileDbContext context, string fileName)
+        {
+            var result = true;
+            result &= ReleaseDbContext(context, true, true, fileName);
+            context = InitializeDbContext(fileName);
+            result &= context != null;
+            return result;
+        }
+
+        /// <summary>
         /// Releases the database <see cref="CardFileDbContext"/> context.
         /// </summary>
         /// <param name="context">An instance to a <see cref="CardFileDbContext"/> class to dispose of.</param>
         /// <param name="save">if set to <c>true</c> a the context is requested to save the changes before disposing of the context.</param>
         /// <param name="forceGarbageCollection">A value indicating whether to force the <see cref="SqLiteConnection"/> immediately to be garbage-collected.</param>
+        /// <param name="newFileName">A new file name if the card file is supposed to be renamed.</param>
+        /// <param name="leavePreviousFile">A value indicating whether to leave the previous file to the file system in case of a save as operation.</param>
         /// <returns><c>true</c> if the operation was successful, <c>false</c> otherwise.</returns>
-        public static bool ReleaseDbContext(CardFileDbContext context, bool save = true, bool forceGarbageCollection = false)
+        public static bool ReleaseDbContext(CardFileDbContext context, bool save = true, bool forceGarbageCollection = false, string newFileName = null, bool leavePreviousFile = false)
         {
             try
             {
                 if (context != null) // null check..
                 {
+                    // get the file name in case of rename => move..
+                    var fileName = context.FileName; 
+
                     var connection = context.SqLiteConnection;
 
                     using (context) // dispose of the context..
@@ -182,6 +210,23 @@ namespace EasyCardFile.Database.Entity.Context
                         {
                             GC.Collect();
                             GC.WaitForPendingFinalizers();
+                        }
+                    }
+
+                    if (save && !string.IsNullOrWhiteSpace(newFileName))
+                    {
+                        if (File.Exists(newFileName))
+                        {
+                            File.Delete(newFileName);
+                        }
+
+                        if (!leavePreviousFile)
+                        {
+                            File.Move(fileName, newFileName);
+                        }
+                        else
+                        {
+                            File.Copy(fileName, newFileName);
                         }
                     }
                 }
