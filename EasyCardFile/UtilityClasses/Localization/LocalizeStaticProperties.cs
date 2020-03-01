@@ -24,6 +24,7 @@ SOFTWARE.
 */
 #endregion
 
+using EasyCardFile.Database.Entity.Entities;
 using EasyCardFile.UtilityClasses.ErrorHandling;
 using VPKSoft.LangLib;
 
@@ -65,7 +66,6 @@ namespace EasyCardFile.UtilityClasses.Localization
         /// <summary>
         /// Gets or sets a dialog text if the user-given passwords mismatch.
         /// </summary>
-        /// <value>The password mismatch.</value>
         public static string PasswordMismatch { get; set; }
 
         /// <summary>
@@ -76,7 +76,6 @@ namespace EasyCardFile.UtilityClasses.Localization
         /// <summary>
         /// Gets or sets a dialog text if the user-given password is invalid.
         /// </summary>
-        /// <value>The password mismatch.</value>
         public static string PasswordInvalid { get; set; }
 
         /// <summary>
@@ -88,6 +87,62 @@ namespace EasyCardFile.UtilityClasses.Localization
         /// Gets or sets the password query dialog text when an encrypted card file is opened.
         /// </summary>
         public static string PasswordQueryOpen { get; set; }
+
+        /// <summary>
+        /// Gets or sets the password query dialog text to disable encryption of an open card file.
+        /// </summary>
+        public static string PasswordQueryDisableEncryption { get; set; }
+
+        /// <summary>
+        /// Gets or sets a message displayed to the user that the card type name must be unique within a card file.
+        /// </summary>
+        public static string CardTypeNameUniqueError { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title of a dialog querying the user of a card type name.
+        /// </summary>
+        public static string CardTypeNameQueryTitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the displayed in a dialog querying the user of a card type name.
+        /// </summary>
+        public static string CardTypeNameQuery { get; set; }
+
+        /// <summary>
+        /// Gets or sets a message instructing the user that a default card type is required.
+        /// </summary>
+        public static string CardTypeDefaultRequired { get; set; }
+
+        /// <summary>
+        /// A title in a dialog displayed to the user that at leas one card is requires in a card file.
+        /// </summary>
+        public static string CardTypeOneRequiredTitle { get; set; }
+
+        /// <summary>
+        /// A message displayed to the user that at leas one card is requires in a card file.
+        /// </summary>
+        public static string CardTypeOneRequired { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title of a dialog displaying a message that the default card type can not be removed.
+        /// </summary>
+        public static string CardTypeCanNotDeleteDefaultTitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets a message that the default card type can not be removed.
+        /// </summary>
+        public static string CardTypeCanNotDeleteDefault { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title of a dialog displaying a message for the user to select a new card type for card(s).
+        /// </summary>
+        public static string CardTypeSelectTypeNewTitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets a message querying a new type for card(s) having their previous type to be deleted.
+        /// </summary>
+        public static string CartTypeSelectTypeNewForDeleted { get; set; }
+
 
         /// <summary>
         /// Localizes the static texts used by the software.
@@ -123,6 +178,43 @@ namespace EasyCardFile.UtilityClasses.Localization
 
             PasswordQueryOpen = DBLangEngine.GetStatMessage("msgGiveAPasswordOpen",
                 "Give a password to open the card file.|A user is asked for a password in a dialog to open an encrypted card file");
+
+            PasswordQueryDisableEncryption = DBLangEngine.GetStatMessage("msgGiveAPasswordDisableEncryption",
+                "Give a password to disable the card file encryption.|A user is asked for a password in a dialog to disable the card file encryption");
+
+            CardTypeNameUniqueError = DBLangEngine.GetStatMessage("msgCardTypeNameUniqueError",
+                "The card type name must be unique and can not be an empty string!|A message indicating that the name of the card type must be unique compared to other card types. Also the card type name can not be an empty string.");
+
+            CardTypeNameQueryTitle = DBLangEngine.GetStatMessage("msgCardTypeNameTitle",
+                "Card type name|A title for a dialog requesting a user to enter a name for a card type");
+
+            CardTypeNameQuery = DBLangEngine.GetStatMessage("msgEnterCardTypeName",
+                "Enter a name for the card type|A message instructing the user to give a name for a new card type");
+
+            CardTypeDefaultRequired = DBLangEngine.GetStatMessage("msgCardTypeMustHaveDefault",
+                "A default card type must be set!|A message indicating that a default card type must be set.");
+
+            CardTypeOneRequired = DBLangEngine.GetStatMessage("msgCardTypeOneRequired",
+                "At least one card type is required|A message explaining to the user that at least one type for a card is requires within a card file");
+
+            CardTypeOneRequiredTitle = DBLangEngine.GetStatMessage("msgCardTypeOneRequiredTitle",
+                "One card type is required|A title of a dialog explaining to the user that at least one type for a card is requires within a card file");
+
+            CardTypeCanNotDeleteDefaultTitle = DBLangEngine.GetStatMessage("msgCardTypeDefaultCanNotDeleteTitle",
+                "The default card can not be deleted|A title of a dialog explaining to the user that the default card type can not be removed.");
+
+            CardTypeCanNotDeleteDefault = DBLangEngine.GetStatMessage("msgCardTypeDefaultCanNotDelete",
+                "The default card can not be deleted. Please set another card as default and then remove the selected one.|A message describing that the default card type can not be removed and another type should be set to default before removing the selected one.");
+
+            CardTypeSelectTypeNewTitle = DBLangEngine.GetStatMessage("msgCardTypeSelectTypeNewTitle",
+                "Select a new card type|A dialog title message instructing the user to select a new card type.");
+
+            CartTypeSelectTypeNewForDeleted = DBLangEngine.GetStatMessage("msgCartTypeSelectTypeNewForDeleted",
+                "Select a new card type for the cards with the deleted type of: {0}|A message instructing the user to select a new card type for the cards using a card type about to be deleted.");
+
+            CardType.NewCardTypeNameLocalized =
+                DBLangEngine.GetStatMessage("msgNewCardTypeName",
+                    "New card type|A localized default name for a new card type");
         }
     }
 }

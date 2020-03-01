@@ -97,13 +97,22 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
                 return cardNaming;
             }
 
+            var testFormula = NameCard(cardNaming, 1, dateTime, padCharacter);
+
+            if (testFormula == cardNaming) // test that the card naming actually changes something to avoid an endless loop..
+            {
+                return testFormula;
+            }
+
             if (cardFile.CardNamingDropBetween)
             {
                 var cardNames = cardFile.Cards.Select(f => f.CardName).OrderBy(f => f, StringComparer.Ordinal).ToList();
 
+                var counter = 1;
+
                 for (int i = 0; i < cardNames.Count - 1; i++)
                 {
-                    var cardName = NameCard(cardNaming, i + 1, dateTime, padCharacter);
+                    var cardName = NameCard(cardNaming, counter++, dateTime, padCharacter);
 
                     if (string.Compare(cardNames[i], cardName, StringComparison.Ordinal) < 0 &&
                         string.Compare(cardNames[i + 1], cardName, StringComparison.Ordinal) > 0)
@@ -114,7 +123,18 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
             }
             else
             {
-                return NameCard(cardNaming, cardFile.Cards.Count + 1, dateTime, padCharacter);
+                var lastName = cardFile.Cards.Select(f => f.CardName).OrderBy(f => f, StringComparer.Ordinal)
+                    .LastOrDefault();
+
+                var counter = 1;
+                var newName = NameCard(cardNaming, counter++, dateTime, padCharacter);
+
+                while (string.CompareOrdinal(newName, lastName) <= 0)
+                {
+                    newName = NameCard(cardNaming, counter++, dateTime, padCharacter);
+                }
+
+                return newName;
             }
 
             return NameCard(cardNaming, 1, dateTime, padCharacter);

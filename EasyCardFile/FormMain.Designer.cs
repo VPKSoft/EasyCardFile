@@ -212,6 +212,7 @@
             this.tsbNewCard.Name = "tsbNewCard";
             this.tsbNewCard.Size = new System.Drawing.Size(23, 22);
             this.tsbNewCard.Text = "New card";
+            this.tsbNewCard.Click += new System.EventHandler(this.tsbNewCard_Click);
             // 
             // tsbDeleteCard
             // 
@@ -235,6 +236,7 @@
             this.tsbCardFilePreferences.Name = "tsbCardFilePreferences";
             this.tsbCardFilePreferences.Size = new System.Drawing.Size(23, 22);
             this.tsbCardFilePreferences.Text = "Card file preferences";
+            this.tsbCardFilePreferences.Click += new System.EventHandler(this.tsbCardFilePreferences_Click);
             // 
             // tab5
             // 

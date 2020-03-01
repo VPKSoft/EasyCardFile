@@ -117,11 +117,35 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="msgCardTypeDefaultCanNotDelete" xml:space="preserve">
+    <value>The default card can not be deleted. Please set another card as default and then remove the selected one.|A message describing that the default card type can not be removed and another type should be set to default before removing the selected one.</value>
+  </data>
+  <data name="msgCardTypeDefaultCanNotDeleteTitle" xml:space="preserve">
+    <value>The default card can not be deleted|A title of a dialog explaining to the user that the default card type can not be removed.</value>
+  </data>
   <data name="msgCardTypeDescription" xml:space="preserve">
     <value>Card type:|A description text for a card type selection combo box.</value>
   </data>
+  <data name="msgCardTypeMustHaveDefault" xml:space="preserve">
+    <value>A default card type must be set!|A message indicating that a default card type must be set.</value>
+  </data>
+  <data name="msgCardTypeNameTitle" xml:space="preserve">
+    <value>Card type name|A title for a dialog requesting a user to enter a name for a card type</value>
+  </data>
   <data name="msgCardTypeNameUniqueError" xml:space="preserve">
     <value>The card type name must be unique and can not be an empty string!|A message indicating that the name of the card type must be unique compared to other card types. Also the card type name can not be an empty string.</value>
+  </data>
+  <data name="msgCardTypeOneRequired" xml:space="preserve">
+    <value>At least one card type is required|A message explaining to the user that at least one type for a card is requires within a card file</value>
+  </data>
+  <data name="msgCardTypeOneRequiredTitle" xml:space="preserve">
+    <value>One card type is required|A title of a dialog explaining to the user that at least one type for a card is requires within a card file</value>
+  </data>
+  <data name="msgCardTypeSelectTypeNewTitle" xml:space="preserve">
+    <value>Select a new card type|A dialog title message instructing the user to select a new card type.</value>
+  </data>
+  <data name="msgCartTypeSelectTypeNewForDeleted" xml:space="preserve">
+    <value>Select a new card type for the cards with the deleted type of: {0}|A message instructing the user to select a new card type for the cards using a card type about to be deleted.</value>
   </data>
   <data name="msgConfirmAPassword" xml:space="preserve">
     <value>Confirm the password to protect the card file.|A user is asked for a confirmation for a password in a dialog (the second time)</value>
@@ -131,6 +155,9 @@
   </data>
   <data name="msgEncryptionGiveAPassword" xml:space="preserve">
     <value>The file is encrypted, please give a password.|A message indicating file encryption. A password is requested from the user.</value>
+  </data>
+  <data name="msgEnterCardTypeName" xml:space="preserve">
+    <value>Enter a name for the card type|A message instructing the user to give a name for a new card type</value>
   </data>
   <data name="msgEnterPassword" xml:space="preserve">
     <value>Give a password|A message querying a password from the user with the card file protection</value>
@@ -146,6 +173,9 @@
   </data>
   <data name="msgGiveAPassword" xml:space="preserve">
     <value>Give a password to protect the card file.|A user is asked for a password in a dialog</value>
+  </data>
+  <data name="msgGiveAPasswordDisableEncryption" xml:space="preserve">
+    <value>Give a password to disable the card file encryption.|A user is asked for a password in a dialog to disable the card file encryption</value>
   </data>
   <data name="msgGiveAPasswordOpen" xml:space="preserve">
     <value>Give a password to open the card file.|A user is asked for a password in a dialog to open an encrypted card file</value>
@@ -164,6 +194,9 @@
   </data>
   <data name="msgNewCardType" xml:space="preserve">
     <value>CARD TYPE|A default name for a type of a card in a new card file.</value>
+  </data>
+  <data name="msgNewCardTypeName" xml:space="preserve">
+    <value>New card type|A localized default name for a new card type</value>
   </data>
   <data name="msgPasswordInvalid" xml:space="preserve">
     <value>The given password is invalid. Please try again.|The user-given password is invalid so do complain via a dialog</value>

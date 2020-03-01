@@ -61,6 +61,24 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The default card can not be deleted. Please set another card as default and then remove the selected one.|A message describing that the default card type can not be removed and another type should be set to default before removing the selected one..
+        /// </summary>
+        internal static string msgCardTypeDefaultCanNotDelete {
+            get {
+                return ResourceManager.GetString("msgCardTypeDefaultCanNotDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The default card can not be deleted|A title of a dialog explaining to the user that the default card type can not be removed..
+        /// </summary>
+        internal static string msgCardTypeDefaultCanNotDeleteTitle {
+            get {
+                return ResourceManager.GetString("msgCardTypeDefaultCanNotDeleteTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Card type:|A description text for a card type selection combo box..
         /// </summary>
         internal static string msgCardTypeDescription {
@@ -70,11 +88,65 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A default card type must be set!|A message indicating that a default card type must be set..
+        /// </summary>
+        internal static string msgCardTypeMustHaveDefault {
+            get {
+                return ResourceManager.GetString("msgCardTypeMustHaveDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Card type name|A title for a dialog requesting a user to enter a name for a card type.
+        /// </summary>
+        internal static string msgCardTypeNameTitle {
+            get {
+                return ResourceManager.GetString("msgCardTypeNameTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The card type name must be unique and can not be an empty string!|A message indicating that the name of the card type must be unique compared to other card types. Also the card type name can not be an empty string..
         /// </summary>
         internal static string msgCardTypeNameUniqueError {
             get {
                 return ResourceManager.GetString("msgCardTypeNameUniqueError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to At least one card type is required|A message explaining to the user that at least one type for a card is requires within a card file.
+        /// </summary>
+        internal static string msgCardTypeOneRequired {
+            get {
+                return ResourceManager.GetString("msgCardTypeOneRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One card type is required|A title of a dialog explaining to the user that at least one type for a card is requires within a card file.
+        /// </summary>
+        internal static string msgCardTypeOneRequiredTitle {
+            get {
+                return ResourceManager.GetString("msgCardTypeOneRequiredTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a new card type|A dialog title message instructing the user to select a new card type..
+        /// </summary>
+        internal static string msgCardTypeSelectTypeNewTitle {
+            get {
+                return ResourceManager.GetString("msgCardTypeSelectTypeNewTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a new card type for the cards with the deleted type of: {0}|A message instructing the user to select a new card type for the cards using a card type about to be deleted..
+        /// </summary>
+        internal static string msgCartTypeSelectTypeNewForDeleted {
+            get {
+                return ResourceManager.GetString("msgCartTypeSelectTypeNewForDeleted", resourceCulture);
             }
         }
         
@@ -102,6 +174,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         internal static string msgEncryptionGiveAPassword {
             get {
                 return ResourceManager.GetString("msgEncryptionGiveAPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a name for the card type|A message instructing the user to give a name for a new card type.
+        /// </summary>
+        internal static string msgEnterCardTypeName {
+            get {
+                return ResourceManager.GetString("msgEnterCardTypeName", resourceCulture);
             }
         }
         
@@ -147,6 +228,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         internal static string msgGiveAPassword {
             get {
                 return ResourceManager.GetString("msgGiveAPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Give a password to disable the card file encryption.|A user is asked for a password in a dialog to disable the card file encryption.
+        /// </summary>
+        internal static string msgGiveAPasswordDisableEncryption {
+            get {
+                return ResourceManager.GetString("msgGiveAPasswordDisableEncryption", resourceCulture);
             }
         }
         
@@ -201,6 +291,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         internal static string msgNewCardType {
             get {
                 return ResourceManager.GetString("msgNewCardType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New card type|A localized default name for a new card type.
+        /// </summary>
+        internal static string msgNewCardTypeName {
+            get {
+                return ResourceManager.GetString("msgNewCardTypeName", resourceCulture);
             }
         }
         

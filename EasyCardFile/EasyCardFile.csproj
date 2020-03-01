@@ -87,8 +87,8 @@
     <Reference Include="VPKSoft.LangLib, Version=1.0.1.9, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.LangLib.1.0.1.9\lib\net461\VPKSoft.LangLib.dll</HintPath>
     </Reference>
-    <Reference Include="VPKSoft.MessageBoxExtended, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VPKSoft.MessageBoxExtended.1.0.0.3\lib\net47\VPKSoft.MessageBoxExtended.dll</HintPath>
+    <Reference Include="VPKSoft.MessageBoxExtended, Version=1.0.0.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VPKSoft.MessageBoxExtended.1.0.0.8\lib\net47\VPKSoft.MessageBoxExtended.dll</HintPath>
     </Reference>
     <Reference Include="VPKSoft.RichTextEdit, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.RichTextEdit.1.0.0.2\lib\net47\VPKSoft.RichTextEdit.dll</HintPath>
@@ -102,12 +102,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CardFileHandler\CardFileNaming\CardNaming.cs" />
+    <Compile Include="CardFileHandler\CardFileNaming\FormDialogAddRenameCard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CardFileHandler\CardFileNaming\FormDialogAddRenameCard.Designer.cs">
+      <DependentUpon>FormDialogAddRenameCard.cs</DependentUpon>
+    </Compile>
     <Compile Include="CardFileHandler\CardFileNaming\FormDialogCardFileNaming.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="CardFileHandler\CardFileNaming\FormDialogCardFileNaming.Designer.cs">
       <DependentUpon>FormDialogCardFileNaming.cs</DependentUpon>
     </Compile>
+    <Compile Include="Database\NoEntity\CardTypeNoEntity.cs" />
     <Compile Include="CardFileHandler\CardFilePreferences\FormDialogCardFilePreferences.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,6 +169,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
+    <Compile Include="UtilityClasses\Miscellaneous\Pair.cs" />
+    <Compile Include="UtilityClasses\ProjectControls\RefreshCheckListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UtilityClasses\ProjectControls\TextBoxButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -169,6 +180,9 @@
       <DependentUpon>TextBoxButton.cs</DependentUpon>
     </Compile>
     <Compile Include="UtilityClasses\TextUtility\RegexMatchLengthReplace.cs" />
+    <EmbeddedResource Include="CardFileHandler\CardFileNaming\FormDialogAddRenameCard.resx">
+      <DependentUpon>FormDialogAddRenameCard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CardFileHandler\CardFileNaming\FormDialogCardFileNaming.resx">
       <DependentUpon>FormDialogCardFileNaming.cs</DependentUpon>
     </EmbeddedResource>
@@ -211,6 +225,10 @@
   <ItemGroup>
     <Content Include="62941cardfilebox_109271.ico" />
     <Content Include="DBLocalization.exe" />
+    <None Include="Resources\Undo.png" />
+    <None Include="Resources\Modify.png" />
+    <None Include="Resources\system-password-2.png" />
+    <None Include="Resources\system-password.png" />
     <None Include="Resources\system-settings-2.png" />
     <None Include="Resources\edit-delete-6.png" />
     <None Include="Resources\Delete.bmp" />

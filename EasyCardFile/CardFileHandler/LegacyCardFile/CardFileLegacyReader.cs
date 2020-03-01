@@ -135,12 +135,16 @@ namespace EasyCardFile.CardFileHandler.LegacyCardFile
                             var cards = legacyReader.GetCards();
                             foreach (var card in cards)
                             {
+                                var cardName = card.name;
+                                var cardType = cardFile.CardTypes.FirstOrDefault(f => f.CardTypeName == card.type);
+                                var cardContents = Encoding.UTF8.GetBytes(card.cardContents);
+
                                 var cardNew = new Card
                                 {
-                                    CardName = card.name,
-                                    CardType = cardFile.CardTypes.FirstOrDefault(f => f.CardTypeName == card.type),
+                                    CardName = cardName,
+                                    CardType = cardType,
                                     Ordering = ordering++,
-                                    CardContents = Encoding.UTF8.GetBytes(card.cardContents),
+                                    CardContents = cardContents,
                                     WordWrap = card.wordWrap,
                                     CardFile = cardFile,
                                 };

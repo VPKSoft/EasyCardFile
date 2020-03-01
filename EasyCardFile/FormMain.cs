@@ -32,7 +32,10 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using EasyCardFile.CardFileHandler;
+using EasyCardFile.CardFileHandler.CardFileNaming;
+using EasyCardFile.CardFileHandler.CardFilePreferences;
 using EasyCardFile.CardFileHandler.LegacyCardFile;
+using EasyCardFile.Database.Entity.Context;
 using EasyCardFile.Database.Entity.Context.ContextCompression;
 using EasyCardFile.Database.Entity.Context.ContextEncryption;
 using EasyCardFile.Settings;
@@ -143,6 +146,12 @@ namespace EasyCardFile
             CardFileSaveClose.CloseCardFile(true, e.Tab);
         }
 
+        private void tsbCardFilePreferences_Click(object sender, EventArgs e)
+        {
+            var wrapper = CardFileUiWrapper.GetActiveDbContext(tcCardFiles);
+            FormDialogCardFilePreferences.ShowDialog(this, wrapper);
+        }
+
         private void mnuTest_Click(object sender, EventArgs e)
         {
             
@@ -186,6 +195,38 @@ namespace EasyCardFile
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            foreach (var tab in tcCardFiles.Tabs)
+            {
+                var wrapper = CardFileUiWrapper.GetWrapperByTab(tab);
+                if (wrapper.CardFileDb.ChangeTracker.HasChanges())
+                {
+                    if (Settings.AutoSave)
+                    {
+                        CardFileDbContext.ReleaseDbContext(wrapper.CardFileDb, true, true);
+                    }
+                    else
+                    {
+                        var result = MessageBoxExtended.Show(this,
+                            DBLangEngine.GetMessage("msgCardFileSaveChangesQuery",
+                                "The card file {0} has changed. Save the changes?", wrapper.CardFileDb?.CardFile?.Name),
+                            DBLangEngine.GetMessage("msgCardFileSaveChangesQueryTitle",
+                                "Save changes to the card file?"), MessageBoxButtonsExtended.YesNoCancel,
+                            MessageBoxIcon.Question, true);
+                        if (result == DialogResultExtended.Cancel)
+                        {
+                            e.Cancel = true;
+                            return;
+                        }
+
+                        if (result == DialogResultExtended.Yes)
+                        {
+                            CardFileDbContext.ReleaseDbContext(wrapper.CardFileDb, true, true);
+                        }
+                    }
+                }
+            }
+
+
             Settings.SessionFiles = new List<string>();
 
             foreach (var tab in tcCardFiles.Tabs)
@@ -293,5 +334,10 @@ namespace EasyCardFile
             }
         }
         #endregion
+
+        private void tsbNewCard_Click(object sender, EventArgs e)
+        {
+            FormDialogAddRenameCard.ShowDialog(this, CardFileUiWrapper.GetActiveCardFile(tcCardFiles));
+        }
     }
 }

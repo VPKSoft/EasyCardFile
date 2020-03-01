@@ -305,6 +305,8 @@ namespace LegacySupportQTVersion
                                 // some weird <[drive-letter]:\\> -tags in one of my old card files..
                                 cardContents = Regex.Replace(cardContents, @"<\w:\\*>", ":");
 
+                                cardContents = cardContents.Replace((char)0x7E7, ' ');
+
                                 yield return (
                                     cardName, 
                                     cardType, 

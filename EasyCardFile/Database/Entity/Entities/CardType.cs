@@ -24,6 +24,7 @@ SOFTWARE.
 */
 #endregion
 
+using System.ComponentModel.DataAnnotations.Schema;
 using SQLite.CodeFirst;
 
 namespace EasyCardFile.Database.Entity.Entities
@@ -49,6 +50,18 @@ namespace EasyCardFile.Database.Entity.Entities
         /// Gets or sets the card file the card type belongs to.
         /// </summary>
         public virtual CardFile CardFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the card naming instruction.
+        /// </summary>
+        public string CardNamingInstruction { get; set; }
+
+        /// <summary>
+        /// Creates new localized card type name (a default).
+        /// </summary>
+        /// <value>The new card type name localized.</value>
+        [NotMapped]
+        public static string NewCardTypeNameLocalized { get; set; }
 
         /// <summary>
         /// Gets or sets the additional data 1. This property is currently not in use and is intended to be used if there are some missing properties with the model.

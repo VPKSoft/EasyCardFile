@@ -118,6 +118,39 @@ namespace EasyCardFile.Database.Entity.Context
         }
 
         /// <summary>
+        /// Saves the database context with compression if enabled and with encryption if enabled.
+        /// </summary>
+        /// <param name="context">An instance to a <see cref="CardFileDbContext"/> class to save.</param>
+        /// <returns><c>true</c> if the operation was successful, <c>false</c> otherwise.</returns>
+        public static bool SaveDbContextWithCompressionEncryption(CardFileDbContext context)
+        {
+            try
+            {
+                if (context != null) // null check..
+                {
+                    if (context.CardFile.Encrypted)
+                    {
+                        context.SaveWithEncryption();
+                    }
+
+                    if (context.CardFile.Compressed)
+                    {
+                        context.SaveWithCompression(Encoding.UTF8);
+                    }
+
+                    context.SaveChanges();
+                }
+
+                return true;
+            }
+            catch (Exception ex) // report the exception and return false..
+            {
+                ErrorHandlingBase.ExceptionLogAction?.Invoke(ex);
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Releases the database <see cref="CardFileDbContext"/> context.
         /// </summary>
         /// <param name="context">An instance to a <see cref="CardFileDbContext"/> class to dispose of.</param>
@@ -136,17 +169,7 @@ namespace EasyCardFile.Database.Entity.Context
                     {
                         if (save) // ..if set to save, then save..
                         {
-                            if (context.CardFile.Encrypted)
-                            {
-                                context.SaveWithEncryption();
-                            }
-
-                            if (context.CardFile.Compressed)
-                            {
-                                context.SaveWithCompression(Encoding.UTF8);
-                            }
-
-                            context.SaveChanges();
+                            SaveDbContextWithCompressionEncryption(context);
                         }
                     }
 

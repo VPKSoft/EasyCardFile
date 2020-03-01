@@ -133,6 +133,16 @@ namespace EasyCardFile.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Modify {
+            get {
+                object obj = ResourceManager.GetObject("Modify", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap new_card {
             get {
                 object obj = ResourceManager.GetObject("new card", resourceCulture);
@@ -163,6 +173,26 @@ namespace EasyCardFile.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap system_password {
+            get {
+                object obj = ResourceManager.GetObject("system-password", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap system_password_2 {
+            get {
+                object obj = ResourceManager.GetObject("system-password-2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap system_settings_2 {
             get {
                 object obj = ResourceManager.GetObject("system-settings-2", resourceCulture);
@@ -176,6 +206,16 @@ namespace EasyCardFile.Properties {
         internal static System.Drawing.Bitmap textfield_rename {
             get {
                 object obj = ResourceManager.GetObject("textfield-rename", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Undo {
+            get {
+                object obj = ResourceManager.GetObject("Undo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
