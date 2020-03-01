@@ -40,6 +40,7 @@
             this.tsbAddCardType = new System.Windows.Forms.ToolStripButton();
             this.tsbRemoveCardType = new System.Windows.Forms.ToolStripButton();
             this.tsbRename = new System.Windows.Forms.ToolStripButton();
+            this.tsbTypeSpecificCardNaming = new System.Windows.Forms.ToolStripButton();
             this.tsbUndo = new System.Windows.Forms.ToolStripButton();
             this.lbRowErrorText = new System.Windows.Forms.Label();
             this.btCancel = new System.Windows.Forms.Button();
@@ -49,7 +50,6 @@
             this.lbChangePassword = new System.Windows.Forms.Label();
             this.clbCardTypes = new EasyCardFile.UtilityClasses.ProjectControls.RefreshCheckListBox();
             this.tbbCardNamingInstruction = new EasyCardFile.UtilityClasses.ProjectControls.TextBoxButton();
-            this.tsbTypeSpecificCardNaming = new System.Windows.Forms.ToolStripButton();
             this.tsbCardTypes.SuspendLayout();
             this.pnChangePassword.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbChangePassword)).BeginInit();
@@ -172,6 +172,16 @@
             this.tsbRename.Text = "Rename card type";
             this.tsbRename.Click += new System.EventHandler(this.tsbRename_Click);
             // 
+            // tsbTypeSpecificCardNaming
+            // 
+            this.tsbTypeSpecificCardNaming.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbTypeSpecificCardNaming.Image = global::EasyCardFile.Properties.Resources.textfield_rename;
+            this.tsbTypeSpecificCardNaming.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbTypeSpecificCardNaming.Name = "tsbTypeSpecificCardNaming";
+            this.tsbTypeSpecificCardNaming.Size = new System.Drawing.Size(30, 20);
+            this.tsbTypeSpecificCardNaming.Text = "Set card type specific naming instructions";
+            this.tsbTypeSpecificCardNaming.Click += new System.EventHandler(this.tsbTypeSpecificCardNaming_Click);
+            // 
             // tsbUndo
             // 
             this.tsbUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -282,16 +292,6 @@
             this.tbbCardNamingInstruction.TabIndex = 8;
             this.tbbCardNamingInstruction.TextChanged += new System.EventHandler(this.tbbCardNamingInstruction_TextChanged);
             this.tbbCardNamingInstruction.Click += new System.EventHandler(this.tbbCardNamingInstruction_Click);
-            // 
-            // tsbTypeSpecificCardNaming
-            // 
-            this.tsbTypeSpecificCardNaming.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbTypeSpecificCardNaming.Image = global::EasyCardFile.Properties.Resources.textfield_rename;
-            this.tsbTypeSpecificCardNaming.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbTypeSpecificCardNaming.Name = "tsbTypeSpecificCardNaming";
-            this.tsbTypeSpecificCardNaming.Size = new System.Drawing.Size(30, 20);
-            this.tsbTypeSpecificCardNaming.Text = "toolStripButton1";
-            this.tsbTypeSpecificCardNaming.Click += new System.EventHandler(this.tsbTypeSpecificCardNaming_Click);
             // 
             // FormDialogCardFilePreferences
             // 
