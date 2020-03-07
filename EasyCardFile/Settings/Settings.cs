@@ -25,6 +25,7 @@ SOFTWARE.
 #endregion
 
 using System.Collections.Generic;
+using EasyCardFile.CardFileHandler;
 using VPKSoft.Utils;
 using VPKSoft.Utils.XmlSettingsMisc;
 
@@ -60,5 +61,29 @@ namespace EasyCardFile.Settings
         /// </summary>
         [IsSetting]
         public int SessionActiveTabIndex { get; set; }
+
+        /// <summary>
+        /// Sets the files belonging to the current session.
+        /// </summary>
+        /// <param name="tabControl">The tab control witch the active card files reside.</param>
+        public void SetSessionFiles(Manina.Windows.Forms.TabControl tabControl)
+        {
+            SessionFiles = new List<string>();
+
+            foreach (var tab in tabControl.Tabs)
+            {
+                var wrapper = CardFileUiWrapper.GetWrapperByTab(tab);
+
+                if (wrapper == null)
+                {
+                    continue;
+                }
+
+                if (!wrapper.IsTemporary)
+                {
+                    SessionFiles.Add(wrapper.FileName);
+                }
+            }
+        }
     }
 }

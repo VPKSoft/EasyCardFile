@@ -87,12 +87,6 @@ namespace EasyCardFile.Database.Entity.Entities
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Card"/> has been changed.
-        /// </summary>
-        [NotMapped]
-        public bool Changed { get; set; }
-
-        /// <summary>
         /// Gets or sets the type of the card.
         /// </summary>
         public CardType CardType { get; set; }

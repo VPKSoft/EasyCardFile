@@ -61,6 +61,24 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The card file {0} has changed. Save the changes?|A query from the user whether to save the changed card file..
+        /// </summary>
+        internal static string msgCardFileSaveChangesQuery {
+            get {
+                return ResourceManager.GetString("msgCardFileSaveChangesQuery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save changes to the card file?|A title for a dialog asking whether to save changed card file..
+        /// </summary>
+        internal static string msgCardFileSaveChangesQueryTitle {
+            get {
+                return ResourceManager.GetString("msgCardFileSaveChangesQueryTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The default card can not be deleted. Please set another card as default and then remove the selected one.|A message describing that the default card type can not be removed and another type should be set to default before removing the selected one..
         /// </summary>
         internal static string msgCardTypeDefaultCanNotDelete {

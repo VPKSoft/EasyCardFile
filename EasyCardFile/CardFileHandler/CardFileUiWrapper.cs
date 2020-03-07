@@ -26,6 +26,7 @@ SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -206,6 +207,16 @@ namespace EasyCardFile.CardFileHandler
             }
         }
 
+        #region Interaction        
+        /// <summary>
+        /// Updates the title of the card file tab.
+        /// </summary>
+        public void UpdateTitle()
+        {
+            UpdateTabText();
+        }
+        #endregion
+
         #region GUI
         /// <summary>
         /// Performs the creation and the layout for a single card file tab to the <see cref="Manina.Windows.Forms.TabControl"/>
@@ -334,27 +345,18 @@ namespace EasyCardFile.CardFileHandler
         /// </summary>
         public bool SaveChangesOnClose { get; set; }
 
-        private bool changed;
+        /// <summary>
+        /// Gets or sets a value indicating if underlying <see cref="DbContext"/> have changes, else false.
+        /// </summary>
+        internal bool Changed => CardFileDb.ChangeTracker.HasChanges();
 
         /// <summary>
-        /// Gets or sets a cardEntity indicating whether the <see cref="CardFileDb"/> database context representing this card file has been changed.
+        /// Gets or sets the name of the card file.
         /// </summary>
-        internal bool Changed
+        internal string CardFileName
         {
-            get => changed;
-
-            set
-            {
-                foreach (var card in CardFileDb.CardFile.Cards)
-                {
-                    if (!value)
-                    {
-                        card.Changed = false;
-                    }
-                }
-
-                changed = value;
-            }
+            get => CardFileDb.CardFile.Name; 
+            set => CardFileDb.CardFile.Name = value; 
         }
 
         /// <summary>
@@ -388,7 +390,6 @@ namespace EasyCardFile.CardFileHandler
         {
             SetCardChanges(ListBoxCards.SelectedItem, ((ComboBox)sender).SelectedItem);
         }
-
 
         private void SearchTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -509,6 +510,39 @@ namespace EasyCardFile.CardFileHandler
         }
 
         /// <summary>
+        /// Sets the active database context to the active tab <see cref="CardFileUiWrapper"/> instance.
+        /// </summary>
+        /// <param name="tabControl">The tab control.</param>
+        /// <param name="context">The card file database context.</param>
+        /// <param name="newFileName">An optional new file name if the card file is was renamed.</param>
+        /// <returns><c>true</c> if the database context was set successfully, <c>false</c> otherwise.</returns>
+        internal static bool SetActiveDbContext(TabControl tabControl, CardFileDbContext context, string newFileName = null)
+        {
+            var tab = tabControl.SelectedTab;
+
+            if (tab == null)
+            {
+                return false;
+            }
+
+            var wrapper = GetWrapperByTab(tab);
+
+            if (wrapper == null)
+            {
+                return false;
+            }
+
+            if (File.Exists(newFileName))
+            {
+                wrapper.FileName = newFileName;
+            }
+
+            wrapper.CardFileDb = context;
+
+            return true;
+        }
+
+        /// <summary>
         /// Displays the card's contents suspending the changed event handlers so the displayed card doesn't flag it self as changed.
         /// </summary>
         /// <param name="cardEntity"></param>
@@ -560,9 +594,7 @@ namespace EasyCardFile.CardFileHandler
                         card.CardType = cardType;
                     }
 
-                    card.Changed = true;
-                    Changed = true;
-                    Tab.Text = CardFileDb.CardFiles.FirstOrDefault()?.Name + FileChangedIndicator;
+                    UpdateTabText();
                 }
             }
             catch (Exception ex)
@@ -570,6 +602,17 @@ namespace EasyCardFile.CardFileHandler
                 // report the exception..
                 ExceptionLogAction?.Invoke(ex);
             }
+        }
+
+        /// <summary>
+        /// Updates the tab text.
+        /// </summary>
+        internal void UpdateTabText()
+        {
+            var name = CardFileDb.CardFiles.FirstOrDefault()?.Name;
+            var changedText = Changed ? FileChangedIndicator : string.Empty;
+
+            Tab.Text = name + changedText;
         }
 
         /// <summary>

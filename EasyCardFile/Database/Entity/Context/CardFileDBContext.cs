@@ -167,7 +167,7 @@ namespace EasyCardFile.Database.Entity.Context
         public static bool SaveFileAs(ref CardFileDbContext context, string fileName)
         {
             var result = true;
-            result &= ReleaseDbContext(context, true, true, fileName);
+            result &= ReleaseDbContext(context, true, true, fileName, true);
             context = InitializeDbContext(fileName);
             result &= context != null;
             return result;
@@ -226,7 +226,7 @@ namespace EasyCardFile.Database.Entity.Context
                         }
                         else
                         {
-                            File.Copy(fileName, newFileName);
+                            File.Copy(fileName, newFileName, true);
                         }
                     }
                 }

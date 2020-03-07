@@ -24,7 +24,9 @@ SOFTWARE.
 */
 #endregion
 
+using System.Windows.Forms;
 using EasyCardFile.Database.Entity.Entities;
+using EasyCardFile.UtilityClasses.Constants;
 using EasyCardFile.UtilityClasses.ErrorHandling;
 using VPKSoft.LangLib;
 
@@ -149,6 +151,26 @@ namespace EasyCardFile.UtilityClasses.Localization
         public static string EasyCardFileDialogExtension { get; set; }
 
         /// <summary>
+        /// Gets or sets a localized query whether to save changes to a changed card file.
+        /// </summary>
+        public static string CardFileChangedSaveQuery { get; set; }
+
+        /// <summary>
+        /// Gets or sets a localized title for a dialog asking whether to save changed card file.
+        /// </summary>
+        public static string CardFileChangedSaveQueryTitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the localized dialog title for a Save As dialog.
+        /// </summary>
+        public static string DialogSaveAsTitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the localized dialog title for an Open dialog.
+        /// </summary>
+        public static string DialogOpenTitle { get; set; }
+
+        /// <summary>
         /// Localizes the static texts used by the software.
         /// </summary>
         public static void LocalizeStatic()
@@ -222,6 +244,39 @@ namespace EasyCardFile.UtilityClasses.Localization
 
             EasyCardFileDialogExtension = DBLangEngine.GetStatMessage("msgEasyCardFileDialogExtension",
                 "Easy CardFile file|A text for a file dialog to describe the Easy CardFile file extension.");
+
+            CardFileChangedSaveQuery = DBLangEngine.GetStatMessage("msgCardFileSaveChangesQuery",
+                "The card file {0} has changed. Save the changes?|A query from the user whether to save the changed card file.");
+
+            CardFileChangedSaveQueryTitle = DBLangEngine.GetStatMessage("msgCardFileSaveChangesQueryTitle",
+                "Save changes to the card file?|A title for a dialog asking whether to save changed card file.");
+
+            DialogSaveAsTitle = DBLangEngine.GetStatMessage("msgDialogSaveAsTitle",
+                "Save As|A title for a Save As dialog.");
+
+            DialogOpenTitle = DBLangEngine.GetStatMessage("msgDialogOpenTitle",
+                "Open|A title for a Open dialog.");
+        }
+
+        /// <summary>
+        /// Localizes the file dialogs.
+        /// </summary>
+        /// <param name="sdCardFile">The Save As card file dialog to localize.</param>
+        /// <param name="odCardFile">The Open card file dialog to localize.</param>
+        internal static void LocalizeFileDialogs(SaveFileDialog sdCardFile, OpenFileDialog odCardFile)
+        {
+            odCardFile.DefaultExt = EasyCardFileConstants.FileExtensionFileDialog;
+            sdCardFile.DefaultExt = EasyCardFileConstants.FileExtensionFileDialog;
+
+            sdCardFile.Filter = EasyCardFileDialogExtension + @"|" +
+                                EasyCardFileConstants.FileExtensionFileDialog;
+
+            odCardFile.Filter = EasyCardFileDialogExtension + @"|" +
+                                EasyCardFileConstants.FileExtensionFileDialog;
+
+            sdCardFile.Title = DialogSaveAsTitle;
+
+            odCardFile.Title = DialogOpenTitle;
         }
     }
 }

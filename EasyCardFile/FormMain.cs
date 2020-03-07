@@ -38,15 +38,16 @@ using EasyCardFile.CardFileHandler.LegacyCardFile;
 using EasyCardFile.Database.Entity.Context;
 using EasyCardFile.Database.Entity.Context.ContextCompression;
 using EasyCardFile.Database.Entity.Context.ContextEncryption;
-using EasyCardFile.Database.Entity.Entities;
 using EasyCardFile.Settings;
 using EasyCardFile.Settings.TypeConverters;
 using EasyCardFile.UtilityClasses.Constants;
+using EasyCardFile.UtilityClasses.FileAssociation;
 using EasyCardFile.UtilityClasses.Localization;
 using VPKSoft.ErrorLogger;
 using VPKSoft.LangLib;
 using VPKSoft.MessageBoxExtended;
 using VPKSoft.Utils.XmlSettingsMisc;
+using VPKSoft.VersionCheck.Forms;
 using VU = VPKSoft.Utils;
 
 // Icon (C): https://icon-icons.com/icon/card-file-box/109271, Apache 2.0
@@ -84,12 +85,12 @@ namespace EasyCardFile
             CardFileUiWrapper.LocalizeTexts();
 
             var appDataPath = VU.Paths.MakeAppSettingsFolder();
-            var temporaryPath = Path.Combine(appDataPath + "Temporary");
-            if (!Directory.Exists(temporaryPath))
+            CardFileSaveClose.TemporaryPath = Path.Combine(appDataPath + "Temporary");
+            if (!Directory.Exists(CardFileSaveClose.TemporaryPath))
             {
-                Directory.CreateDirectory(temporaryPath);
+                Directory.CreateDirectory(CardFileSaveClose.TemporaryPath);
             }
-            CardFileUiWrapper.TemporaryPath = temporaryPath;
+            CardFileUiWrapper.TemporaryPath = CardFileSaveClose.TemporaryPath;
 
             LocalizeStaticProperties.LocalizeStatic();
 
@@ -101,12 +102,22 @@ namespace EasyCardFile
             Settings.Load(PathHandler.GetSettingsFile(Assembly.GetEntryAssembly(), ".xml",
                 Environment.SpecialFolder.LocalApplicationData));
 
-            LocalizeFileDialogs();
+            LocalizeStaticProperties.LocalizeFileDialogs(sdCardFile, odCardFile);
+
+            tmRemoteOpenFileQueue.Enabled = true;
+
+            AssociateFileExtension.AssociateApplicationToFileExtension(EasyCardFileConstants.FileExtension);
+            //AssociateFileExtension.RemoveAssociatedFileExtension(EasyCardFileConstants.FileExtension);
         }
 
         private Settings.Settings Settings { get; }
 
         #region InternalEvents
+        private void tcCardFiles_PageChanged(object sender, Manina.Windows.Forms.PageChangedEventArgs e)
+        {
+            SetTitle();
+        }
+
         private void Settings_RequestTypeConverter(object sender, RequestTypeConverterEventArgs e)
         {
             try
@@ -123,88 +134,22 @@ namespace EasyCardFile
             }
         }
 
-        private void mnuNew_Click(object sender, EventArgs e)
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // ReSharper disable once ObjectCreationAsStatement
-            new CardFileUiWrapper(tcCardFiles);
-        }
+            CardFileSaveClose.RunSaveCheckApplicationClose(tcCardFiles, this, sdCardFile, Settings.AutoSave);
 
-        private void mnuImportPrevious_Click(object sender, EventArgs e)
-        {
-            if (CardFileLegacyReader.Convert(odCardFileLegacy, sdCardFile, this))
-            {
-                OpenCardFile(sdCardFile.FileName);
-            }
-        }
+            CardFileSaveClose.HandleTabsAfterClose(tcCardFiles);
 
-        private void mnuOpen_Click(object sender, EventArgs e)
-        {
-            if (odCardFile.ShowDialog() == DialogResult.OK)
-            {
-                OpenCardFile(odCardFile.FileName, true);
-            }
-        }
+            Settings.SetSessionFiles(tcCardFiles);
 
-        private void tcCardFiles_CloseTabButtonClick(object sender, Manina.Windows.Forms.CancelTabEventArgs e)
-        {
-            CardFileSaveClose.CloseCardFile(true, e.Tab);
-        }
+            Settings.SessionActiveTabIndex = tcCardFiles.SelectedIndex;
 
-        private void tsbCardFilePreferences_Click(object sender, EventArgs e)
-        {
-            var wrapper = CardFileUiWrapper.GetActiveDbContext(tcCardFiles);
-            FormDialogCardFilePreferences.ShowDialog(this, wrapper);
-        }
+            Settings.Save(PathHandler.GetSettingsFile(Assembly.GetEntryAssembly(), ".xml",
+                Environment.SpecialFolder.LocalApplicationData));
 
-        /// <summary>
-        /// Localizes the file dialogs.
-        /// </summary>
-        private void LocalizeFileDialogs()
-        {
-            odCardFile.DefaultExt = EasyCardFileConstants.FileExtensionFileDialog;
-            sdCardFile.DefaultExt = EasyCardFileConstants.FileExtensionFileDialog;
+            CardFileSaveClose.ClearTemporaryFiles();
 
-            sdCardFile.Filter = LocalizeStaticProperties.EasyCardFileDialogExtension + @"|" +
-                                EasyCardFileConstants.FileExtensionFileDialog;
-
-            odCardFile.Filter = LocalizeStaticProperties.EasyCardFileDialogExtension + @"|" +
-                                EasyCardFileConstants.FileExtensionFileDialog;
-        }
-
-        private void mnuTest_Click(object sender, EventArgs e)
-        {
-            
-            var cardFile = CardFileUiWrapper.GetActiveDbContext(tcCardFiles);
-            cardFile.EnableEncryption(Encoding.UTF8, this);
-            cardFile.CardFile.Compressed = true;
-            cardFile.SaveWithEncryption();
-            cardFile.SaveWithCompression(Encoding.UTF8);
-            cardFile.VacuumDatabase();
-
-            //cardFile.EnableEncryption(Encoding.UTF8, this);
-
-            //CardFileDbContext.CompressCardFile(cardFile, Encoding.UTF8);
-
-            /*
-            var randomBase64 = DatabaseEncryptionHelper.GenerateRandomBase64Data(150, 200);
-            var encryptedBase64 = DatabaseEncryptionHelper.EncryptData("helevetti", randomBase64, Encoding.UTF8);
-            var decryptedBase64 = encryptedBase64.DecryptBase64("helevetti", Encoding.UTF8);
-
-            return;
-
-
-/*            var value = "testitekstiä jonniin verran";
-
-            var encrypted = value.EncryptBase64("helevetti", Encoding.UTF8);
-            var decrypted = encrypted.DecryptBase64("helevetti", Encoding.UTF8);
-
-            MessageBox.Show(decrypted);
-            return;*/
-            //var cardFile = CardFileUiWrapper.GetActiveDbContext(tcCardFiles);
-
-            //CardFileDbContext.SaveEncryptedCardFile(cardFile, "helevetti", Encoding.UTF8);
-
-//            CardFileDbContext.DecryptCardFile(cardFile, "helevetti", Encoding.UTF8);
+            Settings.RequestTypeConverter -= Settings_RequestTypeConverter;
         }
 
         private void FormMain_Shown(object sender, EventArgs e)
@@ -212,112 +157,24 @@ namespace EasyCardFile
             RestoreSession();
         }
 
-        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        private void tmRemoteOpenFileQueue_Tick(object sender, EventArgs e)
         {
-            foreach (var tab in tcCardFiles.Tabs)
+            if (Program.OpenFileQueue.Count > 0)
             {
-                var wrapper = CardFileUiWrapper.GetWrapperByTab(tab);
-                if (wrapper.CardFileDb.ChangeTracker.HasChanges())
-                {
-                    wrapper.SaveFile = false;
-                    wrapper.NewFileName = default;
-
-                    if (wrapper.IsTemporary)
-                    {
-                        var result = MessageBoxExtended.Show(this,
-                            DBLangEngine.GetMessage("msgCardFileSaveChangesQuery",
-                                "The card file {0} has changed. Save the changes?", wrapper.CardFileDb?.CardFile?.Name),
-                            DBLangEngine.GetMessage("msgCardFileSaveChangesQueryTitle",
-                                "Save changes to the card file?"), MessageBoxButtonsExtended.YesNoCancel,
-                            MessageBoxIcon.Question, true);
-
-                        if (result == DialogResultExtended.Cancel)
-                        {
-                            e.Cancel = true;
-                            return;
-                        }
-
-                        sdCardFile.FileName = wrapper.CardFileDb?.CardFile?.Name + EasyCardFileConstants.FileExtension;
-
-                        if (result == DialogResultExtended.Yes && sdCardFile.ShowDialog() == DialogResult.OK)
-                        {
-                            wrapper.SaveFile = true;
-                            wrapper.NewFileName = sdCardFile.FileName;
-                            wrapper.IsTemporary = false;
-                        }
-                    }
-                    else if (Settings.AutoSave)
-                    {
-                        wrapper.SaveFile = true;
-                    }
-                    else
-                    {
-                        var result = MessageBoxExtended.Show(this,
-                            DBLangEngine.GetMessage("msgCardFileSaveChangesQuery",
-                                "The card file {0} has changed. Save the changes?", wrapper.CardFileDb?.CardFile?.Name),
-                            DBLangEngine.GetMessage("msgCardFileSaveChangesQueryTitle",
-                                "Save changes to the card file?"), MessageBoxButtonsExtended.YesNoCancel,
-                            MessageBoxIcon.Question, true);
-
-                        if (result == DialogResultExtended.Cancel)
-                        {
-                            e.Cancel = true;
-                            return;
-                        }
-
-                        wrapper.SaveFile = result == DialogResultExtended.Yes;
-                    }
-                }
+                OpenCardFile(Program.OpenFileQueue.Dequeue());
             }
-
-            foreach (var tab in tcCardFiles.Tabs)
-            {
-                var wrapper = CardFileUiWrapper.GetWrapperByTab(tab);
-                if (wrapper.CardFileDb.ChangeTracker.HasChanges())
-                {
-                    if (CardFileDbContext.ReleaseDbContext(wrapper.CardFileDb, wrapper.SaveFile, true,
-                        wrapper.NewFileName))
-                    {
-                        if (!string.IsNullOrEmpty(wrapper.NewFileName))
-                        {
-                            wrapper.FileName = wrapper.NewFileName;
-                        }
-                    }
-                }
-            }
-
-            Settings.SessionFiles = new List<string>();
-
-            foreach (var tab in tcCardFiles.Tabs)
-            {
-                var wrapper = CardFileUiWrapper.GetWrapperByTab(tab);
-
-                if (wrapper == null)
-                {
-                    continue;
-                }
-
-                if (!wrapper.IsTemporary)
-                {
-                    Settings.SessionFiles.Add(wrapper.FileName);
-                }
-            }
-
-            Settings.SessionActiveTabIndex = tcCardFiles.SelectedIndex;
-
-            Settings.Save(PathHandler.GetSettingsFile(Assembly.GetEntryAssembly(), ".xml",
-                Environment.SpecialFolder.LocalApplicationData));
-
-            Settings.RequestTypeConverter -= Settings_RequestTypeConverter;
         }
 
-        private void mnuSettings_Click(object sender, EventArgs e)
+        private void mnuTest_Click(object sender, EventArgs e)
         {
-            FormDialogSettings.ShowDialog(this, Settings);
+            // test something here..
         }
         #endregion
 
-        #region PrivateProperties
+        #region PrivateProperties        
+        /// <summary>
+        /// Gets or sets a value indicating whether the previous session was restored upon the software startup.
+        /// </summary>
         private bool SessionRestored { get; set; }
         #endregion
 
@@ -328,6 +185,7 @@ namespace EasyCardFile
         /// <param name="fileName">Name of the file of the card file.</param>
         /// <param name="displayLoadErrorDialog">if set to <c>true</c> a dialog is displayed in case of an error loading the card file.</param>
         /// <returns><c>true</c> if the card file was opened successfully, <c>false</c> otherwise.</returns>
+        // ReSharper disable once UnusedMethodReturnValue.Local
         private bool OpenCardFile(string fileName, bool displayLoadErrorDialog = false)
         {
             if (!File.Exists(fileName))
@@ -351,6 +209,7 @@ namespace EasyCardFile
 
                 // ReSharper disable once ObjectCreationAsStatement
                 new CardFileUiWrapper(fileName, tcCardFiles);
+                SetTitle();
                 return true;
             }
             catch (Exception ex)
@@ -392,7 +251,74 @@ namespace EasyCardFile
                 tcCardFiles.SelectedIndex = Settings.SessionActiveTabIndex;
             }
         }
+
+        /// <summary>
+        /// Sets the title of the main window of this software.
+        /// </summary>
+        private void SetTitle()
+        {
+            if (tcCardFiles.SelectedTab == null)
+            {
+                Text = EasyCardFileConstants.SoftwareName;
+            }
+
+            var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
+            if (wrapper == null)
+            {
+                return;
+            }
+
+            Text = EasyCardFileConstants.SoftwareName + @" [" + wrapper.CardFileName + @" | " + wrapper.FileName +
+                   (wrapper.Changed ? @" *" : "") + @"]";
+        }
         #endregion
+
+        #region UserInteractionEvents
+        private void tsbCardFilePreferences_Click(object sender, EventArgs e)
+        {
+            var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
+            if (FormDialogCardFilePreferences.ShowDialog(this, wrapper.CardFileDb) == DialogResult.OK)
+            {
+                wrapper.UpdateTitle();
+            }
+        }
+
+        private void mnuNew_Click(object sender, EventArgs e)
+        {
+            // ReSharper disable once ObjectCreationAsStatement
+            new CardFileUiWrapper(tcCardFiles);
+        }
+
+        private void mnuOpen_Click(object sender, EventArgs e)
+        {
+            if (odCardFile.ShowDialog() == DialogResult.OK)
+            {
+                OpenCardFile(odCardFile.FileName, true);
+            }
+        }
+
+        private void tcCardFiles_CloseTabButtonClick(object sender, Manina.Windows.Forms.CancelTabEventArgs e)
+        {
+            CardFileSaveClose.CloseCardFile(true, e.Tab);
+        }
+
+        private void mnuAbout_Click(object sender, EventArgs e)
+        {
+            // ReSharper disable once ObjectCreationAsStatement
+            new FormAbout(this, "MIT",
+                "https://raw.githubusercontent.com/VPKSoft/EasyCardFile/master/LICENSE",
+                "https://www.vpksoft.net/versions/version.php");
+        }
+
+        private void mnuExit_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void mnuSettings_Click(object sender, EventArgs e)
+        {
+            FormDialogSettings.ShowDialog(this, Settings);
+        }
 
         private void tsbNewCard_Click(object sender, EventArgs e)
         {
@@ -405,5 +331,24 @@ namespace EasyCardFile
                 }
             }
         }
+
+        private void mnuSaveAs_Click(object sender, EventArgs e)
+        {
+            CardFileSaveClose.SaveCardFileAs(tcCardFiles, sdCardFile, false);
+        }
+
+        private void mnuSave_Click(object sender, EventArgs e)
+        {
+            CardFileSaveClose.SaveCardFile(tcCardFiles, sdCardFile, false);
+        }
+
+        private void mnuImportLegacy_Click(object sender, EventArgs e)
+        {
+            if (CardFileLegacyReader.Convert(odCardFileLegacy, sdCardFile, this))
+            {
+                OpenCardFile(sdCardFile.FileName);
+            }
+        }
+        #endregion
     }
 }

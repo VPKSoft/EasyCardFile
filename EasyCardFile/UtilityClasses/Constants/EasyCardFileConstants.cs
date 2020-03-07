@@ -14,5 +14,10 @@
         /// The default file extension for a file dialog.
         /// </summary>
         public const string FileExtensionFileDialog = "*" + FileExtension;
+
+        /// <summary>
+        /// The name of this software.
+        /// </summary>
+        public const string SoftwareName = "Easy CardFile";
     }
 }

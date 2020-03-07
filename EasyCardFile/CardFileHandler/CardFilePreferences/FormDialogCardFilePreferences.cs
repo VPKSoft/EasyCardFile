@@ -351,7 +351,7 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
         }
 
         // the default card type was changed..
-        private void checkBox_CheckedChanged(object sender, EventArgs e)
+        private void common_ValueChanged(object sender, EventArgs e)
         {
             if (EventsSuspended)
             {

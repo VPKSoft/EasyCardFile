@@ -25,14 +25,9 @@ SOFTWARE.
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EasyCardFile.Database.Entity.Entities;
 using EasyCardFile.UtilityClasses.ErrorHandling;
-using EasyCardFile.UtilityClasses.Localization;
 using EasyCardFile.UtilityClasses.TextUtility;
 using VPKSoft.ErrorLogger;
 
@@ -135,9 +130,15 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
                 var counter = 1;
                 var newName = NameCard(cardNaming, counter++, dateTime, padCharacter);
 
+                var previousNewName = newName;
+
                 while (string.CompareOrdinal(newName, lastName) <= 0)
                 {
                     newName = NameCard(cardNaming, counter++, dateTime, padCharacter);
+                    if (previousNewName == newName) // avoid another endless loop..
+                    {
+                         break;
+                    }
                 }
 
                 return newName;

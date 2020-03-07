@@ -37,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\EasyCardFile.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>62941cardfilebox_109271.ico</ApplicationIcon>
@@ -96,8 +97,11 @@
     <Reference Include="VPKSoft.TextEditIcons, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.TextEditIcons.1.0.0\lib\net45\VPKSoft.TextEditIcons.dll</HintPath>
     </Reference>
-    <Reference Include="VPKSoft.Utils, Version=1.0.4.6, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VPKSoft.Utils.1.0.4.6\lib\net45\VPKSoft.Utils.dll</HintPath>
+    <Reference Include="VPKSoft.Utils, Version=1.0.4.7, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VPKSoft.Utils.1.0.4.7\lib\net45\VPKSoft.Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="VPKSoft.VersionCheck, Version=1.0.1.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VPKSoft.VersionCheck.1.0.1.4\lib\net47\VPKSoft.VersionCheck.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +168,7 @@
     <Compile Include="Settings\TypeConverters\TypeConverterPrimitiveGenericList.cs" />
     <Compile Include="UtilityClasses\Constants\EasyCardFileConstants.cs" />
     <Compile Include="UtilityClasses\ErrorHandling\ErrorHandlingBase.cs" />
+    <Compile Include="UtilityClasses\FileAssociation\AssociateFileExtension.cs" />
     <Compile Include="UtilityClasses\Localization\LocalizeStaticProperties.cs" />
     <Compile Include="UtilityClasses\Localization\Messages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -226,6 +231,11 @@
   <ItemGroup>
     <Content Include="62941cardfilebox_109271.ico" />
     <Content Include="DBLocalization.exe" />
+    <None Include="Resources\About.png" />
+    <Content Include="Resources\download_dialog_localization.txt" />
+    <None Include="Resources\Exit.png" />
+    <Content Include="setup_version_maintenance.exe" />
+    <None Include="Resources\SaveAs.png" />
     <None Include="Resources\Undo.png" />
     <None Include="Resources\Modify.png" />
     <None Include="Resources\system-password-2.png" />

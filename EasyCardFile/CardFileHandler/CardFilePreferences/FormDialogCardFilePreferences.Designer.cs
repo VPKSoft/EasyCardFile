@@ -83,7 +83,7 @@
             this.cbEncryption.TabIndex = 2;
             this.cbEncryption.Text = "Encrypt the card file";
             this.cbEncryption.UseVisualStyleBackColor = true;
-            this.cbEncryption.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
+            this.cbEncryption.CheckedChanged += new System.EventHandler(this.common_ValueChanged);
             // 
             // cbCompression
             // 
@@ -94,7 +94,7 @@
             this.cbCompression.TabIndex = 4;
             this.cbCompression.Text = "Compress the card file";
             this.cbCompression.UseVisualStyleBackColor = true;
-            this.cbCompression.CheckedChanged += new System.EventHandler(this.checkBox_CheckedChanged);
+            this.cbCompression.CheckedChanged += new System.EventHandler(this.common_ValueChanged);
             // 
             // lbCardNamingInstruction
             // 
@@ -114,6 +114,7 @@
             this.cbCardsDropBetween.TabIndex = 9;
             this.cbCardsDropBetween.Text = "Allow name generation between cards";
             this.cbCardsDropBetween.UseVisualStyleBackColor = true;
+            this.cbCardsDropBetween.CheckedChanged += new System.EventHandler(this.common_ValueChanged);
             // 
             // lbCardTypes
             // 
@@ -136,10 +137,10 @@
             this.tsbTypeSpecificCardNaming,
             this.tsbUndo});
             this.tsbCardTypes.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.tsbCardTypes.Location = new System.Drawing.Point(518, 154);
+            this.tsbCardTypes.Location = new System.Drawing.Point(526, 154);
             this.tsbCardTypes.Name = "tsbCardTypes";
             this.tsbCardTypes.ShowItemToolTips = false;
-            this.tsbCardTypes.Size = new System.Drawing.Size(32, 145);
+            this.tsbCardTypes.Size = new System.Drawing.Size(24, 126);
             this.tsbCardTypes.TabIndex = 14;
             // 
             // tsbAddCardType
@@ -148,7 +149,7 @@
             this.tsbAddCardType.Image = global::EasyCardFile.Properties.Resources.edit_add_2;
             this.tsbAddCardType.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbAddCardType.Name = "tsbAddCardType";
-            this.tsbAddCardType.Size = new System.Drawing.Size(30, 20);
+            this.tsbAddCardType.Size = new System.Drawing.Size(22, 20);
             this.tsbAddCardType.Text = "toolStripButton1";
             this.tsbAddCardType.Click += new System.EventHandler(this.tsbAddCardType_Click);
             // 
@@ -158,7 +159,7 @@
             this.tsbRemoveCardType.Image = global::EasyCardFile.Properties.Resources.edit_delete_6;
             this.tsbRemoveCardType.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbRemoveCardType.Name = "tsbRemoveCardType";
-            this.tsbRemoveCardType.Size = new System.Drawing.Size(30, 20);
+            this.tsbRemoveCardType.Size = new System.Drawing.Size(22, 20);
             this.tsbRemoveCardType.Text = "Delete card type";
             this.tsbRemoveCardType.Click += new System.EventHandler(this.tsbRemoveCardType_Click);
             // 
@@ -168,7 +169,7 @@
             this.tsbRename.Image = global::EasyCardFile.Properties.Resources.Modify;
             this.tsbRename.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbRename.Name = "tsbRename";
-            this.tsbRename.Size = new System.Drawing.Size(30, 20);
+            this.tsbRename.Size = new System.Drawing.Size(22, 20);
             this.tsbRename.Text = "Rename card type";
             this.tsbRename.Click += new System.EventHandler(this.tsbRename_Click);
             // 
@@ -178,7 +179,7 @@
             this.tsbTypeSpecificCardNaming.Image = global::EasyCardFile.Properties.Resources.textfield_rename;
             this.tsbTypeSpecificCardNaming.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbTypeSpecificCardNaming.Name = "tsbTypeSpecificCardNaming";
-            this.tsbTypeSpecificCardNaming.Size = new System.Drawing.Size(30, 20);
+            this.tsbTypeSpecificCardNaming.Size = new System.Drawing.Size(22, 20);
             this.tsbTypeSpecificCardNaming.Text = "Set card type specific naming instructions";
             this.tsbTypeSpecificCardNaming.Click += new System.EventHandler(this.tsbTypeSpecificCardNaming_Click);
             // 
@@ -188,7 +189,7 @@
             this.tsbUndo.Image = global::EasyCardFile.Properties.Resources.Undo;
             this.tsbUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbUndo.Name = "tsbUndo";
-            this.tsbUndo.Size = new System.Drawing.Size(30, 20);
+            this.tsbUndo.Size = new System.Drawing.Size(22, 20);
             this.tsbUndo.Text = "Undo card type changes";
             this.tsbUndo.Click += new System.EventHandler(this.tsbUndo_Click);
             // 
