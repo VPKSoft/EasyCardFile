@@ -335,7 +335,7 @@ namespace EasyCardFile.Database.Entity.Context.ContextEncryption
                         encoding);
 
                 cardFile.Name = cardFile.Name.EncryptBase64(string.Empty, encoding);
-                cardFile.CardNamingInstruction = cardFile.CardNamingInstruction.EncryptBase64(string.Empty, encoding);
+                cardFile.CardNamingInstruction = cardFile.CardNamingInstruction?.EncryptBase64(string.Empty, encoding);
 
                 foreach (var card in cardFile.Cards)
                 {
@@ -418,7 +418,7 @@ namespace EasyCardFile.Database.Entity.Context.ContextEncryption
             }
 
             cardFile.Name = cardFile.Name.DecryptFromBase64(key, encoding);
-            cardFile.CardNamingInstruction = cardFile.CardNamingInstruction.DecryptFromBase64(key, encoding);
+            cardFile.CardNamingInstruction = cardFile.CardNamingInstruction?.DecryptFromBase64(key, encoding);
             cardFile.PasswordHash = DatabaseEncryptionHelper.PasswordHashBase64(key, encoding);
 
             foreach (var card in cardFile.Cards)

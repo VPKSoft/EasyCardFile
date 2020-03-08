@@ -91,8 +91,8 @@
     <Reference Include="VPKSoft.MessageBoxExtended, Version=1.0.0.8, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.MessageBoxExtended.1.0.0.8\lib\net47\VPKSoft.MessageBoxExtended.dll</HintPath>
     </Reference>
-    <Reference Include="VPKSoft.RichTextEdit, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VPKSoft.RichTextEdit.1.0.0.2\lib\net47\VPKSoft.RichTextEdit.dll</HintPath>
+    <Reference Include="VPKSoft.RichTextEdit, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VPKSoft.RichTextEdit.1.0.0.3\lib\net47\VPKSoft.RichTextEdit.dll</HintPath>
     </Reference>
     <Reference Include="VPKSoft.TextEditIcons, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.TextEditIcons.1.0.0\lib\net45\VPKSoft.TextEditIcons.dll</HintPath>
@@ -234,6 +234,8 @@
     <None Include="Resources\About.png" />
     <Content Include="Resources\download_dialog_localization.txt" />
     <None Include="Resources\Exit.png" />
+    <None Include="Resources\Refresh.png" />
+    <None Include="Resources\view-refresh-5.png" />
     <Content Include="setup_version_maintenance.exe" />
     <None Include="Resources\SaveAs.png" />
     <None Include="Resources\Undo.png" />

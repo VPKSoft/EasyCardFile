@@ -40,6 +40,10 @@
             this.mnuTest = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCardFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuNewCard = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuRenameCard = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuDeleteCard = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuCardFilePreferences = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTools = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuSettings = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,6 +63,7 @@
             this.tsbDeleteCard = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbCardFilePreferences = new System.Windows.Forms.ToolStripButton();
+            this.tsbRenameCard = new System.Windows.Forms.ToolStripButton();
             this.tab5 = new Manina.Windows.Forms.Tab();
             this.odCardFileLegacy = new System.Windows.Forms.OpenFileDialog();
             this.sdCardFile = new System.Windows.Forms.SaveFileDialog();
@@ -151,16 +156,52 @@
             // mnuCardFile
             // 
             this.mnuCardFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuNewCard,
+            this.mnuRenameCard,
+            this.mnuDeleteCard,
+            this.toolStripMenuItem1,
             this.mnuCardFilePreferences});
             this.mnuCardFile.Name = "mnuCardFile";
             this.mnuCardFile.Size = new System.Drawing.Size(65, 20);
             this.mnuCardFile.Text = "Card File";
             // 
+            // mnuNewCard
+            // 
+            this.mnuNewCard.Image = global::EasyCardFile.Properties.Resources.new_card;
+            this.mnuNewCard.Name = "mnuNewCard";
+            this.mnuNewCard.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.mnuNewCard.Size = new System.Drawing.Size(184, 22);
+            this.mnuNewCard.Text = "New card";
+            this.mnuNewCard.Click += new System.EventHandler(this.tsbNewCard_Click);
+            // 
+            // mnuRenameCard
+            // 
+            this.mnuRenameCard.Image = global::EasyCardFile.Properties.Resources.Modify;
+            this.mnuRenameCard.Name = "mnuRenameCard";
+            this.mnuRenameCard.ShortcutKeys = System.Windows.Forms.Keys.F2;
+            this.mnuRenameCard.Size = new System.Drawing.Size(184, 22);
+            this.mnuRenameCard.Text = "Rename card";
+            this.mnuRenameCard.Click += new System.EventHandler(this.tsbRenameCard_Click);
+            // 
+            // mnuDeleteCard
+            // 
+            this.mnuDeleteCard.Image = global::EasyCardFile.Properties.Resources.Delete;
+            this.mnuDeleteCard.Name = "mnuDeleteCard";
+            this.mnuDeleteCard.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Delete)));
+            this.mnuDeleteCard.Size = new System.Drawing.Size(184, 22);
+            this.mnuDeleteCard.Text = "Delete card";
+            this.mnuDeleteCard.Click += new System.EventHandler(this.tsbDeleteCard_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(181, 6);
+            // 
             // mnuCardFilePreferences
             // 
             this.mnuCardFilePreferences.Image = global::EasyCardFile.Properties.Resources.card_file_preferences;
             this.mnuCardFilePreferences.Name = "mnuCardFilePreferences";
-            this.mnuCardFilePreferences.Size = new System.Drawing.Size(135, 22);
+            this.mnuCardFilePreferences.Size = new System.Drawing.Size(184, 22);
             this.mnuCardFilePreferences.Text = "Preferences";
             this.mnuCardFilePreferences.Click += new System.EventHandler(this.tsbCardFilePreferences_Click);
             // 
@@ -237,7 +278,8 @@
             this.tsbNewCard,
             this.tsbDeleteCard,
             this.toolStripSeparator2,
-            this.tsbCardFilePreferences});
+            this.tsbCardFilePreferences,
+            this.tsbRenameCard});
             this.tsMain.Location = new System.Drawing.Point(0, 24);
             this.tsMain.Name = "tsMain";
             this.tsMain.Size = new System.Drawing.Size(955, 25);
@@ -307,6 +349,7 @@
             this.tsbDeleteCard.Name = "tsbDeleteCard";
             this.tsbDeleteCard.Size = new System.Drawing.Size(23, 22);
             this.tsbDeleteCard.Text = "Delete card";
+            this.tsbDeleteCard.Click += new System.EventHandler(this.tsbDeleteCard_Click);
             // 
             // toolStripSeparator2
             // 
@@ -322,6 +365,16 @@
             this.tsbCardFilePreferences.Size = new System.Drawing.Size(23, 22);
             this.tsbCardFilePreferences.Text = "Card file preferences";
             this.tsbCardFilePreferences.Click += new System.EventHandler(this.tsbCardFilePreferences_Click);
+            // 
+            // tsbRenameCard
+            // 
+            this.tsbRenameCard.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbRenameCard.Image = global::EasyCardFile.Properties.Resources.Modify;
+            this.tsbRenameCard.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbRenameCard.Name = "tsbRenameCard";
+            this.tsbRenameCard.Size = new System.Drawing.Size(23, 22);
+            this.tsbRenameCard.Text = "Rename card";
+            this.tsbRenameCard.Click += new System.EventHandler(this.tsbRenameCard_Click);
             // 
             // tab5
             // 
@@ -423,6 +476,11 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem mnuCardFile;
         private System.Windows.Forms.ToolStripMenuItem mnuCardFilePreferences;
+        private System.Windows.Forms.ToolStripMenuItem mnuNewCard;
+        private System.Windows.Forms.ToolStripMenuItem mnuDeleteCard;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripButton tsbRenameCard;
+        private System.Windows.Forms.ToolStripMenuItem mnuRenameCard;
     }
 }
 

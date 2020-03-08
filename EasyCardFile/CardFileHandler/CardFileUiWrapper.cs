@@ -95,7 +95,15 @@ namespace EasyCardFile.CardFileHandler
             if (CardFileDb.CardFile.CardTypes == null)
             {
                 CardFileDb.CardFile.CardTypes = new List<CardType>();
+                cardType.CardFile = CardFileDb.CardFile;
+                cardFile.DefaultCardType = cardType;
             }
+
+            if (cardFile.Cards == null)
+            {
+                cardFile.Cards = new List<Card>();
+            }
+
             CardFileDb.CardFile.CardTypes.Add(cardType);
             CardFileDb.SaveChanges();
             CreateTabControls(tabControl);
@@ -136,6 +144,21 @@ namespace EasyCardFile.CardFileHandler
         private static string FileChangedIndicator { get; set; }
 
         /// <summary>
+        /// Gets or sets the localized text for the text editor's row, column and selection length.
+        /// </summary>
+        private static string TextEditorRowColumnSelection { get; set; }
+
+        /// <summary>
+        /// A ToolStrip color selection drop down text for "More colors...".
+        /// </summary>
+        private static string MoreColorsText { get; set; }
+
+        /// <summary>
+        /// A ToolStrip color selection drop down text for Automatic.
+        /// </summary>
+        private static string AutomaticColorText { get; set; }
+
+        /// <summary>
         /// Localizes the texts used with the CardFile UI.
         /// </summary>
         internal static void LocalizeTexts()
@@ -154,6 +177,15 @@ namespace EasyCardFile.CardFileHandler
 
             FileChangedIndicator = DBLangEngine.GetStatMessage("msgFileChangedIndicatorText",
                 " [•]|An indicator text to be used with the card file's file name to indicate that the file has been changed.");
+
+            TextEditorRowColumnSelection = DBLangEngine.GetStatMessage("msgTextEditorRowColumnSelection",
+                "Row: {0}, Column: {1}, Selection {2}|A message for a status strip to describe a row, column and a selection length of a text editor.");
+
+            MoreColorsText = DBLangEngine.GetStatMessage("msgMoreColorsText",
+                "More colors..|A message for a ToolStrip color selection drop down text for more colors.");
+
+            AutomaticColorText = DBLangEngine.GetStatMessage("msgAutomaticColorText",
+                "Automatic|A message for a ToolStrip color selection drop down text for automatic.");
         }
         #endregion
 
@@ -214,6 +246,53 @@ namespace EasyCardFile.CardFileHandler
         public void UpdateTitle()
         {
             UpdateTabText();
+        }
+
+        /// <summary>
+        /// Deletes the selected card from the card file.
+        /// </summary>
+        /// <returns><c>true</c> if the card was successfully deleted, <c>false</c> otherwise.</returns>
+        public bool DeleteCard()
+        {
+            var card = (Card) ListBoxCards.SelectedItem;
+            if (card != null)
+            {
+                var index = ListBoxCards.SelectedIndex;
+
+                CardFileDb.CardFile.Cards.Remove(card);
+                ListBoxCards.Items.Remove(card);
+
+                if (index >= ListBoxCards.Items.Count)
+                {
+                    index--;
+                }
+
+                if (index < ListBoxCards.Items.Count)
+                {
+                    ListBoxCards.SelectedIndex = index;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Gets or sets the selected card in the GUI.
+        /// </summary>
+        /// <value>The selected card.</value>
+        public Card SelectedCard
+        {
+            get => (Card) ListBoxCards.SelectedItem;
+
+            set
+            {
+                if (ListBoxCards.SelectedIndex != -1)
+                {
+                    ListBoxCards.Items[ListBoxCards.SelectedIndex] = value;
+                }
+            }
         }
         #endregion
 
@@ -292,6 +371,11 @@ namespace EasyCardFile.CardFileHandler
             // create a RichTextBoxWithToolStrip for the card file card contents..
             RichTextBox = new RichTextBoxWithToolStrip {Dock = DockStyle.Fill,};
             RichTextBox.TextChanged += RichTextBox_TextChanged;
+            RichTextBox.RichTextBox.SelectionChanged += RichTextBox_SelectionChanged;
+
+            // localize the few properties..
+            RichTextBox.AutomaticColorText = AutomaticColorText;
+            RichTextBox.MoreColorsText = MoreColorsText;
 
             tableLayoutPanel.Controls.Add(RichTextBox, 0, 0);
 
@@ -302,7 +386,7 @@ namespace EasyCardFile.CardFileHandler
             var statusStrip = new StatusStrip {Dock = DockStyle.Fill,};
             tableLayoutPanel.Controls.Add(statusStrip, 0, 1);
 
-            // TODO::Do to morrow ;-) The status strip!
+            RowColumnSelectionItem = statusStrip.Items.Add(string.Format(TextEditorRowColumnSelection, 1, 1, 0));
 
             // add the controls to right split panel..
             splitContainer.Panel2.Controls.Add(tableLayoutPanel);
@@ -320,6 +404,12 @@ namespace EasyCardFile.CardFileHandler
             {
                 // log the exception..
                 ExceptionLogAction?.Invoke(ex);
+            }
+
+            // select the first card..
+            if (ListBoxCards.Items.Count > 0)
+            {
+                ListBoxCards.SelectedIndex = 0;
             }
         }
         #endregion
@@ -383,7 +473,14 @@ namespace EasyCardFile.CardFileHandler
 
         private void RichTextBox_TextChanged(object sender, EventArgs e)
         {
+            var richTextBox = ((RichTextBoxWithToolStrip) sender).RichTextBox;
+            UpdateRowColumnSelection();
             SetCardChanges(ListBoxCards.SelectedItem, null);
+        }
+
+        private void RichTextBox_SelectionChanged(object sender, EventArgs e)
+        {
+            UpdateRowColumnSelection();
         }
 
         private void ComboBoxCardType_SelectedValueChanged(object sender, EventArgs e)
@@ -423,9 +520,29 @@ namespace EasyCardFile.CardFileHandler
         /// Gets or sets the <see cref="Manina.Windows.Forms.Tab"/> to which this <see cref="CardFileDb"/> belongs to.
         /// </summary>
         private Tab Tab { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="ToolStripItem"/> indicating row, column, and the selection length of the card file edit box.
+        /// </summary>
+        /// <value>The row column selection item.</value>
+        private ToolStripItem RowColumnSelectionItem { get; set; }
         #endregion
 
-        #region HeplerMethods
+        #region HeplerMethods        
+        /// <summary>
+        /// Updates the row, column and selection length to the status strip of the tab.
+        /// </summary>
+        private void UpdateRowColumnSelection()
+        {
+            var richTextBox = RichTextBox.RichTextBox;
+
+            var line = richTextBox.GetLineFromCharIndex(richTextBox.SelectionStart);
+            var column = richTextBox.SelectionStart - richTextBox.GetFirstCharIndexFromLine(line);
+            
+            RowColumnSelectionItem.Text = string.Format(TextEditorRowColumnSelection,
+                line + 1, column + 1, richTextBox.SelectionLength);
+        }
+
         /// <summary>
         /// Refreshes the UI if the was saved as or a non-existing file was saved.
         /// </summary>
@@ -464,7 +581,7 @@ namespace EasyCardFile.CardFileHandler
         {
             foreach (var wrapper in UiWrappers)
             {
-                if (wrapper.Tab.Equals(tab))
+                if (wrapper.Tab != null && wrapper.Tab.Equals(tab))
                 {
                     return wrapper;
                 }

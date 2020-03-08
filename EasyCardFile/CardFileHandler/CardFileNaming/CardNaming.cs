@@ -46,11 +46,12 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
         /// <param name="cardNamingInstruction">The card naming instruction string.</param>
         /// <param name="counterValue">The counter value from one and onward.</param>
         /// <param name="dateTime">The date and time to be used for the card naming.</param>
+        /// <param name="cardType">An optional card type to use with the naming.</param>
         /// <param name="padCharacter">The pad character to pad the number.</param>
         /// <returns>A formatted string containing the new card name.</returns>
-        public static string NameCard(string cardNamingInstruction, int counterValue, DateTime dateTime, char padCharacter = '0')
+        public static string NameCard(string cardNamingInstruction, int counterValue, DateTime dateTime, CardType cardType = null, char padCharacter = '0')
         {
-            var cardNaming = cardNamingInstruction;
+            var cardNaming = cardType?.CardNamingInstruction ?? cardNamingInstruction;
 
             // the numbering formula consists of '#' characters N times surrounded with square brackets '[' and ']'..
             cardNaming = cardNaming.ReplaceLength("\\[{1}#+\\]{1}", padCharacter,
@@ -76,11 +77,12 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
         /// </summary>
         /// <param name="cardFile">The card file containing the card naming instructions and the other cards.</param>
         /// <param name="dateTime">The date and time to be used for the card naming.</param>
+        /// <param name="cardType">An optional card type to use with the naming.</param>
         /// <param name="padCharacter">The pad character to pad the number.</param>
         /// <returns>A formatted string containing the new card name.</returns>
-        public static string NameCard(CardFile cardFile, DateTime dateTime, char padCharacter = '0')
+        public static string NameCard(CardFile cardFile, DateTime dateTime, CardType cardType = null, char padCharacter = '0')
         {
-            var cardNaming = cardFile.CardNamingInstruction;
+            var cardNaming = cardType?.CardNamingInstruction ?? cardFile.CardNamingInstruction;
 
             if (cardNaming == null) // not defined..
             {
@@ -89,7 +91,7 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
 
             if (cardFile.Cards == null)
             {
-                return NameCard(cardNaming, 1, dateTime, padCharacter);
+                return NameCard(cardNaming, 1, dateTime, cardType, padCharacter);
             }
 
 
@@ -98,7 +100,7 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
                 return cardNaming;
             }
 
-            var testFormula = NameCard(cardNaming, 1, dateTime, padCharacter);
+            var testFormula = NameCard(cardNaming, 1, dateTime, cardType, padCharacter);
 
             if (testFormula == cardNaming) // test that the card naming actually changes something to avoid an endless loop..
             {
@@ -107,13 +109,16 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
 
             if (cardFile.CardNamingDropBetween)
             {
-                var cardNames = cardFile.Cards.Select(f => f.CardName).OrderBy(f => f, StringComparer.Ordinal).ToList();
+                var cardNames = cardType?.CardNamingInstruction == null
+                    ? cardFile.Cards.Select(f => f.CardName).OrderBy(f => f, StringComparer.Ordinal).ToList()
+                    : cardFile.Cards.Where(f => f.CardType == cardType).Select(f => f.CardName)
+                        .OrderBy(f => f, StringComparer.Ordinal).ToList();
 
                 var counter = 1;
 
                 for (int i = 0; i < cardNames.Count - 1; i++)
                 {
-                    var cardName = NameCard(cardNaming, counter++, dateTime, padCharacter);
+                    var cardName = NameCard(cardNaming, counter++, dateTime, cardType, padCharacter);
 
                     if (string.Compare(cardNames[i], cardName, StringComparison.Ordinal) < 0 &&
                         string.Compare(cardNames[i + 1], cardName, StringComparison.Ordinal) > 0)
@@ -124,17 +129,20 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
             }
             else
             {
-                var lastName = cardFile.Cards.Select(f => f.CardName).OrderBy(f => f, StringComparer.Ordinal)
-                    .LastOrDefault();
+                var lastName = cardType?.CardNamingInstruction == null
+                    ? cardFile.Cards.Select(f => f.CardName).OrderBy(f => f, StringComparer.Ordinal)
+                        .LastOrDefault()
+                    : cardFile.Cards.Where(f => f.CardType == cardType).Select(f => f.CardName).OrderBy(f => f, StringComparer.Ordinal)
+                        .LastOrDefault();
 
                 var counter = 1;
-                var newName = NameCard(cardNaming, counter++, dateTime, padCharacter);
+                var newName = NameCard(cardNaming, counter++, dateTime, cardType, padCharacter);
 
                 var previousNewName = newName;
 
                 while (string.CompareOrdinal(newName, lastName) <= 0)
                 {
-                    newName = NameCard(cardNaming, counter++, dateTime, padCharacter);
+                    newName = NameCard(cardNaming, counter++, dateTime, cardType, padCharacter);
                     if (previousNewName == newName) // avoid another endless loop..
                     {
                          break;
@@ -144,7 +152,7 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
                 return newName;
             }
 
-            return NameCard(cardNaming, 1, dateTime, padCharacter);
+            return NameCard(cardNaming, 1, dateTime, cardType, padCharacter);
         }
     }
 }

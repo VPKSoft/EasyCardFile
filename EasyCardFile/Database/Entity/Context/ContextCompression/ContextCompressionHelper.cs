@@ -54,7 +54,7 @@ namespace EasyCardFile.Database.Entity.Context.ContextCompression
                 }
 
                 cardFile.Name = cardFile.Name.CompressToBase64(encoding);
-                cardFile.CardNamingInstruction = cardFile.CardNamingInstruction.CompressToBase64(encoding);
+                cardFile.CardNamingInstruction = cardFile.CardNamingInstruction?.CompressToBase64(encoding);
 
                 foreach (var card in cardFile.Cards)
                 {
@@ -97,7 +97,7 @@ namespace EasyCardFile.Database.Entity.Context.ContextCompression
                 }
 
                 cardFile.Name = cardFile.Name.DecompressFromBase64(encoding);
-                cardFile.CardNamingInstruction = cardFile.CardNamingInstruction.DecompressFromBase64(encoding);
+                cardFile.CardNamingInstruction = cardFile.CardNamingInstruction?.DecompressFromBase64(encoding);
 
                 foreach (var card in cardFile.Cards)
                 {

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="msgAutomaticColorText" xml:space="preserve">
+    <value>Automatic|A message for a ToolStrip color selection drop down text for automatic.</value>
+  </data>
   <data name="msgCardFileSaveChangesQuery" xml:space="preserve">
     <value>The card file {0} has changed. Save the changes?|A query from the user whether to save the changed card file.</value>
   </data>
@@ -195,6 +198,9 @@
   <data name="msgInvalidPassword" xml:space="preserve">
     <value>The given password was invalid|The user gave an invalid password checked by the software's verification logic.</value>
   </data>
+  <data name="msgMoreColorsText" xml:space="preserve">
+    <value>More colors..|A message for a ToolStrip color selection drop down text for more colors.</value>
+  </data>
   <data name="msgNewCardFileName" xml:space="preserve">
     <value>New {0}|A text for a new file name or a new card file internal name.</value>
   </data>
@@ -230,5 +236,8 @@
   </data>
   <data name="msgSearchTextDescription" xml:space="preserve">
     <value>Search:|A text for a label near a search text box.</value>
+  </data>
+  <data name="msgTextEditorRowColumnSelection" xml:space="preserve">
+    <value>Row: {0}, Column: {1}, Selection {2}|A message for a status strip to describe a row, column and a selection length of a text editor.</value>
   </data>
 </root>

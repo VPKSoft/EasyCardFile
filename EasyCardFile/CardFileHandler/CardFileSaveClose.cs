@@ -99,7 +99,12 @@ namespace EasyCardFile.CardFileHandler
 
         private static string RemoveInvalidPathChars(string path)
         {
-            return string.Concat("_", path.Split(Path.GetInvalidFileNameChars()));
+            var split = path.Split(Path.GetInvalidFileNameChars());
+            if (split.Length == 1)
+            {
+                return split[0];
+            }
+            return string.Concat("_", split);
         }
 
         internal static string GetSaveFileName(CardFileUiWrapper wrapper)
@@ -182,6 +187,11 @@ namespace EasyCardFile.CardFileHandler
                             CardFileDbContext.ReleaseDbContext(wrapper.CardFileDb, wrapper.SaveFile, true,
                                 wrapper.NewFileName, !wrapper.IsTemporary);
                             wrapper.IsTemporary = false;
+                            if (!releaseResources)
+                            {
+                                wrapper.FileName = wrapper.NewFileName;
+                                wrapper.CardFileDb = CardFileDbContext.InitializeDbContext(wrapper.NewFileName);
+                            }
                         }
                     }
                 }

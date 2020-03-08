@@ -61,6 +61,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Automatic|A message for a ToolStrip color selection drop down text for automatic..
+        /// </summary>
+        internal static string msgAutomaticColorText {
+            get {
+                return ResourceManager.GetString("msgAutomaticColorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The card file {0} has changed. Save the changes?|A query from the user whether to save the changed card file..
         /// </summary>
         internal static string msgCardFileSaveChangesQuery {
@@ -295,6 +304,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to More colors..|A message for a ToolStrip color selection drop down text for more colors..
+        /// </summary>
+        internal static string msgMoreColorsText {
+            get {
+                return ResourceManager.GetString("msgMoreColorsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New {0}|A text for a new file name or a new card file internal name..
         /// </summary>
         internal static string msgNewCardFileName {
@@ -399,6 +417,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         internal static string msgSearchTextDescription {
             get {
                 return ResourceManager.GetString("msgSearchTextDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Row: {0}, Column: {1}, Selection {2}|A message for a status strip to describe a row, column and a selection length of a text editor..
+        /// </summary>
+        internal static string msgTextEditorRowColumnSelection {
+            get {
+                return ResourceManager.GetString("msgTextEditorRowColumnSelection", resourceCulture);
             }
         }
     }

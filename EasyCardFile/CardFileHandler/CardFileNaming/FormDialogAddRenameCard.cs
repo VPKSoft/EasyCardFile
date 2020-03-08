@@ -26,12 +26,7 @@ SOFTWARE.
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using EasyCardFile.Database.Entity.Entities;
 using VPKSoft.LangLib;
@@ -78,11 +73,17 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
         private Card AddedCard { get; set; }
 
         /// <summary>
+        /// Gets or sets the card modified by the dialog.
+        /// </summary>
+        private Card ModifiedCard { get; set; }
+
+
+        /// <summary>
         /// <summary>Shows the form as a modal dialog box with the specified owner.</summary>
         /// </summary>
         /// <param name="owner">Any object that implements <see cref="T:System.Windows.Forms.IWin32Window" /> that represents the top-level window that will own the modal dialog box. </param>
         /// <param name="cardFile">The card file fow which a card is to be renamed or a new card to be added.</param>
-        /// <param name="addedCard"></param>
+        /// <param name="addedCard">A new card if the user accepted the dialog.</param>
         /// <returns>One of the <see cref="T:System.Windows.Forms.DialogResult" /> values.</returns>
         /// <exception cref="T:System.ArgumentException">The form specified in the <paramref name="owner" /> parameter is the same as the form being shown.</exception>
         /// <exception cref="T:System.InvalidOperationException">The form being shown is already visible.-or- The form being shown is disabled.-or- The form being shown is not a top-level window.-or- The form being shown as a dialog box is already a modal form.-or-The current process is not running in user interactive mode (for more information, see <see cref="P:System.Windows.Forms.SystemInformation.UserInteractive" />).</exception>
@@ -90,8 +91,12 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
         {
             var form = new FormDialogAddRenameCard
             {
-                tbCardName = {Text = CardNaming.NameCard(cardFile, DateTime.Now)}, CardFile = cardFile
+                tbCardName = {Text = CardNaming.NameCard(cardFile, DateTime.Now, cardFile.DefaultCardType)}, 
+                CardFile = cardFile,
             };
+
+            form.cmbCardType.Items.AddRange(cardFile.CardTypes.ToArray<object>());
+            form.cmbCardType.SelectedItem = cardFile.DefaultCardType;
 
             var result = form.ShowDialog();
 
@@ -100,6 +105,34 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
             return result;
         }
 
+        /// <summary>
+        /// <summary>Shows the form as a modal dialog box with the specified owner.</summary>
+        /// </summary>
+        /// <param name="owner">Any object that implements <see cref="T:System.Windows.Forms.IWin32Window" /> that represents the top-level window that will own the modal dialog box. </param>
+        /// <param name="cardFile">The card file fow which a card is to be renamed or a new card to be added.</param>
+        /// <param name="modifiedCard">The card modified by the dialog in case the user accepted the dialog.</param>
+        /// <returns>One of the <see cref="T:System.Windows.Forms.DialogResult" /> values.</returns>
+        /// <exception cref="T:System.ArgumentException">The form specified in the <paramref name="owner" /> parameter is the same as the form being shown.</exception>
+        /// <exception cref="T:System.InvalidOperationException">The form being shown is already visible.-or- The form being shown is disabled.-or- The form being shown is not a top-level window.-or- The form being shown as a dialog box is already a modal form.-or-The current process is not running in user interactive mode (for more information, see <see cref="P:System.Windows.Forms.SystemInformation.UserInteractive" />).</exception>
+        public static DialogResult ShowDialogRename(IWin32Window owner, CardFile cardFile, ref Card modifiedCard)
+        {
+            var form = new FormDialogAddRenameCard
+            {
+                tbCardName = {Text = modifiedCard.CardName}, 
+                CardFile = cardFile,
+            };
+
+            form.cmbCardType.Items.AddRange(cardFile.CardTypes.ToArray<object>());
+            form.cmbCardType.SelectedItem = modifiedCard.CardType;
+
+            var result = form.ShowDialog();
+
+            form.ModifiedCard = modifiedCard;
+
+            return result;
+        }
+
+
         private void btOk_Click(object sender, EventArgs e)
         {
             if (CardFile.Cards == null)
@@ -107,11 +140,36 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
                 CardFile.Cards = new List<Card>();
             }
 
-            AddedCard = new Card {CardName = tbCardName.Text, CardType = CardFile.DefaultCardType,};
+            if (ModifiedCard != null)
+            {
+                ModifiedCard.CardName = tbCardName.Text;
+                ModifiedCard.CardType = (CardType) cmbCardType.SelectedItem;
+            }
+            else
+            {
+                AddedCard = new Card {CardName = tbCardName.Text, CardType = (CardType)cmbCardType.SelectedItem,};
 
-            CardFile.Cards.Add(AddedCard);
+                CardFile.Cards.Add(AddedCard);
+            }
 
             DialogResult = DialogResult.OK;
+        }
+
+        private void cmbCardType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(tbCardName.Text))
+            {
+                tbCardName.Text = CardNaming.NameCard(CardFile, DateTime.Now, (CardType) cmbCardType.SelectedItem);
+            }
+        }
+
+        private void pbGenerateName_Click(object sender, EventArgs e)
+        {
+            var name = CardNaming.NameCard(CardFile, DateTime.Now, (CardType) cmbCardType.SelectedItem);
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                tbCardName.Text = name;
+            }
         }
     }
 }

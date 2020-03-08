@@ -33,6 +33,10 @@
             this.lbCardName = new System.Windows.Forms.Label();
             this.btCancel = new System.Windows.Forms.Button();
             this.btOk = new System.Windows.Forms.Button();
+            this.cmbCardType = new System.Windows.Forms.ComboBox();
+            this.lbCardType = new System.Windows.Forms.Label();
+            this.pbGenerateName = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pbGenerateName)).BeginInit();
             this.SuspendLayout();
             // 
             // tbCardName
@@ -41,7 +45,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbCardName.Location = new System.Drawing.Point(124, 12);
             this.tbCardName.Name = "tbCardName";
-            this.tbCardName.Size = new System.Drawing.Size(398, 20);
+            this.tbCardName.Size = new System.Drawing.Size(375, 20);
             this.tbCardName.TabIndex = 0;
             // 
             // lbCardName
@@ -57,7 +61,7 @@
             // 
             this.btCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(447, 45);
+            this.btCancel.Location = new System.Drawing.Point(447, 65);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(75, 23);
             this.btCancel.TabIndex = 31;
@@ -67,7 +71,7 @@
             // btOk
             // 
             this.btOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btOk.Location = new System.Drawing.Point(366, 45);
+            this.btOk.Location = new System.Drawing.Point(366, 65);
             this.btOk.Name = "btOk";
             this.btOk.Size = new System.Drawing.Size(75, 23);
             this.btOk.TabIndex = 30;
@@ -75,13 +79,52 @@
             this.btOk.UseVisualStyleBackColor = true;
             this.btOk.Click += new System.EventHandler(this.btOk_Click);
             // 
+            // cmbCardType
+            // 
+            this.cmbCardType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbCardType.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.cmbCardType.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cmbCardType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCardType.FormattingEnabled = true;
+            this.cmbCardType.Location = new System.Drawing.Point(124, 38);
+            this.cmbCardType.Name = "cmbCardType";
+            this.cmbCardType.Size = new System.Drawing.Size(398, 21);
+            this.cmbCardType.TabIndex = 32;
+            this.cmbCardType.SelectedIndexChanged += new System.EventHandler(this.cmbCardType_SelectedIndexChanged);
+            // 
+            // lbCardType
+            // 
+            this.lbCardType.AutoSize = true;
+            this.lbCardType.Location = new System.Drawing.Point(12, 41);
+            this.lbCardType.Name = "lbCardType";
+            this.lbCardType.Size = new System.Drawing.Size(55, 13);
+            this.lbCardType.TabIndex = 33;
+            this.lbCardType.Text = "Card type:";
+            // 
+            // pbGenerateName
+            // 
+            this.pbGenerateName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbGenerateName.Image = global::EasyCardFile.Properties.Resources.view_refresh_5;
+            this.pbGenerateName.Location = new System.Drawing.Point(502, 12);
+            this.pbGenerateName.Margin = new System.Windows.Forms.Padding(0);
+            this.pbGenerateName.Name = "pbGenerateName";
+            this.pbGenerateName.Size = new System.Drawing.Size(20, 20);
+            this.pbGenerateName.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbGenerateName.TabIndex = 34;
+            this.pbGenerateName.TabStop = false;
+            this.pbGenerateName.Click += new System.EventHandler(this.pbGenerateName_Click);
+            // 
             // FormDialogAddRenameCard
             // 
             this.AcceptButton = this.btOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(534, 80);
+            this.ClientSize = new System.Drawing.Size(534, 100);
+            this.Controls.Add(this.pbGenerateName);
+            this.Controls.Add(this.lbCardType);
+            this.Controls.Add(this.cmbCardType);
             this.Controls.Add(this.btCancel);
             this.Controls.Add(this.btOk);
             this.Controls.Add(this.lbCardName);
@@ -93,6 +136,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Enter a name for the card";
+            ((System.ComponentModel.ISupportInitialize)(this.pbGenerateName)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -104,5 +148,8 @@
         private System.Windows.Forms.Label lbCardName;
         private System.Windows.Forms.Button btCancel;
         private System.Windows.Forms.Button btOk;
+        private System.Windows.Forms.ComboBox cmbCardType;
+        private System.Windows.Forms.Label lbCardType;
+        private System.Windows.Forms.PictureBox pbGenerateName;
     }
 }

@@ -332,14 +332,21 @@ namespace EasyCardFile
             }
         }
 
+        private void tsbDeleteCard_Click(object sender, EventArgs e)
+        {
+            CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles)?.DeleteCard();
+        }
+
         private void mnuSaveAs_Click(object sender, EventArgs e)
         {
             CardFileSaveClose.SaveCardFileAs(tcCardFiles, sdCardFile, false);
+            SetTitle();
         }
 
         private void mnuSave_Click(object sender, EventArgs e)
         {
             CardFileSaveClose.SaveCardFile(tcCardFiles, sdCardFile, false);
+            SetTitle();
         }
 
         private void mnuImportLegacy_Click(object sender, EventArgs e)
@@ -350,5 +357,20 @@ namespace EasyCardFile
             }
         }
         #endregion
+
+        private void tsbRenameCard_Click(object sender, EventArgs e)
+        {
+            var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
+            var cardFile = wrapper.CardFileDb.CardFile;
+            var card = wrapper.SelectedCard;
+
+            if (card != null)
+            {
+                if (FormDialogAddRenameCard.ShowDialogRename(this, cardFile, ref card) == DialogResult.OK)
+                {
+                    wrapper.SelectedCard = card;
+                }
+            }
+        }
     }
 }
