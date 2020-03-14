@@ -103,6 +103,16 @@ namespace EasyCardFile.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap document_print_preview_4 {
+            get {
+                object obj = ResourceManager.GetObject("document-print-preview-4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap edit_add_2 {
             get {
                 object obj = ResourceManager.GetObject("edit-add-2", resourceCulture);
@@ -176,6 +186,26 @@ namespace EasyCardFile.Properties {
         internal static System.Drawing.Bitmap New_document {
             get {
                 object obj = ResourceManager.GetObject("New document", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Print {
+            get {
+                object obj = ResourceManager.GetObject("Print", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap printer_printing_2 {
+            get {
+                object obj = ResourceManager.GetObject("printer-printing-2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

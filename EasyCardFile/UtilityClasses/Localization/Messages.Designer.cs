@@ -394,6 +394,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Print preview|A message for a print preview window title.
+        /// </summary>
+        internal static string msgPrintPreview {
+            get {
+                return ResourceManager.GetString("msgPrintPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a password to protect the card file|A message querying the user to enter a password for the first time to protect the card file.
         /// </summary>
         internal static string msgQueryPassword1 {

@@ -159,21 +159,6 @@ namespace EasyCardFile.Database.Entity.Context
         }
 
         /// <summary>
-        /// Saves the <see cref="CardFileDbContext"/> with a new file name.
-        /// </summary>
-        /// <param name="context">The context to save as new file name.</param>
-        /// <param name="fileName">Name of the file to save the .</param>
-        /// <returns><c>true</c> if the file was saved successfully with a new file name, <c>false</c> otherwise.</returns>
-        public static bool SaveFileAs(ref CardFileDbContext context, string fileName)
-        {
-            var result = true;
-            result &= ReleaseDbContext(context, true, true, fileName, true);
-            context = InitializeDbContext(fileName);
-            result &= context != null;
-            return result;
-        }
-
-        /// <summary>
         /// Releases the database <see cref="CardFileDbContext"/> context.
         /// </summary>
         /// <param name="context">An instance to a <see cref="CardFileDbContext"/> class to dispose of.</param>

@@ -96,6 +96,8 @@ namespace EasyCardFile.Database.Entity.Context.ContextCompression
                     return false;
                 }
 
+                //return true;
+
                 cardFile.Name = cardFile.Name.DecompressFromBase64(encoding);
                 cardFile.CardNamingInstruction = cardFile.CardNamingInstruction?.DecompressFromBase64(encoding);
 

@@ -64,12 +64,18 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbCardFilePreferences = new System.Windows.Forms.ToolStripButton();
             this.tsbRenameCard = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbPrint = new System.Windows.Forms.ToolStripButton();
+            this.tsbPrintPreview = new System.Windows.Forms.ToolStripButton();
             this.tab5 = new Manina.Windows.Forms.Tab();
             this.odCardFileLegacy = new System.Windows.Forms.OpenFileDialog();
             this.sdCardFile = new System.Windows.Forms.SaveFileDialog();
             this.odCardFile = new System.Windows.Forms.OpenFileDialog();
-            this.tcCardFiles = new Manina.Windows.Forms.TabControl();
             this.tmRemoteOpenFileQueue = new System.Windows.Forms.Timer(this.components);
+            this.tcCardFiles = new Manina.Windows.Forms.TabControl();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuPrint = new System.Windows.Forms.ToolStripMenuItem();
+            this.printPreviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMain.SuspendLayout();
             this.tsMain.SuspendLayout();
             this.SuspendLayout();
@@ -105,7 +111,7 @@
             // 
             this.mnuNew.Image = global::EasyCardFile.Properties.Resources.New_document;
             this.mnuNew.Name = "mnuNew";
-            this.mnuNew.Size = new System.Drawing.Size(114, 22);
+            this.mnuNew.Size = new System.Drawing.Size(180, 22);
             this.mnuNew.Text = "New";
             this.mnuNew.Click += new System.EventHandler(this.mnuNew_Click);
             // 
@@ -113,7 +119,7 @@
             // 
             this.mnuOpen.Image = global::EasyCardFile.Properties.Resources.folder_database;
             this.mnuOpen.Name = "mnuOpen";
-            this.mnuOpen.Size = new System.Drawing.Size(114, 22);
+            this.mnuOpen.Size = new System.Drawing.Size(180, 22);
             this.mnuOpen.Text = "Open...";
             this.mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
             // 
@@ -121,7 +127,7 @@
             // 
             this.mnuSave.Image = global::EasyCardFile.Properties.Resources.Save;
             this.mnuSave.Name = "mnuSave";
-            this.mnuSave.Size = new System.Drawing.Size(114, 22);
+            this.mnuSave.Size = new System.Drawing.Size(180, 22);
             this.mnuSave.Text = "Save";
             this.mnuSave.Click += new System.EventHandler(this.mnuSave_Click);
             // 
@@ -129,19 +135,19 @@
             // 
             this.mnuSaveAs.Image = global::EasyCardFile.Properties.Resources.SaveAs;
             this.mnuSaveAs.Name = "mnuSaveAs";
-            this.mnuSaveAs.Size = new System.Drawing.Size(114, 22);
+            this.mnuSaveAs.Size = new System.Drawing.Size(180, 22);
             this.mnuSaveAs.Text = "Save As";
             this.mnuSaveAs.Click += new System.EventHandler(this.mnuSaveAs_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(111, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
             // 
             // mnuTest
             // 
             this.mnuTest.Name = "mnuTest";
-            this.mnuTest.Size = new System.Drawing.Size(114, 22);
+            this.mnuTest.Size = new System.Drawing.Size(180, 22);
             this.mnuTest.Text = "Test";
             this.mnuTest.Click += new System.EventHandler(this.mnuTest_Click);
             // 
@@ -149,7 +155,7 @@
             // 
             this.mnuExit.Image = global::EasyCardFile.Properties.Resources.Exit;
             this.mnuExit.Name = "mnuExit";
-            this.mnuExit.Size = new System.Drawing.Size(114, 22);
+            this.mnuExit.Size = new System.Drawing.Size(180, 22);
             this.mnuExit.Text = "Exit";
             this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
             // 
@@ -160,6 +166,9 @@
             this.mnuRenameCard,
             this.mnuDeleteCard,
             this.toolStripMenuItem1,
+            this.mnuPrint,
+            this.printPreviewToolStripMenuItem,
+            this.toolStripMenuItem3,
             this.mnuCardFilePreferences});
             this.mnuCardFile.Name = "mnuCardFile";
             this.mnuCardFile.Size = new System.Drawing.Size(65, 20);
@@ -279,7 +288,10 @@
             this.tsbDeleteCard,
             this.toolStripSeparator2,
             this.tsbCardFilePreferences,
-            this.tsbRenameCard});
+            this.tsbRenameCard,
+            this.toolStripSeparator3,
+            this.tsbPrint,
+            this.tsbPrintPreview});
             this.tsMain.Location = new System.Drawing.Point(0, 24);
             this.tsMain.Name = "tsMain";
             this.tsMain.Size = new System.Drawing.Size(955, 25);
@@ -376,6 +388,31 @@
             this.tsbRenameCard.Text = "Rename card";
             this.tsbRenameCard.Click += new System.EventHandler(this.tsbRenameCard_Click);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsbPrint
+            // 
+            this.tsbPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbPrint.Image = global::EasyCardFile.Properties.Resources.printer_printing_2;
+            this.tsbPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbPrint.Name = "tsbPrint";
+            this.tsbPrint.Size = new System.Drawing.Size(23, 22);
+            this.tsbPrint.Text = "Print card";
+            this.tsbPrint.Click += new System.EventHandler(this.tsbPrint_Click);
+            // 
+            // tsbPrintPreview
+            // 
+            this.tsbPrintPreview.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbPrintPreview.Image = global::EasyCardFile.Properties.Resources.document_print_preview_4;
+            this.tsbPrintPreview.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbPrintPreview.Name = "tsbPrintPreview";
+            this.tsbPrintPreview.Size = new System.Drawing.Size(23, 22);
+            this.tsbPrintPreview.Text = "Print preview";
+            this.tsbPrintPreview.Click += new System.EventHandler(this.tsbPrintPreview_Click);
+            // 
             // tab5
             // 
             this.tab5.Location = new System.Drawing.Point(1, 24);
@@ -398,6 +435,10 @@
             this.odCardFile.DefaultExt = "*.ecff";
             this.odCardFile.Filter = "Easy CardFile file|*.ecff";
             // 
+            // tmRemoteOpenFileQueue
+            // 
+            this.tmRemoteOpenFileQueue.Tick += new System.EventHandler(this.tmRemoteOpenFileQueue_Tick);
+            // 
             // tcCardFiles
             // 
             this.tcCardFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -412,9 +453,26 @@
             this.tcCardFiles.CloseTabButtonClick += new System.EventHandler<Manina.Windows.Forms.CancelTabEventArgs>(this.tcCardFiles_CloseTabButtonClick);
             this.tcCardFiles.PageChanged += new System.EventHandler<Manina.Windows.Forms.PageChangedEventArgs>(this.tcCardFiles_PageChanged);
             // 
-            // tmRemoteOpenFileQueue
+            // toolStripMenuItem3
             // 
-            this.tmRemoteOpenFileQueue.Tick += new System.EventHandler(this.tmRemoteOpenFileQueue_Tick);
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(181, 6);
+            // 
+            // mnuPrint
+            // 
+            this.mnuPrint.Image = global::EasyCardFile.Properties.Resources.printer_printing_2;
+            this.mnuPrint.Name = "mnuPrint";
+            this.mnuPrint.Size = new System.Drawing.Size(184, 22);
+            this.mnuPrint.Text = "Print card";
+            this.mnuPrint.Click += new System.EventHandler(this.tsbPrint_Click);
+            // 
+            // printPreviewToolStripMenuItem
+            // 
+            this.printPreviewToolStripMenuItem.Image = global::EasyCardFile.Properties.Resources.document_print_preview_4;
+            this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
+            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.printPreviewToolStripMenuItem.Text = "Print preview";
+            this.printPreviewToolStripMenuItem.Click += new System.EventHandler(this.tsbPrintPreview_Click);
             // 
             // FormMain
             // 
@@ -481,6 +539,12 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripButton tsbRenameCard;
         private System.Windows.Forms.ToolStripMenuItem mnuRenameCard;
+        private System.Windows.Forms.ToolStripButton tsbPrint;
+        private System.Windows.Forms.ToolStripButton tsbPrintPreview;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem mnuPrint;
+        private System.Windows.Forms.ToolStripMenuItem printPreviewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
     }
 }
 

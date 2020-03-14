@@ -80,7 +80,18 @@ namespace EasyCardFile.CardFileHandler
             {
                 if (!releaseResources)
                 {
-                    cardFile.CardFileDb.SaveChanges();
+                    if (cardFile.CardFileDb.CardFile.Compressed || cardFile.CardFileDb.CardFile.Encrypted)
+                    {
+                        CardFileDbContext.ReleaseDbContext(cardFile.CardFileDb, true, true);
+                        if (!cardFile.OpenCardFile(cardFile.FileName))
+                        {
+                            throw new InvalidOperationException("Error opening the card file: " + cardFile.FileName);
+                        }
+                    }
+                    else
+                    {
+                        cardFile.CardFileDb.SaveChanges();
+                    }
                 }
                 else
                 {
@@ -94,7 +105,6 @@ namespace EasyCardFile.CardFileHandler
                 ExceptionLogAction?.Invoke(ex);
                 return false;
             }
-
         }
 
         private static string RemoveInvalidPathChars(string path)
@@ -104,7 +114,7 @@ namespace EasyCardFile.CardFileHandler
             {
                 return split[0];
             }
-            return string.Concat("_", split);
+            return string.Join("_", split);
         }
 
         internal static string GetSaveFileName(CardFileUiWrapper wrapper)
@@ -152,22 +162,25 @@ namespace EasyCardFile.CardFileHandler
                         if (context != null && sdCardFile.ShowDialog() == DialogResult.OK)
                         {
                             var newFileName = sdCardFile.FileName;
-                            CardFileDbContext.SaveFileAs(ref context, newFileName);
-                            CardFileUiWrapper.SetActiveDbContext(tabControl, context, newFileName);
-                            if (releaseResources)
-                            {
-                                CardFileDbContext.ReleaseDbContext(context, true, true);
-                            }
+                            CardFileDbContext.ReleaseDbContext(wrapper.CardFileDb, false, true,
+                                wrapper.NewFileName, !wrapper.IsTemporary);
 
                             if (previousFileName != newFileName)
                             {
-                                File.Delete(previousFileName);
+                                File.Delete(newFileName);
 
-                                File.Move(tempSave, previousFileName);
+                                File.Move(tempSave, newFileName);
                             }
                             else
                             {
                                 File.Delete(tempSave);
+                            }
+
+                            if (!releaseResources)
+                            {
+                                wrapper.NewFileName = newFileName;
+                                wrapper.FileName = wrapper.NewFileName;
+                                wrapper.OpenCardFile(wrapper.FileName);
                             }
                         }
                         else
@@ -190,7 +203,10 @@ namespace EasyCardFile.CardFileHandler
                             if (!releaseResources)
                             {
                                 wrapper.FileName = wrapper.NewFileName;
-                                wrapper.CardFileDb = CardFileDbContext.InitializeDbContext(wrapper.NewFileName);
+                                if (!wrapper.OpenCardFile(wrapper.FileName))
+                                {
+                                    throw new InvalidOperationException("Error opening the card file: " + wrapper.FileName);
+                                }
                             }
                         }
                     }
@@ -218,7 +234,7 @@ namespace EasyCardFile.CardFileHandler
                 foreach (var tab in tabControl.Tabs)
                 {
                     var wrapper = CardFileUiWrapper.GetWrapperByTab(tab);
-                    if (wrapper.CardFileDb.ChangeTracker.HasChanges())
+                    if (wrapper.Changed)
                     {
                         if (CardFileDbContext.ReleaseDbContext(wrapper.CardFileDb, wrapper.SaveFile, true,
                             wrapper.NewFileName, !wrapper.IsTemporary))

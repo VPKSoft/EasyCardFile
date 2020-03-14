@@ -29,15 +29,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 using EasyCardFile.CardFileHandler;
 using EasyCardFile.CardFileHandler.CardFileNaming;
 using EasyCardFile.CardFileHandler.CardFilePreferences;
 using EasyCardFile.CardFileHandler.LegacyCardFile;
-using EasyCardFile.Database.Entity.Context;
-using EasyCardFile.Database.Entity.Context.ContextCompression;
-using EasyCardFile.Database.Entity.Context.ContextEncryption;
 using EasyCardFile.Settings;
 using EasyCardFile.Settings.TypeConverters;
 using EasyCardFile.UtilityClasses.Constants;
@@ -48,6 +44,7 @@ using VPKSoft.LangLib;
 using VPKSoft.MessageBoxExtended;
 using VPKSoft.Utils.XmlSettingsMisc;
 using VPKSoft.VersionCheck.Forms;
+using VPKSoft.WinFormsRtfPrint;
 using VU = VPKSoft.Utils;
 
 // Icon (C): https://icon-icons.com/icon/card-file-box/109271, Apache 2.0
@@ -107,7 +104,8 @@ namespace EasyCardFile
             tmRemoteOpenFileQueue.Enabled = true;
 
             AssociateFileExtension.AssociateApplicationToFileExtension(EasyCardFileConstants.FileExtension);
-            //AssociateFileExtension.RemoveAssociatedFileExtension(EasyCardFileConstants.FileExtension);
+
+            RtfPrint.Owner = this; // mother of all dialogs..
         }
 
         private Settings.Settings Settings { get; }
@@ -147,6 +145,13 @@ namespace EasyCardFile
             Settings.Save(PathHandler.GetSettingsFile(Assembly.GetEntryAssembly(), ".xml",
                 Environment.SpecialFolder.LocalApplicationData));
 
+            foreach (var wrapper in CardFileUiWrapper.GetTabList(tcCardFiles))
+            {
+                // ResSharper: Delegate subtraction has unpredictable result? Lets hope not..
+                // ReSharper disable once DelegateSubtraction
+                wrapper.CardFileChanged -= CardFileChanged;
+            }
+
             CardFileSaveClose.ClearTemporaryFiles();
 
             Settings.RequestTypeConverter -= Settings_RequestTypeConverter;
@@ -168,6 +173,11 @@ namespace EasyCardFile
         private void mnuTest_Click(object sender, EventArgs e)
         {
             // test something here..
+        }
+
+        private void CardFileChanged(object sender, EventArgs e)
+        {
+            SetTitle();
         }
         #endregion
 
@@ -207,8 +217,9 @@ namespace EasyCardFile
                     }
                 }
 
-                // ReSharper disable once ObjectCreationAsStatement
-                new CardFileUiWrapper(fileName, tcCardFiles);
+                var newWrapper = new CardFileUiWrapper(fileName, tcCardFiles);
+                newWrapper.CardFileChanged += CardFileChanged;
+
                 SetTitle();
                 return true;
             }
@@ -286,7 +297,8 @@ namespace EasyCardFile
         private void mnuNew_Click(object sender, EventArgs e)
         {
             // ReSharper disable once ObjectCreationAsStatement
-            new CardFileUiWrapper(tcCardFiles);
+            var wrapper = new CardFileUiWrapper(tcCardFiles);
+            wrapper.CardFileChanged += CardFileChanged;
         }
 
         private void mnuOpen_Click(object sender, EventArgs e)
@@ -299,7 +311,10 @@ namespace EasyCardFile
 
         private void tcCardFiles_CloseTabButtonClick(object sender, Manina.Windows.Forms.CancelTabEventArgs e)
         {
-            CardFileSaveClose.CloseCardFile(true, e.Tab);
+            using (CardFileUiWrapper.GetWrapperByTab(e.Tab))
+            {
+                CardFileSaveClose.CloseCardFile(true, e.Tab);
+            }
         }
 
         private void mnuAbout_Click(object sender, EventArgs e)
@@ -327,14 +342,22 @@ namespace EasyCardFile
             {
                 if (FormDialogAddRenameCard.ShowDialog(this, wrapper.CardFileDb.CardFile, out var card) == DialogResult.OK)
                 {
+                    wrapper.Changed = true;
                     wrapper.RefreshUi(card);
+                    SetTitle();
                 }
             }
         }
 
         private void tsbDeleteCard_Click(object sender, EventArgs e)
         {
-            CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles)?.DeleteCard();
+            var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
+            var changed = wrapper?.DeleteCard();
+            if (changed != null && changed == true)
+            {
+                wrapper.Changed = true;
+                SetTitle();
+            }
         }
 
         private void mnuSaveAs_Click(object sender, EventArgs e)
@@ -349,15 +372,6 @@ namespace EasyCardFile
             SetTitle();
         }
 
-        private void mnuImportLegacy_Click(object sender, EventArgs e)
-        {
-            if (CardFileLegacyReader.Convert(odCardFileLegacy, sdCardFile, this))
-            {
-                OpenCardFile(sdCardFile.FileName);
-            }
-        }
-        #endregion
-
         private void tsbRenameCard_Click(object sender, EventArgs e)
         {
             var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
@@ -369,8 +383,31 @@ namespace EasyCardFile
                 if (FormDialogAddRenameCard.ShowDialogRename(this, cardFile, ref card) == DialogResult.OK)
                 {
                     wrapper.SelectedCard = card;
+                    wrapper.Changed = true;
+                    SetTitle();
                 }
             }
         }
+
+        private void tsbPrint_Click(object sender, EventArgs e)
+        {
+            CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles)?.RichTextBox?.RichTextBox
+                ?.Print(false, true);
+        }
+
+        private void tsbPrintPreview_Click(object sender, EventArgs e)
+        {
+            CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles)?.RichTextBox?.RichTextBox.PrintPreview(Icon,
+                DBLangEngine.GetMessage("msgPrintPreview", "Print preview|A message for a print preview window title"));
+        }
+
+        private void mnuImportLegacy_Click(object sender, EventArgs e)
+        {
+            if (CardFileLegacyReader.Convert(odCardFileLegacy, sdCardFile, this))
+            {
+                OpenCardFile(sdCardFile.FileName);
+            }
+        }
+        #endregion
     }
 }

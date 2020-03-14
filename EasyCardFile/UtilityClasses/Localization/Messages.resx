@@ -228,6 +228,9 @@
   <data name="msgPasswordRequired" xml:space="preserve">
     <value>Password is required|A short message indicating that some operation requires a valid password for the some operation to continue successfully.</value>
   </data>
+  <data name="msgPrintPreview" xml:space="preserve">
+    <value>Print preview|A message for a print preview window title</value>
+  </data>
   <data name="msgQueryPassword1" xml:space="preserve">
     <value>Enter a password to protect the card file|A message querying the user to enter a password for the first time to protect the card file</value>
   </data>

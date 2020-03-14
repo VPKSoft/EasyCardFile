@@ -24,9 +24,11 @@ SOFTWARE.
 */
 #endregion
 
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using System.Windows.Forms;
+using SQLite.CodeFirst;
 
 namespace EasyCardFile.Database.Entity.Entities
 {
@@ -105,6 +107,19 @@ namespace EasyCardFile.Database.Entity.Entities
         /// Gets or sets the card file the card belongs to.
         /// </summary>
         public virtual CardFile CardFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the date and time the card was created.
+        /// </summary>
+        /// <value>The create date time.</value>
+        [SqlDefaultValue(DefaultValue = "DATETIME('now', 'localtime')")]
+        public DateTime CreateDateTime { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// Gets or sets the date and time the card was modified.
+        /// </summary>
+        [SqlDefaultValue(DefaultValue = "DATETIME('now', 'localtime')")]
+        public DateTime ModifiedDateTime { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Gets or sets the additional data 1. This property is currently not in use and is intended to be used if there are some missing properties with the model.

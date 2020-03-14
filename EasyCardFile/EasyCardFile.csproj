@@ -103,6 +103,9 @@
     <Reference Include="VPKSoft.VersionCheck, Version=1.0.1.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.VersionCheck.1.0.1.4\lib\net47\VPKSoft.VersionCheck.dll</HintPath>
     </Reference>
+    <Reference Include="VPKSoft.WinFormsRtfPrint, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VPKSoft.WinFormsRtfPrint.1.0.0.3\lib\net47\VPKSoft.WinFormsRtfPrint.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CardFileHandler\CardFileNaming\CardNaming.cs" />
@@ -118,6 +121,7 @@
     <Compile Include="CardFileHandler\CardFileNaming\FormDialogCardFileNaming.Designer.cs">
       <DependentUpon>FormDialogCardFileNaming.cs</DependentUpon>
     </Compile>
+    <Compile Include="Database\Entity\Enumerations\CardSortType.cs" />
     <Compile Include="Database\NoEntity\CardTypeNoEntity.cs" />
     <Compile Include="CardFileHandler\CardFilePreferences\FormDialogCardFilePreferences.cs">
       <SubType>Form</SubType>
@@ -232,10 +236,13 @@
     <Content Include="62941cardfilebox_109271.ico" />
     <Content Include="DBLocalization.exe" />
     <None Include="Resources\About.png" />
+    <None Include="Resources\document-print-preview-4.png" />
     <Content Include="Resources\download_dialog_localization.txt" />
     <None Include="Resources\Exit.png" />
     <None Include="Resources\Refresh.png" />
     <None Include="Resources\view-refresh-5.png" />
+    <None Include="Resources\Print.png" />
+    <None Include="Resources\printer-printing-2.png" />
     <Content Include="setup_version_maintenance.exe" />
     <None Include="Resources\SaveAs.png" />
     <None Include="Resources\Undo.png" />

@@ -26,7 +26,6 @@ SOFTWARE.
 
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -239,6 +238,13 @@ namespace EasyCardFile.CardFileHandler
             }
         }
 
+        #region Events        
+        /// <summary>
+        /// Occurs when the <see cref="CardFile"/> of this UI wrapper has changed.
+        /// </summary>
+        public EventHandler CardFileChanged;
+        #endregion
+
         #region Interaction        
         /// <summary>
         /// Updates the title of the card file tab.
@@ -435,18 +441,45 @@ namespace EasyCardFile.CardFileHandler
         /// </summary>
         public bool SaveChangesOnClose { get; set; }
 
+        private bool changed;
+
+        private bool firstSetChanged = true;
+
         /// <summary>
-        /// Gets or sets a value indicating if underlying <see cref="DbContext"/> have changes, else false.
+        /// Gets or sets a value if changes have been made to the card file.
         /// </summary>
-        internal bool Changed => CardFileDb.ChangeTracker.HasChanges();
+        internal bool Changed
+        {
+            get => changed;
+            set
+            {
+                if (changed == value && firstSetChanged)
+                {
+                    return; // the no changes case..
+                }
+
+                firstSetChanged = false;
+                changed = value;
+
+                // inform the event subscriber(s) of the changes..
+                CardFileChanged?.Invoke(this, new EventArgs());
+                UpdateTabText();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the name of the card file.
         /// </summary>
         internal string CardFileName
         {
-            get => CardFileDb.CardFile.Name; 
-            set => CardFileDb.CardFile.Name = value; 
+            get => CardFileDb?.CardFile?.Name;
+            set
+            {
+                if (CardFileDb?.CardFile != null)
+                {
+                    CardFileDb.CardFile.Name = value;
+                }
+            } 
         }
 
         /// <summary>
@@ -468,12 +501,25 @@ namespace EasyCardFile.CardFileHandler
         #region EventHandlers
         private void ListBoxCards_SelectedValueChanged(object sender, EventArgs e)
         {
+            if (SuspendCardChanged)
+            {
+                return;
+            }
             DisplayCard(((ListBox) sender).SelectedItem);
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the <see cref="RichTextBox"/> should be tracking the text changes within.
+        /// </summary>
+        public bool SuspendTextHandler { get; set; }
+
         private void RichTextBox_TextChanged(object sender, EventArgs e)
         {
-            var richTextBox = ((RichTextBoxWithToolStrip) sender).RichTextBox;
+            if (SuspendTextHandler)
+            {
+                return;
+            }
+
             UpdateRowColumnSelection();
             SetCardChanges(ListBoxCards.SelectedItem, null);
         }
@@ -499,7 +545,7 @@ namespace EasyCardFile.CardFileHandler
         /// <summary>
         /// The <see cref="RichTextBoxWithToolStrip"/> control to edit and display the selected card contents within the card file.
         /// </summary>
-        private RichTextBoxWithToolStrip RichTextBox { get; set; }
+        internal RichTextBoxWithToolStrip RichTextBox { get; set; }
 
         /// <summary>
         /// The <see cref="ListBox"/> control with a filtered list of card within the card file.
@@ -549,6 +595,8 @@ namespace EasyCardFile.CardFileHandler
         /// <param name="selectCard">An optional instance to a <see cref="Card"/> to select from the list box.</param>
         internal void RefreshUi(Card selectCard = null)
         {
+            SuspendTextHandler = true;
+
             var index = ListBoxCards.SelectedIndex;
 
             ListBoxCards.Items.Clear();
@@ -570,6 +618,13 @@ namespace EasyCardFile.CardFileHandler
             {
                 ListBoxCards.SelectedIndex = index;
             }
+
+            SuspendTextHandler = false;
+        }
+
+        internal void Print()
+        {
+//            RichTextBox.RichTextBox.pri
         }
 
         /// <summary>
@@ -612,6 +667,26 @@ namespace EasyCardFile.CardFileHandler
             var tab = tabControl.SelectedTab;
 
             return tab == null ? null : GetWrapperByTab(tab);
+        }
+
+        /// <summary>
+        /// Gets the list of <see cref="CardFileUiWrapper"/> instances within the given <see cref="Manina.Windows.Forms.TabControl"/>.
+        /// </summary>
+        /// <param name="tabControl">The tab control to get the <see cref="CardFileUiWrapper"/> instances from.</param>
+        /// <returns>A List&lt;CardFileUiWrapper&gt; containing the <see cref="CardFileUiWrapper"/> instances.</returns>
+        internal static List<CardFileUiWrapper> GetTabList(TabControl tabControl)
+        {
+            List<CardFileUiWrapper> result = new List<CardFileUiWrapper>();
+            foreach (var tabControlTab in tabControl.Tabs)
+            {
+                var wrapper = GetWrapperByTab(tabControlTab);
+                if (wrapper != null)
+                {
+                    result.Add(wrapper);
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -665,6 +740,12 @@ namespace EasyCardFile.CardFileHandler
         /// <param name="cardEntity"></param>
         private void DisplayCard(object cardEntity)
         {
+            if (SuspendTextHandler)
+            {
+                RichTextBox.Clear();
+                return;
+            }
+
             var card = (Card) cardEntity;
             if (card != null)
             {
@@ -673,8 +754,16 @@ namespace EasyCardFile.CardFileHandler
                 {
                     RichTextBox.Rtf = Encoding.UTF8.GetString(card.CardContents);
                 }
+                else
+                {
+                    RichTextBox.Clear();
+                }
                 CardTypeComboBox.SelectedItem = card.CardType;
                 SuspendCardChanged = false;
+            }
+            else
+            {
+                RichTextBox.Clear();
             }
         }
 
@@ -711,7 +800,9 @@ namespace EasyCardFile.CardFileHandler
                         card.CardType = cardType;
                     }
 
-                    UpdateTabText();
+                    card.ModifiedDateTime = DateTime.Now; // track the change time..
+
+                    Changed = true;
                 }
             }
             catch (Exception ex)

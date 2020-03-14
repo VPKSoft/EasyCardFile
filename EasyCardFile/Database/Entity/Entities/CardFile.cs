@@ -24,8 +24,11 @@ SOFTWARE.
 */
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using EasyCardFile.Database.Entity.Enumerations;
+using SQLite.CodeFirst;
 
 namespace EasyCardFile.Database.Entity.Entities
 {
@@ -86,6 +89,12 @@ namespace EasyCardFile.Database.Entity.Entities
         /// Gets or sets the default type of the card.
         /// </summary>
         public CardType DefaultCardType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of how the cards should be sorted.
+        /// </summary>
+        [SqlDefaultValue(DefaultValue = "0")]
+        public CardSortType CardSortType { get; set; }
 
         /// <summary>
         /// Gets or sets the encryption password validation randomized value. This is Base64 encoded binary data.
