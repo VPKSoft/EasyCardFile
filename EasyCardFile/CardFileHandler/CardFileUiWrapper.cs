@@ -26,6 +26,7 @@ SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -35,9 +36,12 @@ using EasyCardFile.Database.Entity.Context.ContextCompression;
 using EasyCardFile.Database.Entity.Context.ContextEncryption;
 using EasyCardFile.Database.Entity.Entities;
 using EasyCardFile.UtilityClasses.ErrorHandling;
+using EasyCardFile.UtilityClasses.Miscellaneous;
+using EasyCardFile.UtilityClasses.ProjectControls;
 using Manina.Windows.Forms;
 using VPKSoft.LangLib;
 using VPKSoft.RichTextEdit;
+using VPKSoft.WinFormsRtfPrint;
 using TabControl = Manina.Windows.Forms.TabControl;
 
 namespace EasyCardFile.CardFileHandler
@@ -47,7 +51,7 @@ namespace EasyCardFile.CardFileHandler
     /// Implements the <see cref="EasyCardFile.UtilityClasses.ErrorHandling.ErrorHandlingBase" />
     /// </summary>
     /// <seealso cref="EasyCardFile.UtilityClasses.ErrorHandling.ErrorHandlingBase" />
-    public class CardFileUiWrapper: ErrorHandlingBase, IDisposable
+    public class CardFileUiWrapper: ErrorHandlingBase, IContainer
     {
         #region Constructors
         /// <summary>
@@ -158,6 +162,11 @@ namespace EasyCardFile.CardFileHandler
         private static string AutomaticColorText { get; set; }
 
         /// <summary>
+        /// Gets or sets the localized print preview dialog title.
+        /// </summary>
+        private static string PrintPreviewDialogTitle { get; set; }
+
+        /// <summary>
         /// Localizes the texts used with the CardFile UI.
         /// </summary>
         internal static void LocalizeTexts()
@@ -185,6 +194,9 @@ namespace EasyCardFile.CardFileHandler
 
             AutomaticColorText = DBLangEngine.GetStatMessage("msgAutomaticColorText",
                 "Automatic|A message for a ToolStrip color selection drop down text for automatic.");
+
+            PrintPreviewDialogTitle = DBLangEngine.GetStatMessage("msgPrintPreview",
+                "Print preview|A message for a print preview window title");
         }
         #endregion
 
@@ -245,13 +257,26 @@ namespace EasyCardFile.CardFileHandler
         public EventHandler CardFileChanged;
         #endregion
 
-        #region Interaction        
+        #region Interaction                
+        /// <summary>
+        /// <summary>Gets or sets the location of the splitter, in pixels, from the left or top edge of the <see cref="CardFileUiWrapper.SplitContainer" />.</summary>
+        /// </summary>
+        public int SplitterDistance { get; set; }
+
         /// <summary>
         /// Updates the title of the card file tab.
         /// </summary>
         public void UpdateTitle()
         {
             UpdateTabText();
+        }
+
+        /// <summary>
+        /// Refreshes the card list box.
+        /// </summary>
+        public void RefreshCardList()
+        {
+            ListBoxCards?.RefreshItems();
         }
 
         /// <summary>
@@ -285,21 +310,10 @@ namespace EasyCardFile.CardFileHandler
         }
 
         /// <summary>
-        /// Gets or sets the selected card in the GUI.
+        /// Gets the selected card in the GUI.
         /// </summary>
         /// <value>The selected card.</value>
-        public Card SelectedCard
-        {
-            get => (Card) ListBoxCards.SelectedItem;
-
-            set
-            {
-                if (ListBoxCards.SelectedIndex != -1)
-                {
-                    ListBoxCards.Items[ListBoxCards.SelectedIndex] = value;
-                }
-            }
-        }
+        public Card SelectedCard => (Card) ListBoxCards.SelectedItem;
         #endregion
 
         #region GUI
@@ -313,7 +327,7 @@ namespace EasyCardFile.CardFileHandler
             Tab = new Tab {Text = CardFileDb.CardFiles.FirstOrDefault()?.Name};
 
             // create a split container for the card file container..
-            var splitContainer = new SplitContainer {Dock = DockStyle.Fill,};
+            SplitContainer = new SplitContainer {Dock = DockStyle.Fill,};
 
             // create a table layout panel for the search box and for the card list..
             var tableLayoutPanel = new TableLayoutPanel {Dock = DockStyle.Fill, RowCount = 3, ColumnCount = 2,};
@@ -322,7 +336,7 @@ namespace EasyCardFile.CardFileHandler
             tableLayoutPanel.RowStyles.Add(new RowStyle{ SizeType = SizeType.AutoSize});
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             tableLayoutPanel.RowStyles.Add(new RowStyle{ SizeType = SizeType.AutoSize});
-            splitContainer.Panel1.Controls.Add(tableLayoutPanel);
+            SplitContainer.Panel1.Controls.Add(tableLayoutPanel);
 
             // create the search label to indicate that the next control will search something..
             var label = new Label {Text = SearchDescription, Padding = new Padding(2), Margin = new Padding(3),};
@@ -333,8 +347,10 @@ namespace EasyCardFile.CardFileHandler
             tableLayoutPanel.Controls.Add(SearchTextBox, 1, 0);
             SearchTextBox.TextChanged += SearchTextBox_TextChanged;
 
+            ToolTip = new ToolTip(this); // we do need a tool tip!
+
             // create the card file list box..
-            ListBoxCards = new ListBox {Dock = DockStyle.Fill};
+            ListBoxCards = new RefreshListBox {Dock = DockStyle.Fill};
             tableLayoutPanel.Controls.Add(ListBoxCards, 0, 1);
             tableLayoutPanel.SetColumnSpan(ListBoxCards, 2);
 
@@ -387,6 +403,7 @@ namespace EasyCardFile.CardFileHandler
 
             // subscribe the selected cardEntity changed event handler..
             ListBoxCards.SelectedValueChanged += ListBoxCards_SelectedValueChanged;
+            ListBoxCards.MouseMove += ListBoxCards_MouseMove;
 
             // create a status strip for the card editor/viewer..
             var statusStrip = new StatusStrip {Dock = DockStyle.Fill,};
@@ -395,16 +412,16 @@ namespace EasyCardFile.CardFileHandler
             RowColumnSelectionItem = statusStrip.Items.Add(string.Format(TextEditorRowColumnSelection, 1, 1, 0));
 
             // add the controls to right split panel..
-            splitContainer.Panel2.Controls.Add(tableLayoutPanel);
+            SplitContainer.Panel2.Controls.Add(tableLayoutPanel);
 
-            Tab.Controls.Add(splitContainer);
+            Tab.Controls.Add(SplitContainer);
             tabControl.Tabs.Add(Tab);
             tabControl.SelectedTab = Tab;
             var splitterDistance = tabControl.ClientSize.Width * 25 / 100; // size about 25%..
 
             try
             {
-                splitContainer.SplitterDistance = splitterDistance;
+                SplitContainer.SplitterDistance = splitterDistance;
             }
             catch (Exception ex)
             {
@@ -417,6 +434,23 @@ namespace EasyCardFile.CardFileHandler
             {
                 ListBoxCards.SelectedIndex = 0;
             }
+        }
+
+        private Card PreviousItemAtMousePoint { get; set; }
+
+        private void ListBoxCards_MouseMove(object sender, MouseEventArgs e)
+        {
+            var listBox = (RefreshListBox) sender;
+            var item = (Card)listBox.GetItemAtPoint(e.Location);
+
+            if (Equals(PreviousItemAtMousePoint, item))
+            {
+                return;
+            }
+
+            PreviousItemAtMousePoint = item;
+
+            ToolTip.SetToolTip(listBox, item?.CardName);
         }
         #endregion
 
@@ -505,7 +539,10 @@ namespace EasyCardFile.CardFileHandler
             {
                 return;
             }
-            DisplayCard(((ListBox) sender).SelectedItem);
+
+            var listBox = (ListBox) sender;
+
+            DisplayCard(listBox.SelectedItem);
         }
 
         /// <summary>
@@ -548,9 +585,20 @@ namespace EasyCardFile.CardFileHandler
         internal RichTextBoxWithToolStrip RichTextBox { get; set; }
 
         /// <summary>
-        /// The <see cref="ListBox"/> control with a filtered list of card within the card file.
+        /// Gets or sets the split container of the card file UI wrapper.
         /// </summary>
-        private ListBox ListBoxCards { get; set; }
+        internal SplitContainer SplitContainer { get; set; }
+
+        /// <summary>
+        /// The <see cref="RefreshListBox"/> control with a filtered list of card within the card file.
+        /// </summary>
+        private RefreshListBox ListBoxCards { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="ToolTip"/> used by the card file list box.
+        /// </summary>
+        /// <value>The tool tip.</value>
+        private ToolTip ToolTip { get; set; }
 
         /// <summary>
         /// The <see cref="TextBox"/> control to filter the cards within the card list.
@@ -622,9 +670,23 @@ namespace EasyCardFile.CardFileHandler
             SuspendTextHandler = false;
         }
 
+        /// <summary>
+        /// Displays a <see cref="PrintDialog"/> and in case the user accepts the print dialog, prints the card contents.
+        /// </summary>
         internal void Print()
         {
-//            RichTextBox.RichTextBox.pri
+            if (ListBoxCards.SelectedItem != null)
+            {
+                RichTextBox.RichTextBox.Print(false, true);
+            }
+        }
+
+        /// <summary>
+        /// Displays a <see cref="PrintPreviewDialog"/> of the selected card contents.
+        /// </summary>
+        internal void PrintPreview()
+        {
+            RichTextBox?.RichTextBox.PrintPreview(null, PrintPreviewDialogTitle);
         }
 
         /// <summary>
@@ -890,11 +952,59 @@ namespace EasyCardFile.CardFileHandler
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
+        #pragma warning disable CA1063 // Implement IDisposable Correctly
         public void Dispose()
+        #pragma warning restore CA1063 // Implement IDisposable Correctly
         {
+            foreach (var component in components)
+            {
+                component.PairFirst.Dispose();
+            }
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+        #endregion
+
+        #region IComponent
+        /// <summary>
+        /// Adds the specified <see cref="T:System.ComponentModel.IComponent" /> to the <see cref="T:System.ComponentModel.IContainer" /> at the end of the list.
+        /// </summary>
+        /// <param name="component">The <see cref="T:System.ComponentModel.IComponent" /> to add.</param>
+        public void Add(IComponent component)
+        {
+            components.Add(new Pair<IComponent, string>(component, null));
+        }
+
+        /// <summary>
+        /// Adds the specified <see cref="T:System.ComponentModel.IComponent" /> to the <see cref="T:System.ComponentModel.IContainer" /> at the end of the list, and assigns a name to the component.
+        /// </summary>
+        /// <param name="component">The <see cref="T:System.ComponentModel.IComponent" /> to add.</param>
+        /// <param name="name">The unique, case-insensitive name to assign to the component.-or-
+        /// <see langword="null" /> that leaves the component unnamed.</param>
+        public void Add(IComponent component, string name)
+        {
+            components.Add(new Pair<IComponent, string>(component, name));
+        }
+
+        /// <summary>
+        /// Removes a component from the <see cref="T:System.ComponentModel.IContainer" />.
+        /// </summary>
+        /// <param name="component">The <see cref="T:System.ComponentModel.IComponent" /> to remove.</param>
+        public void Remove(IComponent component)
+        {
+            components.RemoveWhere(f => f.PairFirst.Equals(component));
+        }
+
+        /// <summary>
+        /// A container for the <see cref="IComponent"/> <see cref="Components"/> property.
+        /// </summary>
+        private readonly HashSet<Pair<IComponent, string>> components = new HashSet<Pair<IComponent, string>>();
+
+        /// <summary>
+        /// Gets all the components in the <see cref="T:System.ComponentModel.IContainer" />.
+        /// </summary>
+        /// <value>The components.</value>
+        public ComponentCollection Components => new ComponentCollection(components.Select(f => f.PairFirst).ToArray());
         #endregion
     }
 }

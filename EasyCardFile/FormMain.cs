@@ -376,14 +376,14 @@ namespace EasyCardFile
         {
             var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
             var cardFile = wrapper.CardFileDb.CardFile;
-            var card = wrapper.SelectedCard;
 
-            if (card != null)
+            if (wrapper.SelectedCard != null)
             {
-                if (FormDialogAddRenameCard.ShowDialogRename(this, cardFile, ref card) == DialogResult.OK)
+                if (FormDialogAddRenameCard.ShowDialogRename(this, cardFile, wrapper.SelectedCard) == DialogResult.OK)
                 {
-                    wrapper.SelectedCard = card;
+                    wrapper.SelectedCard.ModifiedDateTime = DateTime.Now;
                     wrapper.Changed = true;
+                    wrapper.RefreshCardList();
                     SetTitle();
                 }
             }
@@ -391,14 +391,12 @@ namespace EasyCardFile
 
         private void tsbPrint_Click(object sender, EventArgs e)
         {
-            CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles)?.RichTextBox?.RichTextBox
-                ?.Print(false, true);
+            CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles)?.Print();
         }
 
         private void tsbPrintPreview_Click(object sender, EventArgs e)
         {
-            CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles)?.RichTextBox?.RichTextBox.PrintPreview(Icon,
-                DBLangEngine.GetMessage("msgPrintPreview", "Print preview|A message for a print preview window title"));
+            CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles)?.PrintPreview();
         }
 
         private void mnuImportLegacy_Click(object sender, EventArgs e)

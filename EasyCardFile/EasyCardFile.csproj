@@ -183,6 +183,9 @@
     <Compile Include="UtilityClasses\ProjectControls\RefreshCheckListBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UtilityClasses\ProjectControls\RefreshListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UtilityClasses\ProjectControls\TextBoxButton.cs">
       <SubType>UserControl</SubType>
     </Compile>

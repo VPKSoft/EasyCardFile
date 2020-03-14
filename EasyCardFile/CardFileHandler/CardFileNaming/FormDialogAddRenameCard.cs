@@ -114,7 +114,7 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
         /// <returns>One of the <see cref="T:System.Windows.Forms.DialogResult" /> values.</returns>
         /// <exception cref="T:System.ArgumentException">The form specified in the <paramref name="owner" /> parameter is the same as the form being shown.</exception>
         /// <exception cref="T:System.InvalidOperationException">The form being shown is already visible.-or- The form being shown is disabled.-or- The form being shown is not a top-level window.-or- The form being shown as a dialog box is already a modal form.-or-The current process is not running in user interactive mode (for more information, see <see cref="P:System.Windows.Forms.SystemInformation.UserInteractive" />).</exception>
-        public static DialogResult ShowDialogRename(IWin32Window owner, CardFile cardFile, ref Card modifiedCard)
+        public static DialogResult ShowDialogRename(IWin32Window owner, CardFile cardFile, Card modifiedCard)
         {
             var form = new FormDialogAddRenameCard
             {
@@ -125,9 +125,9 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
             form.cmbCardType.Items.AddRange(cardFile.CardTypes.ToArray<object>());
             form.cmbCardType.SelectedItem = modifiedCard.CardType;
 
-            var result = form.ShowDialog();
-
             form.ModifiedCard = modifiedCard;
+
+            var result = form.ShowDialog();
 
             return result;
         }
