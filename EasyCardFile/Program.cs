@@ -32,6 +32,7 @@ using System.Windows.Forms;
 using EasyCardFile.UtilityClasses.Constants;
 using VPKSoft.ErrorLogger;
 using VPKSoft.IPC;
+using VPKSoft.PosLib;
 using VPKSoft.Utils;
 
 namespace EasyCardFile
@@ -78,6 +79,8 @@ namespace EasyCardFile
                 return;
             }
 
+            PositionCore.Bind(); // attach the PosLib to the application            
+
             AppRunning.CheckIfRunning("VPKSoft.EasyCardFile.Application.2020");
 
             foreach (var arg in args)
@@ -106,6 +109,7 @@ namespace EasyCardFile
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMain());
+            PositionCore.UnBind(); // release the event handlers used by the PosLib and save the default data
 
             if (!Debugger.IsAttached)
             {

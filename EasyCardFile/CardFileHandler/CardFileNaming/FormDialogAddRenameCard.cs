@@ -24,11 +24,11 @@ SOFTWARE.
 */
 #endregion
 
+using EasyCardFile.Database.Entity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using EasyCardFile.Database.Entity.Entities;
 using VPKSoft.LangLib;
 
 namespace EasyCardFile.CardFileHandler.CardFileNaming
@@ -170,6 +170,16 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
             {
                 tbCardName.Text = name;
             }
+        }
+
+        private void tbCardName_TextChanged(object sender, EventArgs e)
+        {
+            btOk.Enabled = !string.IsNullOrWhiteSpace(tbCardName.Text) && cmbCardType.SelectedItem != null;
+        }
+
+        private void FormDialogAddRenameCard_Shown(object sender, EventArgs e)
+        {
+            btOk.Enabled = !string.IsNullOrWhiteSpace(tbCardName.Text) && cmbCardType.SelectedItem != null;
         }
     }
 }

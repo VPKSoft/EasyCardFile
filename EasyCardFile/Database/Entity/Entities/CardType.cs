@@ -25,6 +25,7 @@ SOFTWARE.
 #endregion
 
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Drawing;
 using SQLite.CodeFirst;
 
 namespace EasyCardFile.Database.Entity.Entities
@@ -55,6 +56,21 @@ namespace EasyCardFile.Database.Entity.Entities
         /// Gets or sets the card naming instruction.
         /// </summary>
         public string CardNamingInstruction { get; set; }
+
+        /// <summary>
+        /// Gets or sets the foreground color for the card type.
+        /// </summary>
+        public string ForeColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the background color for the card type.
+        /// </summary>
+        public string BackColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the card type image.
+        /// </summary>
+        public byte[] TypeImage { get; set; }
 
         /// <summary>
         /// Creates new localized card type name (a default).

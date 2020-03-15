@@ -97,7 +97,7 @@ namespace EasyCardFile.CardFileHandler
 
             if (CardFileDb.CardFile.CardTypes == null)
             {
-                CardFileDb.CardFile.CardTypes = new List<CardType>();
+                CardFileDb.CardFile.CardTypes = new List<CardType> {cardType};
                 cardType.CardFile = CardFileDb.CardFile;
                 cardFile.DefaultCardType = cardType;
             }
@@ -107,7 +107,7 @@ namespace EasyCardFile.CardFileHandler
                 cardFile.Cards = new List<Card>();
             }
 
-            CardFileDb.CardFile.CardTypes.Add(cardType);
+            //CardFileDb.CardFile.CardTypes.Add(cardType);
             CardFileDb.SaveChanges();
             CreateTabControls(tabControl);
             UiWrappers.Add(this);
@@ -150,6 +150,16 @@ namespace EasyCardFile.CardFileHandler
         /// Gets or sets the localized text for the text editor's row, column and selection length.
         /// </summary>
         private static string TextEditorRowColumnSelection { get; set; }
+
+        /// <summary>
+        /// Gets or sets the localized text for the text editor's status strip when the card was changed.
+        /// </summary>
+        private static string TextEditorCardChangedDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the localized text for the text editor's status strip when the card was created.
+        /// </summary>
+        private static string TextEditorCardCreatedDate { get; set; }
 
         /// <summary>
         /// A ToolStrip color selection drop down text for "More colors...".
@@ -197,6 +207,12 @@ namespace EasyCardFile.CardFileHandler
 
             PrintPreviewDialogTitle = DBLangEngine.GetStatMessage("msgPrintPreview",
                 "Print preview|A message for a print preview window title");
+            
+            TextEditorCardChangedDate = DBLangEngine.GetStatMessage("msgEditorCardModified",
+                "Modified: {0}|A message for a status strip to indicate a date and time the card was modified.");
+
+            TextEditorCardCreatedDate = DBLangEngine.GetStatMessage("msgEditorCardCreated",
+                "Created: {0}|A message for a status strip to indicate a date and time the card was created.");
         }
         #endregion
 
@@ -261,7 +277,23 @@ namespace EasyCardFile.CardFileHandler
         /// <summary>
         /// <summary>Gets or sets the location of the splitter, in pixels, from the left or top edge of the <see cref="CardFileUiWrapper.SplitContainer" />.</summary>
         /// </summary>
-        public int SplitterDistance { get; set; }
+        public int SplitterDistance 
+        { 
+            get => SplitContainer.SplitterDistance;
+
+            set
+            {
+                try
+                {
+                    SplitContainer.SplitterDistance = value;
+                }
+                catch (Exception ex)
+                {
+                    // log the exception..
+                    ExceptionLogAction?.Invoke(ex);
+                }
+            }
+        }
 
         /// <summary>
         /// Updates the title of the card file tab.
@@ -409,7 +441,9 @@ namespace EasyCardFile.CardFileHandler
             var statusStrip = new StatusStrip {Dock = DockStyle.Fill,};
             tableLayoutPanel.Controls.Add(statusStrip, 0, 1);
 
-            RowColumnSelectionItem = statusStrip.Items.Add(string.Format(TextEditorRowColumnSelection, 1, 1, 0));
+            ItemRowColumnSelection = statusStrip.Items.Add(string.Format(TextEditorRowColumnSelection, 1, 1, 0));
+            ItemModifiedDateTime = statusStrip.Items.Add("");
+            ItemCreatedDateTime = statusStrip.Items.Add("");
 
             // add the controls to right split panel..
             SplitContainer.Panel2.Controls.Add(tableLayoutPanel);
@@ -618,8 +652,17 @@ namespace EasyCardFile.CardFileHandler
         /// <summary>
         /// Gets or sets the <see cref="ToolStripItem"/> indicating row, column, and the selection length of the card file edit box.
         /// </summary>
-        /// <value>The row column selection item.</value>
-        private ToolStripItem RowColumnSelectionItem { get; set; }
+        private ToolStripItem ItemRowColumnSelection { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="ToolStripItem"/> indicating the date and time the card was modified.
+        /// </summary>
+        private ToolStripItem ItemModifiedDateTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="ToolStripItem"/> indicating the date and time the card was created.
+        /// </summary>
+        private ToolStripItem ItemCreatedDateTime { get; set; }
         #endregion
 
         #region HeplerMethods        
@@ -633,7 +676,7 @@ namespace EasyCardFile.CardFileHandler
             var line = richTextBox.GetLineFromCharIndex(richTextBox.SelectionStart);
             var column = richTextBox.SelectionStart - richTextBox.GetFirstCharIndexFromLine(line);
             
-            RowColumnSelectionItem.Text = string.Format(TextEditorRowColumnSelection,
+            ItemRowColumnSelection.Text = string.Format(TextEditorRowColumnSelection,
                 line + 1, column + 1, richTextBox.SelectionLength);
         }
 
@@ -668,6 +711,14 @@ namespace EasyCardFile.CardFileHandler
             }
 
             SuspendTextHandler = false;
+
+            CardTypeComboBox.Items.Clear();
+            foreach (var cardType in CardFileDb.CardFile.CardTypes)
+            {
+                CardTypeComboBox.Items.Add(cardType);
+            }
+
+            DisplayCard(ListBoxCards.SelectedItem);
         }
 
         /// <summary>
@@ -822,6 +873,9 @@ namespace EasyCardFile.CardFileHandler
                 }
                 CardTypeComboBox.SelectedItem = card.CardType;
                 SuspendCardChanged = false;
+
+                ItemCreatedDateTime.Text = string.Format(TextEditorCardCreatedDate, card.CreateDateTime);
+                ItemModifiedDateTime.Text = string.Format(TextEditorCardChangedDate, card.ModifiedDateTime);
             }
             else
             {
@@ -863,6 +917,8 @@ namespace EasyCardFile.CardFileHandler
                     }
 
                     card.ModifiedDateTime = DateTime.Now; // track the change time..
+
+                    ItemModifiedDateTime.Text = string.Format(TextEditorCardChangedDate, card.ModifiedDateTime);
 
                     Changed = true;
                 }

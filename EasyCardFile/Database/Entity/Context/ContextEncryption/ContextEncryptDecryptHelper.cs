@@ -26,6 +26,7 @@ SOFTWARE.
 
 using System;
 using System.Globalization;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 using EasyCardFile.Database.Encryption;
@@ -68,11 +69,33 @@ namespace EasyCardFile.Database.Entity.Context.ContextEncryption
                 return false;
             }
 
+
             cardFile.PasswordHash = encryptionData.passwordHash;
-            cardFile.EncryptionHashAlgorithmValueBase64 = encryptionData.valueBase64;
+            cardFile.EncryptionHashAlgorithmValueBase64 = GenerateHashBase64(encryptionData.valueBase64);
             cardFile.EncryptionPasswordValidationRandomizedBase64 = encryptionData.validationBase64;
 
             return true;
+        }
+
+        /// <summary>
+        /// Generates a <see cref="SHA512"/> hash value of a given byte array given as a base64 encoded string.
+        /// </summary>
+        /// <param name="base64Bytes">A base64 encoded string containing the bytes which hash value to compute.</param>
+        /// <returns>A base64 encoded hash value of the given byte array in base64 encoded string.</returns>
+        private static string GenerateHashBase64(string base64Bytes)
+        {
+            if (base64Bytes == null)
+            {
+                return "";
+            }
+
+            using (var sha = SHA512.Create())
+            {
+                var hashBase64 =
+                    Convert.ToBase64String(sha.ComputeHash(Convert.FromBase64String(base64Bytes)));
+
+                return hashBase64;
+            }
         }
 
         /// <summary>
@@ -327,12 +350,15 @@ namespace EasyCardFile.Database.Entity.Context.ContextEncryption
                 DatabaseEncryptionHelper.KeyBytes =
                     Convert.FromBase64String(cardFile.PasswordHash); // set this to override the key use..
 
-                cardFile.EncryptionHashAlgorithmValueBase64 =
+                cardFile.EncryptionHashAlgorithmValueBase64 = 
                     DatabaseEncryptionHelper.GenerateRandomBase64Data(150, 200);
                 cardFile.Encrypted = true;
                 cardFile.EncryptionPasswordValidationRandomizedBase64 =
                     DatabaseEncryptionHelper.EncryptData(string.Empty, cardFile.EncryptionHashAlgorithmValueBase64,
                         encoding);
+
+                cardFile.EncryptionHashAlgorithmValueBase64 =
+                    GenerateHashBase64(cardFile.EncryptionHashAlgorithmValueBase64);
 
                 cardFile.Name = cardFile.Name.EncryptBase64(string.Empty, encoding);
                 cardFile.CardNamingInstruction = cardFile.CardNamingInstruction?.EncryptBase64(string.Empty, encoding);
@@ -399,7 +425,7 @@ namespace EasyCardFile.Database.Entity.Context.ContextEncryption
                     return false;
                 }
 
-                var testPassword = cardFile.EncryptionPasswordValidationRandomizedBase64.DecryptBase64(key, encoding);
+                var testPassword = GenerateHashBase64(cardFile.EncryptionPasswordValidationRandomizedBase64.DecryptBase64(key, encoding));
 
                 if (testPassword != cardFile.EncryptionHashAlgorithmValueBase64)
                 {

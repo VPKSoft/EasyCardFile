@@ -83,8 +83,6 @@ namespace EasyCardFile.Database.Encryption
                     return null;
                 }
 
-
-
                 algorithm.Key = KeyBytes ?? PasswordHash(algorithm, key, encoding);
                 algorithm.GenerateIV();
 

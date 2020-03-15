@@ -47,6 +47,7 @@
             this.tbCardName.Name = "tbCardName";
             this.tbCardName.Size = new System.Drawing.Size(375, 20);
             this.tbCardName.TabIndex = 0;
+            this.tbCardName.TextChanged += new System.EventHandler(this.tbCardName_TextChanged);
             // 
             // lbCardName
             // 
@@ -136,6 +137,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Enter a name for the card";
+            this.Shown += new System.EventHandler(this.FormDialogAddRenameCard_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.pbGenerateName)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -37,18 +37,21 @@
             this.cbCardsDropBetween = new System.Windows.Forms.CheckBox();
             this.lbCardTypes = new System.Windows.Forms.Label();
             this.tsbCardTypes = new System.Windows.Forms.ToolStrip();
+            this.lbRowErrorText = new System.Windows.Forms.Label();
+            this.btCancel = new System.Windows.Forms.Button();
+            this.btOk = new System.Windows.Forms.Button();
+            this.pnChangePassword = new System.Windows.Forms.Panel();
+            this.lbChangePassword = new System.Windows.Forms.Label();
+            this.clbCardTypes = new EasyCardFile.UtilityClasses.ProjectControls.RefreshCheckListBox();
+            this.pbChangePassword = new System.Windows.Forms.PictureBox();
             this.tsbAddCardType = new System.Windows.Forms.ToolStripButton();
             this.tsbRemoveCardType = new System.Windows.Forms.ToolStripButton();
             this.tsbRename = new System.Windows.Forms.ToolStripButton();
             this.tsbTypeSpecificCardNaming = new System.Windows.Forms.ToolStripButton();
             this.tsbUndo = new System.Windows.Forms.ToolStripButton();
-            this.lbRowErrorText = new System.Windows.Forms.Label();
-            this.btCancel = new System.Windows.Forms.Button();
-            this.btOk = new System.Windows.Forms.Button();
-            this.pnChangePassword = new System.Windows.Forms.Panel();
-            this.pbChangePassword = new System.Windows.Forms.PictureBox();
-            this.lbChangePassword = new System.Windows.Forms.Label();
-            this.clbCardTypes = new EasyCardFile.UtilityClasses.ProjectControls.RefreshCheckListBox();
+            this.tsbForegroundColor = new System.Windows.Forms.ToolStripButton();
+            this.tsbBackgroundColor = new System.Windows.Forms.ToolStripButton();
+            this.tsbTypeImage = new System.Windows.Forms.ToolStripButton();
             this.tbbCardNamingInstruction = new EasyCardFile.UtilityClasses.ProjectControls.TextBoxButton();
             this.tsbCardTypes.SuspendLayout();
             this.pnChangePassword.SuspendLayout();
@@ -135,13 +138,99 @@
             this.tsbRemoveCardType,
             this.tsbRename,
             this.tsbTypeSpecificCardNaming,
-            this.tsbUndo});
+            this.tsbUndo,
+            this.tsbForegroundColor,
+            this.tsbBackgroundColor,
+            this.tsbTypeImage});
             this.tsbCardTypes.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.tsbCardTypes.Location = new System.Drawing.Point(526, 154);
             this.tsbCardTypes.Name = "tsbCardTypes";
             this.tsbCardTypes.ShowItemToolTips = false;
-            this.tsbCardTypes.Size = new System.Drawing.Size(24, 126);
+            this.tsbCardTypes.Size = new System.Drawing.Size(24, 195);
             this.tsbCardTypes.TabIndex = 14;
+            // 
+            // lbRowErrorText
+            // 
+            this.lbRowErrorText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbRowErrorText.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbRowErrorText.ForeColor = System.Drawing.Color.Red;
+            this.lbRowErrorText.Location = new System.Drawing.Point(12, 376);
+            this.lbRowErrorText.Name = "lbRowErrorText";
+            this.lbRowErrorText.Size = new System.Drawing.Size(373, 26);
+            this.lbRowErrorText.TabIndex = 15;
+            // 
+            // btCancel
+            // 
+            this.btCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btCancel.Location = new System.Drawing.Point(472, 376);
+            this.btCancel.Name = "btCancel";
+            this.btCancel.Size = new System.Drawing.Size(75, 23);
+            this.btCancel.TabIndex = 31;
+            this.btCancel.Text = "Cancel";
+            this.btCancel.UseVisualStyleBackColor = true;
+            // 
+            // btOk
+            // 
+            this.btOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btOk.Location = new System.Drawing.Point(391, 376);
+            this.btOk.Name = "btOk";
+            this.btOk.Size = new System.Drawing.Size(75, 23);
+            this.btOk.TabIndex = 30;
+            this.btOk.Text = "OK";
+            this.btOk.UseVisualStyleBackColor = true;
+            this.btOk.Click += new System.EventHandler(this.btOk_Click);
+            // 
+            // pnChangePassword
+            // 
+            this.pnChangePassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnChangePassword.Controls.Add(this.pbChangePassword);
+            this.pnChangePassword.Controls.Add(this.lbChangePassword);
+            this.pnChangePassword.Location = new System.Drawing.Point(343, 43);
+            this.pnChangePassword.Margin = new System.Windows.Forms.Padding(0);
+            this.pnChangePassword.Name = "pnChangePassword";
+            this.pnChangePassword.Size = new System.Drawing.Size(204, 20);
+            this.pnChangePassword.TabIndex = 32;
+            this.pnChangePassword.Click += new System.EventHandler(this.pnChangePassword_Click);
+            // 
+            // lbChangePassword
+            // 
+            this.lbChangePassword.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lbChangePassword.Location = new System.Drawing.Point(0, 0);
+            this.lbChangePassword.Name = "lbChangePassword";
+            this.lbChangePassword.Padding = new System.Windows.Forms.Padding(2, 2, 0, 0);
+            this.lbChangePassword.Size = new System.Drawing.Size(179, 18);
+            this.lbChangePassword.TabIndex = 0;
+            this.lbChangePassword.Text = "Change password";
+            this.lbChangePassword.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.lbChangePassword.Click += new System.EventHandler(this.pnChangePassword_Click);
+            // 
+            // clbCardTypes
+            // 
+            this.clbCardTypes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.clbCardTypes.FormattingEnabled = true;
+            this.clbCardTypes.Location = new System.Drawing.Point(15, 154);
+            this.clbCardTypes.Name = "clbCardTypes";
+            this.clbCardTypes.Size = new System.Drawing.Size(498, 214);
+            this.clbCardTypes.TabIndex = 33;
+            this.clbCardTypes.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCardTypes_ItemCheck);
+            this.clbCardTypes.SelectedValueChanged += new System.EventHandler(this.clbCardTypes_SelectedValueChanged);
+            // 
+            // pbChangePassword
+            // 
+            this.pbChangePassword.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pbChangePassword.Image = global::EasyCardFile.Properties.Resources.system_password_2;
+            this.pbChangePassword.Location = new System.Drawing.Point(182, 0);
+            this.pbChangePassword.Margin = new System.Windows.Forms.Padding(0);
+            this.pbChangePassword.Name = "pbChangePassword";
+            this.pbChangePassword.Size = new System.Drawing.Size(20, 18);
+            this.pbChangePassword.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbChangePassword.TabIndex = 1;
+            this.pbChangePassword.TabStop = false;
+            this.pbChangePassword.Click += new System.EventHandler(this.pnChangePassword_Click);
             // 
             // tsbAddCardType
             // 
@@ -193,88 +282,32 @@
             this.tsbUndo.Text = "Undo card type changes";
             this.tsbUndo.Click += new System.EventHandler(this.tsbUndo_Click);
             // 
-            // lbRowErrorText
+            // tsbForegroundColor
             // 
-            this.lbRowErrorText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbRowErrorText.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbRowErrorText.ForeColor = System.Drawing.Color.Red;
-            this.lbRowErrorText.Location = new System.Drawing.Point(12, 330);
-            this.lbRowErrorText.Name = "lbRowErrorText";
-            this.lbRowErrorText.Size = new System.Drawing.Size(373, 26);
-            this.lbRowErrorText.TabIndex = 15;
+            this.tsbForegroundColor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbForegroundColor.Image = global::EasyCardFile.Properties.Resources.colorize_2;
+            this.tsbForegroundColor.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbForegroundColor.Name = "tsbForegroundColor";
+            this.tsbForegroundColor.Size = new System.Drawing.Size(22, 20);
+            this.tsbForegroundColor.Text = "Type foreground color";
             // 
-            // btCancel
+            // tsbBackgroundColor
             // 
-            this.btCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(472, 330);
-            this.btCancel.Name = "btCancel";
-            this.btCancel.Size = new System.Drawing.Size(75, 23);
-            this.btCancel.TabIndex = 31;
-            this.btCancel.Text = "Cancel";
-            this.btCancel.UseVisualStyleBackColor = true;
+            this.tsbBackgroundColor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbBackgroundColor.Image = global::EasyCardFile.Properties.Resources.color_fill;
+            this.tsbBackgroundColor.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbBackgroundColor.Name = "tsbBackgroundColor";
+            this.tsbBackgroundColor.Size = new System.Drawing.Size(22, 20);
+            this.tsbBackgroundColor.Text = "Type background color";
             // 
-            // btOk
+            // tsbTypeImage
             // 
-            this.btOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btOk.Location = new System.Drawing.Point(391, 330);
-            this.btOk.Name = "btOk";
-            this.btOk.Size = new System.Drawing.Size(75, 23);
-            this.btOk.TabIndex = 30;
-            this.btOk.Text = "OK";
-            this.btOk.UseVisualStyleBackColor = true;
-            this.btOk.Click += new System.EventHandler(this.btOk_Click);
-            // 
-            // pnChangePassword
-            // 
-            this.pnChangePassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnChangePassword.Controls.Add(this.pbChangePassword);
-            this.pnChangePassword.Controls.Add(this.lbChangePassword);
-            this.pnChangePassword.Location = new System.Drawing.Point(343, 43);
-            this.pnChangePassword.Margin = new System.Windows.Forms.Padding(0);
-            this.pnChangePassword.Name = "pnChangePassword";
-            this.pnChangePassword.Size = new System.Drawing.Size(204, 20);
-            this.pnChangePassword.TabIndex = 32;
-            this.pnChangePassword.Click += new System.EventHandler(this.pnChangePassword_Click);
-            // 
-            // pbChangePassword
-            // 
-            this.pbChangePassword.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pbChangePassword.Image = global::EasyCardFile.Properties.Resources.system_password_2;
-            this.pbChangePassword.Location = new System.Drawing.Point(182, 0);
-            this.pbChangePassword.Margin = new System.Windows.Forms.Padding(0);
-            this.pbChangePassword.Name = "pbChangePassword";
-            this.pbChangePassword.Size = new System.Drawing.Size(20, 18);
-            this.pbChangePassword.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbChangePassword.TabIndex = 1;
-            this.pbChangePassword.TabStop = false;
-            this.pbChangePassword.Click += new System.EventHandler(this.pnChangePassword_Click);
-            // 
-            // lbChangePassword
-            // 
-            this.lbChangePassword.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lbChangePassword.Location = new System.Drawing.Point(0, 0);
-            this.lbChangePassword.Name = "lbChangePassword";
-            this.lbChangePassword.Padding = new System.Windows.Forms.Padding(2, 2, 0, 0);
-            this.lbChangePassword.Size = new System.Drawing.Size(179, 18);
-            this.lbChangePassword.TabIndex = 0;
-            this.lbChangePassword.Text = "Change password";
-            this.lbChangePassword.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.lbChangePassword.Click += new System.EventHandler(this.pnChangePassword_Click);
-            // 
-            // clbCardTypes
-            // 
-            this.clbCardTypes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.clbCardTypes.FormattingEnabled = true;
-            this.clbCardTypes.Location = new System.Drawing.Point(15, 154);
-            this.clbCardTypes.Name = "clbCardTypes";
-            this.clbCardTypes.Size = new System.Drawing.Size(498, 169);
-            this.clbCardTypes.TabIndex = 33;
-            this.clbCardTypes.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCardTypes_ItemCheck);
-            this.clbCardTypes.SelectedValueChanged += new System.EventHandler(this.clbCardTypes_SelectedValueChanged);
+            this.tsbTypeImage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbTypeImage.Image = global::EasyCardFile.Properties.Resources.image;
+            this.tsbTypeImage.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbTypeImage.Name = "tsbTypeImage";
+            this.tsbTypeImage.Size = new System.Drawing.Size(22, 20);
+            this.tsbTypeImage.Text = "Type image";
             // 
             // tbbCardNamingInstruction
             // 
@@ -300,7 +333,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(559, 365);
+            this.ClientSize = new System.Drawing.Size(559, 411);
             this.Controls.Add(this.clbCardTypes);
             this.Controls.Add(this.pnChangePassword);
             this.Controls.Add(this.btCancel);
@@ -353,5 +386,8 @@
         private System.Windows.Forms.ToolStripButton tsbRename;
         private System.Windows.Forms.ToolStripButton tsbUndo;
         private System.Windows.Forms.ToolStripButton tsbTypeSpecificCardNaming;
+        private System.Windows.Forms.ToolStripButton tsbForegroundColor;
+        private System.Windows.Forms.ToolStripButton tsbBackgroundColor;
+        private System.Windows.Forms.ToolStripButton tsbTypeImage;
     }
 }

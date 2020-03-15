@@ -162,6 +162,12 @@
   <data name="msgConfirmAPasswordTitle" xml:space="preserve">
     <value>Confirm the password|A user is asked for a confirmation for a password in a dialog (the second time)</value>
   </data>
+  <data name="msgEditorCardCreated" xml:space="preserve">
+    <value>Created: {0}|A message for a status strip to indicate a date and time the card was created.</value>
+  </data>
+  <data name="msgEditorCardModified" xml:space="preserve">
+    <value>Modified: {0}|A message for a status strip to indicate a date and time the card was modified.</value>
+  </data>
   <data name="msgEncryptionGiveAPassword" xml:space="preserve">
     <value>The file is encrypted, please give a password.|A message indicating file encryption. A password is requested from the user.</value>
   </data>

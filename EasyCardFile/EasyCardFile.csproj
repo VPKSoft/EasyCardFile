@@ -91,6 +91,9 @@
     <Reference Include="VPKSoft.MessageBoxExtended, Version=1.0.0.8, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.MessageBoxExtended.1.0.0.8\lib\net47\VPKSoft.MessageBoxExtended.dll</HintPath>
     </Reference>
+    <Reference Include="VPKSoft.PosLib, Version=1.0.1.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VPKSoft.PosLib.1.0.1.1\lib\net45\VPKSoft.PosLib.dll</HintPath>
+    </Reference>
     <Reference Include="VPKSoft.RichTextEdit, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.RichTextEdit.1.0.0.3\lib\net47\VPKSoft.RichTextEdit.dll</HintPath>
     </Reference>
@@ -238,6 +241,11 @@
   <ItemGroup>
     <Content Include="62941cardfilebox_109271.ico" />
     <Content Include="DBLocalization.exe" />
+    <Content Include="history.txt" />
+    <None Include="Resources\colorize-2.png" />
+    <None Include="Resources\color-fill.png" />
+    <None Include="Resources\image.png" />
+    <Content Include="VPKSoft.ico" />
     <None Include="Resources\About.png" />
     <None Include="Resources\document-print-preview-4.png" />
     <Content Include="Resources\download_dialog_localization.txt" />

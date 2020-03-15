@@ -196,6 +196,24 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Created: {0}|A message for a status strip to indicate a date and time the card was created..
+        /// </summary>
+        internal static string msgEditorCardCreated {
+            get {
+                return ResourceManager.GetString("msgEditorCardCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modified: {0}|A message for a status strip to indicate a date and time the card was modified..
+        /// </summary>
+        internal static string msgEditorCardModified {
+            get {
+                return ResourceManager.GetString("msgEditorCardModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The file is encrypted, please give a password.|A message indicating file encryption. A password is requested from the user..
         /// </summary>
         internal static string msgEncryptionGiveAPassword {

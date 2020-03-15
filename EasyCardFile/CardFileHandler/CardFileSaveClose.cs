@@ -87,11 +87,14 @@ namespace EasyCardFile.CardFileHandler
                         {
                             throw new InvalidOperationException("Error opening the card file: " + cardFile.FileName);
                         }
+                        cardFile.RefreshUi();
                     }
                     else
                     {
                         cardFile.CardFileDb.SaveChanges();
                     }
+
+                    cardFile.Changed = false;
                 }
                 else
                 {
@@ -180,6 +183,7 @@ namespace EasyCardFile.CardFileHandler
                             {
                                 wrapper.NewFileName = newFileName;
                                 wrapper.FileName = wrapper.NewFileName;
+                                wrapper.Changed = false;
                                 wrapper.OpenCardFile(wrapper.FileName);
                             }
                         }
@@ -203,6 +207,7 @@ namespace EasyCardFile.CardFileHandler
                             if (!releaseResources)
                             {
                                 wrapper.FileName = wrapper.NewFileName;
+                                wrapper.Changed = false;
                                 if (!wrapper.OpenCardFile(wrapper.FileName))
                                 {
                                     throw new InvalidOperationException("Error opening the card file: " + wrapper.FileName);

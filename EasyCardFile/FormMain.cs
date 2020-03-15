@@ -42,6 +42,7 @@ using EasyCardFile.UtilityClasses.Localization;
 using VPKSoft.ErrorLogger;
 using VPKSoft.LangLib;
 using VPKSoft.MessageBoxExtended;
+using VPKSoft.PosLib;
 using VPKSoft.Utils.XmlSettingsMisc;
 using VPKSoft.VersionCheck.Forms;
 using VPKSoft.WinFormsRtfPrint;
@@ -63,6 +64,9 @@ namespace EasyCardFile
         /// </summary>
         public FormMain()
         {
+            // Add this form to be positioned..
+            PositionForms.Add(this);
+
             InitializeComponent();
 
             // ReSharper disable once StringLiteralTypo
@@ -139,6 +143,7 @@ namespace EasyCardFile
             CardFileSaveClose.HandleTabsAfterClose(tcCardFiles);
 
             Settings.SetSessionFiles(tcCardFiles);
+            Settings.SetSplitters(tcCardFiles, Width);
 
             Settings.SessionActiveTabIndex = tcCardFiles.SelectedIndex;
 
@@ -261,6 +266,8 @@ namespace EasyCardFile
             {
                 tcCardFiles.SelectedIndex = Settings.SessionActiveTabIndex;
             }
+
+            Settings.GetSplitters(tcCardFiles, Width);
         }
 
         /// <summary>
@@ -291,6 +298,7 @@ namespace EasyCardFile
             if (FormDialogCardFilePreferences.ShowDialog(this, wrapper.CardFileDb) == DialogResult.OK)
             {
                 wrapper.UpdateTitle();
+                wrapper.RefreshUi();
             }
         }
 
@@ -305,6 +313,16 @@ namespace EasyCardFile
         {
             if (odCardFile.ShowDialog() == DialogResult.OK)
             {
+                // ReSharper disable once StringLiteralTypo
+                if (string.Equals(Path.GetExtension(odCardFile.FileName), ".ecfp", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (CardFileLegacyReader.Convert(odCardFileLegacy, sdCardFile, this))
+                    {
+                        OpenCardFile(sdCardFile.FileName);
+                    }
+                    return;
+                }
+
                 OpenCardFile(odCardFile.FileName, true);
             }
         }

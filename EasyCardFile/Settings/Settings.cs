@@ -25,6 +25,8 @@ SOFTWARE.
 #endregion
 
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using EasyCardFile.CardFileHandler;
 using VPKSoft.Utils;
 using VPKSoft.Utils.XmlSettingsMisc;
@@ -49,6 +51,13 @@ namespace EasyCardFile.Settings
         /// </summary>
         [IsSetting]
         public List<string> SessionFiles { get; set; }
+
+        /// <summary>
+        /// Gets or sets the splitter settings.
+        /// </summary>
+        /// <value>The splitter settings.</value>
+        [IsSetting]
+        public List<string> SplitterSettings { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets a value indicating whether to restore the session on application startup.
@@ -82,6 +91,97 @@ namespace EasyCardFile.Settings
                 if (!wrapper.IsTemporary)
                 {
                     SessionFiles.Add(wrapper.FileName);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the splitter distances of the <see cref="CardFileUiWrapper"/> instances to the settings.
+        /// </summary>
+        /// <param name="tabControl">The tab control witch <see cref="CardFileUiWrapper"/> instances reside.</param>
+        /// <param name="mainWindowWidth">The width of the main window of the application to allow relation to to splitter distance result.</param>
+        public void SetSplitters(Manina.Windows.Forms.TabControl tabControl, int mainWindowWidth)
+        {
+            foreach (var tab in tabControl.Tabs)
+            {
+                var wrapper = CardFileUiWrapper.GetWrapperByTab(tab);
+
+                if (wrapper == null)
+                {
+                    continue;
+                }
+
+                SetSplitter(wrapper, mainWindowWidth);
+            }
+        }
+
+        /// <summary>
+        /// Sets the splitter distance of the <see cref="CardFileUiWrapper"/> instance to the settings.
+        /// </summary>
+        /// <param name="wrapper">The <see cref="CardFileUiWrapper"/> instance which splitter distance to save.</param>
+        /// <param name="mainWindowWidth">The width of the main window of the application to allow relation to to splitter distance result.</param>
+        public void SetSplitter(CardFileUiWrapper wrapper, int mainWindowWidth)
+        {
+            if (wrapper.IsTemporary || !File.Exists(wrapper.FileName))
+            {
+                return;
+            }
+
+            var index = SplitterSettings.FindIndex(f => f.EndsWith(wrapper.FileName));
+
+            if (index != -1)
+            {
+                SplitterSettings.RemoveAt(index);
+            }
+
+            SplitterSettings.Add(wrapper.SplitterDistance + "|" + mainWindowWidth + ":" + wrapper.FileName);
+        }
+
+        /// <summary>
+        /// Gets the splitter distances for a <see cref="CardFileUiWrapper"/> instances.
+        /// </summary>
+        /// <param name="tabControl">The tab control witch <see cref="CardFileUiWrapper"/> instances reside.</param>
+        /// <param name="mainWindowWidth">The width of the main window of the application to allow relation to to splitter distance result.</param>
+        public void GetSplitters(Manina.Windows.Forms.TabControl tabControl, int mainWindowWidth)
+        {
+            foreach (var tab in tabControl.Tabs)
+            {
+                var wrapper = CardFileUiWrapper.GetWrapperByTab(tab);
+
+                if (wrapper == null)
+                {
+                    continue;
+                }
+
+                GetSplitter(wrapper, mainWindowWidth);
+            }
+        }
+
+        /// <summary>
+        /// Gets the splitter distance for a <see cref="CardFileUiWrapper"/> instance.
+        /// </summary>
+        /// <param name="wrapper">The <see cref="CardFileUiWrapper"/> instance which splitter distance to save.</param>
+        /// <param name="mainWindowWidth">The width of the main window of the application to allow relation to to splitter distance result.</param>
+        public void GetSplitter(CardFileUiWrapper wrapper, int mainWindowWidth)
+        {
+            var index = SplitterSettings.FindIndex(f => f.EndsWith(wrapper.FileName));
+
+            if (index != -1)
+            {
+                var distance = SplitterSettings[index].Split(':').FirstOrDefault()?.Split('|');
+                if (distance != null && distance.Length == 2)
+                {
+                    var previousWidth = int.Parse(distance[1]);
+                    var splitterDistance = int.Parse(distance[0]);
+
+                    var difference = (double)previousWidth - mainWindowWidth;
+
+                    difference /= mainWindowWidth;
+                        difference = 1.0 - difference;
+
+                    var newDistance = (int)(splitterDistance * difference);
+
+                    wrapper.SplitterDistance = newDistance;
                 }
             }
         }
