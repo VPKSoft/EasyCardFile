@@ -37,13 +37,6 @@
             this.cbCardsDropBetween = new System.Windows.Forms.CheckBox();
             this.lbCardTypes = new System.Windows.Forms.Label();
             this.tsbCardTypes = new System.Windows.Forms.ToolStrip();
-            this.lbRowErrorText = new System.Windows.Forms.Label();
-            this.btCancel = new System.Windows.Forms.Button();
-            this.btOk = new System.Windows.Forms.Button();
-            this.pnChangePassword = new System.Windows.Forms.Panel();
-            this.lbChangePassword = new System.Windows.Forms.Label();
-            this.clbCardTypes = new EasyCardFile.UtilityClasses.ProjectControls.RefreshCheckListBox();
-            this.pbChangePassword = new System.Windows.Forms.PictureBox();
             this.tsbAddCardType = new System.Windows.Forms.ToolStripButton();
             this.tsbRemoveCardType = new System.Windows.Forms.ToolStripButton();
             this.tsbRename = new System.Windows.Forms.ToolStripButton();
@@ -52,10 +45,27 @@
             this.tsbForegroundColor = new System.Windows.Forms.ToolStripButton();
             this.tsbBackgroundColor = new System.Windows.Forms.ToolStripButton();
             this.tsbTypeImage = new System.Windows.Forms.ToolStripButton();
+            this.lbRowErrorText = new System.Windows.Forms.Label();
+            this.btCancel = new System.Windows.Forms.Button();
+            this.btOk = new System.Windows.Forms.Button();
+            this.pnChangePassword = new System.Windows.Forms.Panel();
+            this.pbChangePassword = new System.Windows.Forms.PictureBox();
+            this.lbChangePassword = new System.Windows.Forms.Label();
+            this.tlpCardTypeProperties = new System.Windows.Forms.TableLayoutPanel();
+            this.lbCartTypeForeground = new System.Windows.Forms.Label();
+            this.lbCartTypeBackground = new System.Windows.Forms.Label();
+            this.lbCardTypeImage = new System.Windows.Forms.Label();
+            this.pnCartTypeForeground = new System.Windows.Forms.Panel();
+            this.lbCardTypeProperties = new System.Windows.Forms.Label();
+            this.pnCartTypeBackground = new System.Windows.Forms.Panel();
+            this.pbCardTypeImage = new System.Windows.Forms.PictureBox();
+            this.clbCardTypes = new EasyCardFile.UtilityClasses.ProjectControls.RefreshCheckListBox();
             this.tbbCardNamingInstruction = new EasyCardFile.UtilityClasses.ProjectControls.TextBoxButton();
             this.tsbCardTypes.SuspendLayout();
             this.pnChangePassword.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbChangePassword)).BeginInit();
+            this.tlpCardTypeProperties.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCardTypeImage)).BeginInit();
             this.SuspendLayout();
             // 
             // lbCardFileName
@@ -142,12 +152,88 @@
             this.tsbForegroundColor,
             this.tsbBackgroundColor,
             this.tsbTypeImage});
-            this.tsbCardTypes.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-            this.tsbCardTypes.Location = new System.Drawing.Point(526, 154);
+            this.tsbCardTypes.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.tsbCardTypes.Location = new System.Drawing.Point(350, 138);
             this.tsbCardTypes.Name = "tsbCardTypes";
-            this.tsbCardTypes.ShowItemToolTips = false;
-            this.tsbCardTypes.Size = new System.Drawing.Size(24, 195);
+            this.tsbCardTypes.Size = new System.Drawing.Size(196, 25);
             this.tsbCardTypes.TabIndex = 14;
+            // 
+            // tsbAddCardType
+            // 
+            this.tsbAddCardType.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbAddCardType.Image = global::EasyCardFile.Properties.Resources.edit_add_2;
+            this.tsbAddCardType.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbAddCardType.Name = "tsbAddCardType";
+            this.tsbAddCardType.Size = new System.Drawing.Size(23, 22);
+            this.tsbAddCardType.Text = "toolStripButton1";
+            this.tsbAddCardType.Click += new System.EventHandler(this.tsbAddCardType_Click);
+            // 
+            // tsbRemoveCardType
+            // 
+            this.tsbRemoveCardType.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbRemoveCardType.Image = global::EasyCardFile.Properties.Resources.edit_delete_6;
+            this.tsbRemoveCardType.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbRemoveCardType.Name = "tsbRemoveCardType";
+            this.tsbRemoveCardType.Size = new System.Drawing.Size(23, 22);
+            this.tsbRemoveCardType.Text = "Delete card type";
+            this.tsbRemoveCardType.Click += new System.EventHandler(this.tsbRemoveCardType_Click);
+            // 
+            // tsbRename
+            // 
+            this.tsbRename.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbRename.Image = global::EasyCardFile.Properties.Resources.Modify;
+            this.tsbRename.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbRename.Name = "tsbRename";
+            this.tsbRename.Size = new System.Drawing.Size(23, 22);
+            this.tsbRename.Text = "Rename card type";
+            this.tsbRename.Click += new System.EventHandler(this.tsbRename_Click);
+            // 
+            // tsbTypeSpecificCardNaming
+            // 
+            this.tsbTypeSpecificCardNaming.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbTypeSpecificCardNaming.Image = global::EasyCardFile.Properties.Resources.textfield_rename;
+            this.tsbTypeSpecificCardNaming.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbTypeSpecificCardNaming.Name = "tsbTypeSpecificCardNaming";
+            this.tsbTypeSpecificCardNaming.Size = new System.Drawing.Size(23, 22);
+            this.tsbTypeSpecificCardNaming.Text = "Set card type specific naming instructions";
+            this.tsbTypeSpecificCardNaming.Click += new System.EventHandler(this.tsbTypeSpecificCardNaming_Click);
+            // 
+            // tsbUndo
+            // 
+            this.tsbUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbUndo.Image = global::EasyCardFile.Properties.Resources.Undo;
+            this.tsbUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbUndo.Name = "tsbUndo";
+            this.tsbUndo.Size = new System.Drawing.Size(23, 22);
+            this.tsbUndo.Text = "Undo card type changes";
+            this.tsbUndo.Click += new System.EventHandler(this.tsbUndo_Click);
+            // 
+            // tsbForegroundColor
+            // 
+            this.tsbForegroundColor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbForegroundColor.Image = global::EasyCardFile.Properties.Resources.colorize_2;
+            this.tsbForegroundColor.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbForegroundColor.Name = "tsbForegroundColor";
+            this.tsbForegroundColor.Size = new System.Drawing.Size(23, 22);
+            this.tsbForegroundColor.Text = "Type foreground color";
+            // 
+            // tsbBackgroundColor
+            // 
+            this.tsbBackgroundColor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbBackgroundColor.Image = global::EasyCardFile.Properties.Resources.color_fill;
+            this.tsbBackgroundColor.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbBackgroundColor.Name = "tsbBackgroundColor";
+            this.tsbBackgroundColor.Size = new System.Drawing.Size(23, 22);
+            this.tsbBackgroundColor.Text = "Type background color";
+            // 
+            // tsbTypeImage
+            // 
+            this.tsbTypeImage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbTypeImage.Image = global::EasyCardFile.Properties.Resources.image;
+            this.tsbTypeImage.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbTypeImage.Name = "tsbTypeImage";
+            this.tsbTypeImage.Size = new System.Drawing.Size(23, 22);
+            this.tsbTypeImage.Text = "Type image";
             // 
             // lbRowErrorText
             // 
@@ -155,7 +241,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbRowErrorText.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbRowErrorText.ForeColor = System.Drawing.Color.Red;
-            this.lbRowErrorText.Location = new System.Drawing.Point(12, 376);
+            this.lbRowErrorText.Location = new System.Drawing.Point(12, 387);
             this.lbRowErrorText.Name = "lbRowErrorText";
             this.lbRowErrorText.Size = new System.Drawing.Size(373, 26);
             this.lbRowErrorText.TabIndex = 15;
@@ -164,7 +250,7 @@
             // 
             this.btCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btCancel.Location = new System.Drawing.Point(472, 376);
+            this.btCancel.Location = new System.Drawing.Point(472, 387);
             this.btCancel.Name = "btCancel";
             this.btCancel.Size = new System.Drawing.Size(75, 23);
             this.btCancel.TabIndex = 31;
@@ -174,7 +260,7 @@
             // btOk
             // 
             this.btOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btOk.Location = new System.Drawing.Point(391, 376);
+            this.btOk.Location = new System.Drawing.Point(391, 387);
             this.btOk.Name = "btOk";
             this.btOk.Size = new System.Drawing.Size(75, 23);
             this.btOk.TabIndex = 30;
@@ -194,31 +280,6 @@
             this.pnChangePassword.TabIndex = 32;
             this.pnChangePassword.Click += new System.EventHandler(this.pnChangePassword_Click);
             // 
-            // lbChangePassword
-            // 
-            this.lbChangePassword.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lbChangePassword.Location = new System.Drawing.Point(0, 0);
-            this.lbChangePassword.Name = "lbChangePassword";
-            this.lbChangePassword.Padding = new System.Windows.Forms.Padding(2, 2, 0, 0);
-            this.lbChangePassword.Size = new System.Drawing.Size(179, 18);
-            this.lbChangePassword.TabIndex = 0;
-            this.lbChangePassword.Text = "Change password";
-            this.lbChangePassword.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.lbChangePassword.Click += new System.EventHandler(this.pnChangePassword_Click);
-            // 
-            // clbCardTypes
-            // 
-            this.clbCardTypes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.clbCardTypes.FormattingEnabled = true;
-            this.clbCardTypes.Location = new System.Drawing.Point(15, 154);
-            this.clbCardTypes.Name = "clbCardTypes";
-            this.clbCardTypes.Size = new System.Drawing.Size(498, 214);
-            this.clbCardTypes.TabIndex = 33;
-            this.clbCardTypes.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCardTypes_ItemCheck);
-            this.clbCardTypes.SelectedValueChanged += new System.EventHandler(this.clbCardTypes_SelectedValueChanged);
-            // 
             // pbChangePassword
             // 
             this.pbChangePassword.Dock = System.Windows.Forms.DockStyle.Right;
@@ -232,82 +293,126 @@
             this.pbChangePassword.TabStop = false;
             this.pbChangePassword.Click += new System.EventHandler(this.pnChangePassword_Click);
             // 
-            // tsbAddCardType
+            // lbChangePassword
             // 
-            this.tsbAddCardType.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbAddCardType.Image = global::EasyCardFile.Properties.Resources.edit_add_2;
-            this.tsbAddCardType.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbAddCardType.Name = "tsbAddCardType";
-            this.tsbAddCardType.Size = new System.Drawing.Size(22, 20);
-            this.tsbAddCardType.Text = "toolStripButton1";
-            this.tsbAddCardType.Click += new System.EventHandler(this.tsbAddCardType_Click);
+            this.lbChangePassword.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lbChangePassword.Location = new System.Drawing.Point(0, 0);
+            this.lbChangePassword.Name = "lbChangePassword";
+            this.lbChangePassword.Padding = new System.Windows.Forms.Padding(2, 2, 0, 0);
+            this.lbChangePassword.Size = new System.Drawing.Size(179, 18);
+            this.lbChangePassword.TabIndex = 0;
+            this.lbChangePassword.Text = "Change password";
+            this.lbChangePassword.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.lbChangePassword.Click += new System.EventHandler(this.pnChangePassword_Click);
             // 
-            // tsbRemoveCardType
+            // tlpCardTypeProperties
             // 
-            this.tsbRemoveCardType.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbRemoveCardType.Image = global::EasyCardFile.Properties.Resources.edit_delete_6;
-            this.tsbRemoveCardType.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbRemoveCardType.Name = "tsbRemoveCardType";
-            this.tsbRemoveCardType.Size = new System.Drawing.Size(22, 20);
-            this.tsbRemoveCardType.Text = "Delete card type";
-            this.tsbRemoveCardType.Click += new System.EventHandler(this.tsbRemoveCardType_Click);
+            this.tlpCardTypeProperties.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tlpCardTypeProperties.ColumnCount = 3;
+            this.tlpCardTypeProperties.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tlpCardTypeProperties.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+            this.tlpCardTypeProperties.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+            this.tlpCardTypeProperties.Controls.Add(this.lbCartTypeForeground, 0, 0);
+            this.tlpCardTypeProperties.Controls.Add(this.lbCartTypeBackground, 1, 0);
+            this.tlpCardTypeProperties.Controls.Add(this.lbCardTypeImage, 2, 0);
+            this.tlpCardTypeProperties.Controls.Add(this.pnCartTypeForeground, 0, 1);
+            this.tlpCardTypeProperties.Controls.Add(this.pnCartTypeBackground, 1, 1);
+            this.tlpCardTypeProperties.Controls.Add(this.pbCardTypeImage, 2, 1);
+            this.tlpCardTypeProperties.Location = new System.Drawing.Point(170, 299);
+            this.tlpCardTypeProperties.Name = "tlpCardTypeProperties";
+            this.tlpCardTypeProperties.RowCount = 2;
+            this.tlpCardTypeProperties.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpCardTypeProperties.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpCardTypeProperties.Size = new System.Drawing.Size(376, 82);
+            this.tlpCardTypeProperties.TabIndex = 34;
+            this.tlpCardTypeProperties.Resize += new System.EventHandler(this.tlpCardTypeProperties_Resize);
             // 
-            // tsbRename
+            // lbCartTypeForeground
             // 
-            this.tsbRename.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbRename.Image = global::EasyCardFile.Properties.Resources.Modify;
-            this.tsbRename.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbRename.Name = "tsbRename";
-            this.tsbRename.Size = new System.Drawing.Size(22, 20);
-            this.tsbRename.Text = "Rename card type";
-            this.tsbRename.Click += new System.EventHandler(this.tsbRename_Click);
+            this.lbCartTypeForeground.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbCartTypeForeground.Location = new System.Drawing.Point(3, 0);
+            this.lbCartTypeForeground.Name = "lbCartTypeForeground";
+            this.lbCartTypeForeground.Size = new System.Drawing.Size(119, 40);
+            this.lbCartTypeForeground.TabIndex = 0;
+            this.lbCartTypeForeground.Text = "Card type foreground color:";
             // 
-            // tsbTypeSpecificCardNaming
+            // lbCartTypeBackground
             // 
-            this.tsbTypeSpecificCardNaming.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbTypeSpecificCardNaming.Image = global::EasyCardFile.Properties.Resources.textfield_rename;
-            this.tsbTypeSpecificCardNaming.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbTypeSpecificCardNaming.Name = "tsbTypeSpecificCardNaming";
-            this.tsbTypeSpecificCardNaming.Size = new System.Drawing.Size(22, 20);
-            this.tsbTypeSpecificCardNaming.Text = "Set card type specific naming instructions";
-            this.tsbTypeSpecificCardNaming.Click += new System.EventHandler(this.tsbTypeSpecificCardNaming_Click);
+            this.lbCartTypeBackground.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbCartTypeBackground.Location = new System.Drawing.Point(128, 0);
+            this.lbCartTypeBackground.Name = "lbCartTypeBackground";
+            this.lbCartTypeBackground.Size = new System.Drawing.Size(119, 40);
+            this.lbCartTypeBackground.TabIndex = 1;
+            this.lbCartTypeBackground.Text = "Card type backround color:";
             // 
-            // tsbUndo
+            // lbCardTypeImage
             // 
-            this.tsbUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbUndo.Image = global::EasyCardFile.Properties.Resources.Undo;
-            this.tsbUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbUndo.Name = "tsbUndo";
-            this.tsbUndo.Size = new System.Drawing.Size(22, 20);
-            this.tsbUndo.Text = "Undo card type changes";
-            this.tsbUndo.Click += new System.EventHandler(this.tsbUndo_Click);
+            this.lbCardTypeImage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbCardTypeImage.Location = new System.Drawing.Point(253, 0);
+            this.lbCardTypeImage.Name = "lbCardTypeImage";
+            this.lbCardTypeImage.Size = new System.Drawing.Size(120, 40);
+            this.lbCardTypeImage.TabIndex = 2;
+            this.lbCardTypeImage.Text = "Card type image";
             // 
-            // tsbForegroundColor
+            // pnCartTypeForeground
             // 
-            this.tsbForegroundColor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbForegroundColor.Image = global::EasyCardFile.Properties.Resources.colorize_2;
-            this.tsbForegroundColor.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbForegroundColor.Name = "tsbForegroundColor";
-            this.tsbForegroundColor.Size = new System.Drawing.Size(22, 20);
-            this.tsbForegroundColor.Text = "Type foreground color";
+            this.pnCartTypeForeground.BackColor = System.Drawing.SystemColors.ControlText;
+            this.pnCartTypeForeground.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnCartTypeForeground.Location = new System.Drawing.Point(0, 40);
+            this.pnCartTypeForeground.Margin = new System.Windows.Forms.Padding(0);
+            this.pnCartTypeForeground.Name = "pnCartTypeForeground";
+            this.pnCartTypeForeground.Size = new System.Drawing.Size(42, 42);
+            this.pnCartTypeForeground.TabIndex = 3;
             // 
-            // tsbBackgroundColor
+            // lbCardTypeProperties
             // 
-            this.tsbBackgroundColor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbBackgroundColor.Image = global::EasyCardFile.Properties.Resources.color_fill;
-            this.tsbBackgroundColor.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbBackgroundColor.Name = "tsbBackgroundColor";
-            this.tsbBackgroundColor.Size = new System.Drawing.Size(22, 20);
-            this.tsbBackgroundColor.Text = "Type background color";
+            this.lbCardTypeProperties.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lbCardTypeProperties.Location = new System.Drawing.Point(12, 299);
+            this.lbCardTypeProperties.Name = "lbCardTypeProperties";
+            this.lbCardTypeProperties.Size = new System.Drawing.Size(152, 82);
+            this.lbCardTypeProperties.TabIndex = 35;
+            this.lbCardTypeProperties.Text = "Card type properties:";
             // 
-            // tsbTypeImage
+            // pnCartTypeBackground
             // 
-            this.tsbTypeImage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbTypeImage.Image = global::EasyCardFile.Properties.Resources.image;
-            this.tsbTypeImage.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbTypeImage.Name = "tsbTypeImage";
-            this.tsbTypeImage.Size = new System.Drawing.Size(22, 20);
-            this.tsbTypeImage.Text = "Type image";
+            this.pnCartTypeBackground.BackColor = System.Drawing.SystemColors.Window;
+            this.pnCartTypeBackground.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnCartTypeBackground.Location = new System.Drawing.Point(125, 40);
+            this.pnCartTypeBackground.Margin = new System.Windows.Forms.Padding(0);
+            this.pnCartTypeBackground.Name = "pnCartTypeBackground";
+            this.pnCartTypeBackground.Size = new System.Drawing.Size(42, 42);
+            this.pnCartTypeBackground.TabIndex = 4;
+            // 
+            // pbCardTypeImage
+            // 
+            this.pbCardTypeImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pbCardTypeImage.Location = new System.Drawing.Point(250, 40);
+            this.pbCardTypeImage.Margin = new System.Windows.Forms.Padding(0);
+            this.pbCardTypeImage.Name = "pbCardTypeImage";
+            this.pbCardTypeImage.Size = new System.Drawing.Size(42, 42);
+            this.pbCardTypeImage.TabIndex = 5;
+            this.pbCardTypeImage.TabStop = false;
+            // 
+            // clbCardTypes
+            // 
+            this.clbCardTypes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.clbCardTypes.FormattingEnabled = true;
+            this.clbCardTypes.IntegralHeight = false;
+            this.clbCardTypes.Location = new System.Drawing.Point(15, 166);
+            this.clbCardTypes.Name = "clbCardTypes";
+            this.clbCardTypes.Size = new System.Drawing.Size(532, 127);
+            this.clbCardTypes.TabIndex = 33;
+            this.clbCardTypes.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCardTypes_ItemCheck);
+            this.clbCardTypes.SelectedValueChanged += new System.EventHandler(this.clbCardTypes_SelectedValueChanged);
             // 
             // tbbCardNamingInstruction
             // 
@@ -333,7 +438,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
-            this.ClientSize = new System.Drawing.Size(559, 411);
+            this.ClientSize = new System.Drawing.Size(559, 422);
+            this.Controls.Add(this.lbCardTypeProperties);
+            this.Controls.Add(this.tlpCardTypeProperties);
             this.Controls.Add(this.clbCardTypes);
             this.Controls.Add(this.pnChangePassword);
             this.Controls.Add(this.btCancel);
@@ -358,6 +465,8 @@
             this.tsbCardTypes.PerformLayout();
             this.pnChangePassword.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbChangePassword)).EndInit();
+            this.tlpCardTypeProperties.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbCardTypeImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -382,12 +491,20 @@
         private System.Windows.Forms.Panel pnChangePassword;
         private System.Windows.Forms.Label lbChangePassword;
         private System.Windows.Forms.PictureBox pbChangePassword;
-        private EasyCardFile.UtilityClasses.ProjectControls.RefreshCheckListBox clbCardTypes;
         private System.Windows.Forms.ToolStripButton tsbRename;
         private System.Windows.Forms.ToolStripButton tsbUndo;
         private System.Windows.Forms.ToolStripButton tsbTypeSpecificCardNaming;
         private System.Windows.Forms.ToolStripButton tsbForegroundColor;
         private System.Windows.Forms.ToolStripButton tsbBackgroundColor;
         private System.Windows.Forms.ToolStripButton tsbTypeImage;
+        private UtilityClasses.ProjectControls.RefreshCheckListBox clbCardTypes;
+        private System.Windows.Forms.TableLayoutPanel tlpCardTypeProperties;
+        private System.Windows.Forms.Label lbCartTypeForeground;
+        private System.Windows.Forms.Label lbCartTypeBackground;
+        private System.Windows.Forms.Label lbCardTypeImage;
+        private System.Windows.Forms.Panel pnCartTypeForeground;
+        private System.Windows.Forms.Label lbCardTypeProperties;
+        private System.Windows.Forms.Panel pnCartTypeBackground;
+        private System.Windows.Forms.PictureBox pbCardTypeImage;
     }
 }

@@ -45,8 +45,14 @@ namespace EasyCardFile.Database.NoEntity
                 ? new CardTypeNoEntity {CardTypeName = CardType.NewCardTypeNameLocalized, DefaultCardType = true, Id = -1}
                 : new CardTypeNoEntity
                 {
-                    Id = cardType.Id, CardTypeName = cardType.CardTypeName, AdditionalData1 = cardType.AdditionalData1,
-                    DefaultCardType = isDefaultType
+                    Id = cardType.Id, 
+                    CardTypeName = cardType.CardTypeName, 
+                    AdditionalData1 = cardType.AdditionalData1,
+                    DefaultCardType = isDefaultType, 
+                    ForeColor = cardType.ForeColor, 
+                    BackColor = cardType.BackColor, 
+                    TypeImage = cardType.TypeImage, 
+                    CardNamingInstruction = cardType.CardNamingInstruction
                 };
         }
 
@@ -60,6 +66,9 @@ namespace EasyCardFile.Database.NoEntity
             cardType.CardTypeName = cardTypeNoEntity.CardTypeName;
             cardType.CardNamingInstruction = cardTypeNoEntity.CardNamingInstruction;
             cardType.AdditionalData1 = cardTypeNoEntity.AdditionalData1;
+            cardType.ForeColor = cardTypeNoEntity.ForeColor;
+            cardType.BackColor = cardTypeNoEntity.BackColor;
+            cardType.TypeImage = cardTypeNoEntity.TypeImage;
         }
 
         /// <summary>
@@ -76,6 +85,21 @@ namespace EasyCardFile.Database.NoEntity
         /// Gets or sets the card naming instruction.
         /// </summary>
         public string CardNamingInstruction { get; set; }
+
+        /// <summary>
+        /// Gets or sets the foreground color for the card type.
+        /// </summary>
+        public string ForeColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the background color for the card type.
+        /// </summary>
+        public string BackColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the card type image.
+        /// </summary>
+        public byte[] TypeImage { get; set; }
 
         /// <summary>
         /// Gets or sets the additional data 1. This property is currently not in use and is intended to be used if there are some missing properties with the model.

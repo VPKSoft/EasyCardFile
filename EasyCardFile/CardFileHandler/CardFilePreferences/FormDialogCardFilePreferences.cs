@@ -28,15 +28,18 @@ using EasyCardFile.CardFileHandler.CardFileNaming;
 using EasyCardFile.Database.Entity.Context;
 using EasyCardFile.Database.Entity.Context.ContextEncryption;
 using EasyCardFile.Database.Entity.Entities;
+using EasyCardFile.Database.NoEntity;
 using EasyCardFile.UtilityClasses.Localization;
+using EasyCardFile.UtilityClasses.Miscellaneous;
 using EasyCardFile.UtilityClasses.ProjectControls;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using EasyCardFile.Database.NoEntity;
-using EasyCardFile.UtilityClasses.Miscellaneous;
+using VPKSoft.ErrorLogger;
 using VPKSoft.LangLib;
 using VPKSoft.MessageBoxExtended;
 
@@ -175,6 +178,19 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
             tsbRename.Enabled = clbCardTypes.SelectedItem != null;
 
             tsbTypeSpecificCardNaming.Enabled = clbCardTypes.SelectedItem != null;
+
+            var cardType = CardTypes.FirstOrDefault(f => f.CardTypeName == (string)clbCardTypes?.SelectedItem);
+
+            pnCartTypeForeground.BackColor = cardType != null // this notation is fun!
+                ? cardType.ForeColor != default ? ColorTranslator.FromHtml(cardType.ForeColor) : SystemColors.ControlText
+                : SystemColors.ControlText;
+
+            pnCartTypeBackground.BackColor = cardType != null // this notation is fun!
+                ? cardType.ForeColor != default ? ColorTranslator.FromHtml(cardType.BackColor) : SystemColors.Window
+                : SystemColors.Window;
+
+            // set the image if one exists..
+            pbCardTypeImage.Image = cardType == null ? null : FromByteArray(cardType.TypeImage);
         }
 
         /// <summary>
@@ -219,6 +235,32 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
             }
             CardTypesChanged = false;
             EnableDisableCardTypeButtons();
+        }
+
+        /// <summary>
+        /// Creates an <see cref="Image"/> instance from a given byte array.
+        /// </summary>
+        /// <param name="bytes">The bytes containing the <see cref="Image"/> data.</param>
+        /// <returns>An instance to a <see cref="Image"/> class if the operation was successful; <c>null</c> otherwise.</returns>
+        private Image FromByteArray(byte[] bytes)
+        {
+            try
+            {
+                if (bytes == null)
+                {
+                    return null;
+                }
+
+                using (var stream = new MemoryStream(bytes))
+                {
+                    return Image.FromStream(stream);
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogError(ex);
+                return null;
+            }
         }
         #endregion
 
@@ -693,6 +735,14 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
         private void clbCardTypes_SelectedValueChanged(object sender, EventArgs e)
         {
             EnableDisableCardTypeButtons();
+        }
+
+        // resize the card type "properties" to 1:1 aspect ratio..
+        private void tlpCardTypeProperties_Resize(object sender, EventArgs e)
+        {
+            pnCartTypeForeground.Width = pnCartTypeForeground.Height;
+            pnCartTypeBackground.Width = pnCartTypeBackground.Height;
+            pbCardTypeImage.Width = pbCardTypeImage.Height;
         }
         #endregion
     }
