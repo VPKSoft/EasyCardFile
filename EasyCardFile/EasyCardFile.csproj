@@ -85,6 +85,9 @@
     <Reference Include="VPKSoft.ErrorLogger, Version=1.0.0.6, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.ErrorLogger.1.0.0.6\lib\net45\VPKSoft.ErrorLogger.dll</HintPath>
     </Reference>
+    <Reference Include="VPKSoft.ImageAreaSelector, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VPKSoft.ImageAreaSelector.1.0.0\lib\net47\VPKSoft.ImageAreaSelector.dll</HintPath>
+    </Reference>
     <Reference Include="VPKSoft.LangLib, Version=1.0.1.9, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.LangLib.1.0.1.9\lib\net461\VPKSoft.LangLib.dll</HintPath>
     </Reference>
@@ -182,6 +185,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
+    <Compile Include="UtilityClasses\Miscellaneous\Dialogs\FormDialogSelectImageArea.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UtilityClasses\Miscellaneous\Dialogs\FormDialogSelectImageArea.Designer.cs">
+      <DependentUpon>FormDialogSelectImageArea.cs</DependentUpon>
+    </Compile>
     <Compile Include="UtilityClasses\Miscellaneous\Pair.cs" />
     <Compile Include="UtilityClasses\ProjectControls\RefreshCheckListBox.cs">
       <SubType>Component</SubType>
@@ -219,6 +228,9 @@
     <EmbeddedResource Include="UtilityClasses\Localization\Messages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UtilityClasses\Miscellaneous\Dialogs\FormDialogSelectImageArea.resx">
+      <DependentUpon>FormDialogSelectImageArea.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UtilityClasses\ProjectControls\TextBoxButton.resx">
       <DependentUpon>TextBoxButton.cs</DependentUpon>

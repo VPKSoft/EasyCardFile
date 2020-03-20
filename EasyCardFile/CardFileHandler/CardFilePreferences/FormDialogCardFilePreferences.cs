@@ -130,7 +130,30 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
         }
         #endregion
 
-        #region HelperMethods                
+        #region HelperMethods
+        private void ChangeColor(bool foreGround)
+        {
+            string newCardTypeName = clbCardTypes.SelectedItem.ToString();
+            var cardType = CardTypes.FirstOrDefault(f => f.CardTypeName == newCardTypeName);
+            if (cardType != null)
+            {
+                cdButtonColors.Color = foreGround ? ColorTranslator.FromHtml(cardType.ForeColor) : ColorTranslator.FromHtml(cardType.BackColor);
+                if (cdButtonColors.ShowDialog(this) == DialogResult.OK)
+                {
+                    if (foreGround)
+                    {
+                        cardType.ForeColor = ColorTranslator.ToHtml(cdButtonColors.Color);
+                        pnCartTypeForeground.BackColor = cdButtonColors.Color;
+                    }
+                    else
+                    {
+                        cardType.BackColor = ColorTranslator.ToHtml(cdButtonColors.Color);
+                        pnCartTypeBackground.BackColor = cdButtonColors.Color;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Applies the card type changes to the <see cref="CardFile"/> in case the dialog is accepted.
         /// </summary>
@@ -694,16 +717,16 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
             {
                 string newCardTypeName = clbCardTypes.SelectedItem.ToString();
 
-                var carType = CardTypes.FirstOrDefault(f => f.CardTypeName == newCardTypeName);
+                var cardType = CardTypes.FirstOrDefault(f => f.CardTypeName == newCardTypeName);
 
                 if (MessageBoxQueryPrimitiveValue.Show(this,
                         LocalizeStaticProperties.CardTypeNameQuery,
                         LocalizeStaticProperties.CardTypeNameQueryTitle,
                         MessageBoxIcon.Question, ref newCardTypeName) == DialogResultExtended.OK)
                 {
-                    if (carType != null)
+                    if (cardType != null)
                     {
-                        carType.CardTypeName = newCardTypeName;
+                        cardType.CardTypeName = newCardTypeName;
                         clbCardTypes.Items[clbCardTypes.SelectedIndex] = newCardTypeName;
                         clbCardTypes.RefreshItems();
                         CardTypesChanged = true;
@@ -743,6 +766,11 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
             pnCartTypeForeground.Width = pnCartTypeForeground.Height;
             pnCartTypeBackground.Width = pnCartTypeBackground.Height;
             pbCardTypeImage.Width = pbCardTypeImage.Height;
+        }
+
+        private void tsbForegroundColor_Click(object sender, EventArgs e)
+        {
+            ChangeColor(sender.Equals(tsbForegroundColor));
         }
         #endregion
     }

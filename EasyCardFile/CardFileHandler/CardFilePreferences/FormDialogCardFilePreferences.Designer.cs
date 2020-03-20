@@ -59,8 +59,10 @@
             this.lbCardTypeProperties = new System.Windows.Forms.Label();
             this.pnCartTypeBackground = new System.Windows.Forms.Panel();
             this.pbCardTypeImage = new System.Windows.Forms.PictureBox();
+            this.cdButtonColors = new System.Windows.Forms.ColorDialog();
             this.clbCardTypes = new EasyCardFile.UtilityClasses.ProjectControls.RefreshCheckListBox();
             this.tbbCardNamingInstruction = new EasyCardFile.UtilityClasses.ProjectControls.TextBoxButton();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tsbCardTypes.SuspendLayout();
             this.pnChangePassword.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbChangePassword)).BeginInit();
@@ -216,6 +218,7 @@
             this.tsbForegroundColor.Name = "tsbForegroundColor";
             this.tsbForegroundColor.Size = new System.Drawing.Size(23, 22);
             this.tsbForegroundColor.Text = "Type foreground color";
+            this.tsbForegroundColor.Click += new System.EventHandler(this.tsbForegroundColor_Click);
             // 
             // tsbBackgroundColor
             // 
@@ -225,6 +228,7 @@
             this.tsbBackgroundColor.Name = "tsbBackgroundColor";
             this.tsbBackgroundColor.Size = new System.Drawing.Size(23, 22);
             this.tsbBackgroundColor.Text = "Type background color";
+            this.tsbBackgroundColor.Click += new System.EventHandler(this.tsbForegroundColor_Click);
             // 
             // tsbTypeImage
             // 
@@ -400,6 +404,11 @@
             this.pbCardTypeImage.TabIndex = 5;
             this.pbCardTypeImage.TabStop = false;
             // 
+            // cdButtonColors
+            // 
+            this.cdButtonColors.AnyColor = true;
+            this.cdButtonColors.FullOpen = true;
+            // 
             // clbCardTypes
             // 
             this.clbCardTypes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -431,6 +440,10 @@
             this.tbbCardNamingInstruction.TabIndex = 8;
             this.tbbCardNamingInstruction.TextChanged += new System.EventHandler(this.tbbCardNamingInstruction_TextChanged);
             this.tbbCardNamingInstruction.Click += new System.EventHandler(this.tbbCardNamingInstruction_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // FormDialogCardFilePreferences
             // 
@@ -506,5 +519,7 @@
         private System.Windows.Forms.Label lbCardTypeProperties;
         private System.Windows.Forms.Panel pnCartTypeBackground;
         private System.Windows.Forms.PictureBox pbCardTypeImage;
+        private System.Windows.Forms.ColorDialog cdButtonColors;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
