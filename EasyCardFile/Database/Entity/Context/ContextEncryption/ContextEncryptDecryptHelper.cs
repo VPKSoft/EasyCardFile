@@ -372,6 +372,10 @@ namespace EasyCardFile.Database.Entity.Context.ContextEncryption
                 foreach (var cardType in cardFile.CardTypes)
                 {
                     cardType.CardTypeName = cardType.CardTypeName.EncryptBase64(string.Empty, encoding);
+                    if (cardType.TypeImage != null)
+                    {
+                        cardType.TypeImage = DatabaseEncryptionHelper.EncryptData(string.Empty, cardType.TypeImage, encoding);
+                    }
                 }
 
                 cardFileDbContext.SaveChanges();
@@ -456,6 +460,10 @@ namespace EasyCardFile.Database.Entity.Context.ContextEncryption
             foreach (var cardType in cardFile.CardTypes)
             {
                 cardType.CardTypeName = cardType.CardTypeName.DecryptFromBase64(key, encoding);
+                if (cardType.TypeImage != null)
+                {
+                    cardType.TypeImage = DatabaseEncryptionHelper.DecryptData(key, cardType.TypeImage, encoding);
+                }
             }
 
             return true;

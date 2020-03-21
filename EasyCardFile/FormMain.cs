@@ -297,6 +297,7 @@ namespace EasyCardFile
             var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
             if (FormDialogCardFilePreferences.ShowDialog(this, wrapper.CardFileDb) == DialogResult.OK)
             {
+                wrapper.Changed = true;
                 wrapper.UpdateTitle();
                 wrapper.RefreshUi();
             }
@@ -422,6 +423,42 @@ namespace EasyCardFile
             if (CardFileLegacyReader.Convert(odCardFileLegacy, sdCardFile, this))
             {
                 OpenCardFile(sdCardFile.FileName);
+            }
+        }
+        #endregion
+
+        #region LocalizeForFreeTM
+        // a user wishes to help with localization of the software (?!)..
+        private void mnuLocalization_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string args = "--localize=\"" +
+                              Path.Combine(
+                                  Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                                  "EasyCardFile",
+                                  "localization.sqlite") + "\"";
+
+                Process.Start(Application.ExecutablePath, args);
+            }
+            catch (Exception ex)
+            {
+                // log the exception..
+                ExceptionLogger.LogError(ex, "Localization");
+            }
+        }
+
+        // a user wishes to dump (update) the current language database..
+        private void mnuDumpLanguage_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Process.Start(Application.ExecutablePath, "--dblang");
+            }
+            catch (Exception ex)
+            {
+                // log the exception..
+                ExceptionLogger.LogError(ex, "Localization dump");
             }
         }
         #endregion

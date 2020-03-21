@@ -53,7 +53,7 @@
             this.Controls.Add(this.imageAreaSelector1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormDialogSelectImageArea";
-            this.Text = "FormDialogSelectImageArea";
+            this.Text = "Select an image for the card type";
             this.ResumeLayout(false);
 
         }

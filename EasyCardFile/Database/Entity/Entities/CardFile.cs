@@ -109,12 +109,12 @@ namespace EasyCardFile.Database.Entity.Entities
         /// <summary>
         /// Gets or sets the width of the <see cref="CardType.TypeImage"/> image.
         /// </summary>
-        public int ImageWidth { get; set; }
+        public int ImageWidth { get; set; } = 16;
 
         /// <summary>
         /// Gets or sets the Height of the <see cref="CardType.TypeImage"/> image.
         /// </summary>
-        public int ImageHeight { get; set; }
+        public int ImageHeight { get; set; } = 16;
 
         /// <summary>
         /// Gets or sets the additional data 1. This property is currently not in use and is intended to be used if there are some missing properties with the model.

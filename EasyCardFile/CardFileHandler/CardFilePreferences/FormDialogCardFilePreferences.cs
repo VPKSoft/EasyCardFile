@@ -39,9 +39,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using EasyCardFile.Database.Entity.ModelHelpers;
 using VPKSoft.ErrorLogger;
 using VPKSoft.LangLib;
 using VPKSoft.MessageBoxExtended;
+using VPKSoft.Utils;
+using Utils = VPKSoft.LangLib.Utils;
 
 namespace EasyCardFile.CardFileHandler.CardFilePreferences
 {
@@ -56,6 +59,19 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
         public FormDialogCardFilePreferences()
         {
             InitializeComponent();
+
+            // ReSharper disable once StringLiteralTypo
+            DBLangEngine.DBName = "localization.sqlite"; // Do the VPKSoft.LangLib == translation..
+
+            if (Utils.ShouldLocalize() != null)
+            {
+                DBLangEngine.InitializeLanguage("EasyCardFile.UtilityClasses.Localization.Messages",
+                    Utils.ShouldLocalize(), false);
+                return; // After localization don't do anything more..
+            }
+
+            // initialize the language/localization database..
+            DBLangEngine.InitializeLanguage("EasyCardFile.UtilityClasses.Localization.Messages");
 
             MessageBoxQueryPrimitiveValue.ValidateTypeValue += MessageBoxQueryPrimitiveValue_ValidateTypeValue;
         }
@@ -209,7 +225,7 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
                 : SystemColors.ControlText;
 
             pnCartTypeBackground.BackColor = cardType != null // this notation is fun!
-                ? cardType.ForeColor != default ? ColorTranslator.FromHtml(cardType.BackColor) : SystemColors.Window
+                ? cardType.BackColor != default ? ColorTranslator.FromHtml(cardType.BackColor) : SystemColors.Window
                 : SystemColors.Window;
 
             // set the image if one exists..
@@ -404,10 +420,24 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
             CardFileEncryptionPasswordValidationRandomizedBase64 =
                 CardFile.EncryptionPasswordValidationRandomizedBase64;
 
+            cbLockAspectRatio.Checked = CardFile.ImageHeight == CardFile.ImageWidth;
+            if (CardFile.ImageHeight >= 16 && CardFile.ImageWidth >= 16)
+            {
+                nudHeight.Value = CardFile.ImageHeight;
+                nudWidth.Value = CardFile.ImageWidth;
+            }
+
             CardFileEncryptionHashAlgorithmValueBase64 = 
                 CardFile.EncryptionHashAlgorithmValueBase64;
 
             ChangePasswordEnabled = CardFile.Encrypted;
+
+            var font = (CardFile.AdditionalData2 == null
+                ? Font
+                : (Font) CardFile.AdditionalData2.DeserializeObjectBinary());
+
+            lbCardListFontValue.Tag = font;
+            lbCardListFontValue.Text = font.Name + @";" + font.SizeInPoints;
 
             ListCardTypes();
 
@@ -511,6 +541,9 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
 
                 CardFileDbContext.CardFile.CardTypes.Remove(removeCardEntity);
             }
+
+            CardFileDbContext.CardFile.ImageWidth = (int) nudWidth.Value;
+            CardFileDbContext.CardFile.ImageHeight = (int) nudHeight.Value;
 
             CardFileDbContext.CardFile.DefaultCardType =
                 CardFileDbContext.CardFile.CardTypes.FirstOrDefault(f =>
@@ -772,6 +805,53 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
         {
             ChangeColor(sender.Equals(tsbForegroundColor));
         }
+
+        private void nudWidth_ValueChanged(object sender, EventArgs e)
+        {
+            if (cbLockAspectRatio.Checked)
+            {
+                nudHeight.Value = nudWidth.Value;
+            }
+        }
+
+        private void nudHeight_ValueChanged(object sender, EventArgs e)
+        {
+            if (cbLockAspectRatio.Checked)
+            {
+                nudWidth.Value = nudHeight.Value;
+            }
+        }
+        private void cbLockAspectRatio_CheckedChanged(object sender, EventArgs e)
+        {
+            var maxRatio = Math.Max(nudHeight.Value, nudWidth.Value);
+            nudHeight.Value = maxRatio;
+        }
         #endregion
+
+        private void pbCardTypeImage_Click(object sender, EventArgs e)
+        {
+            // TODO::Localize the filters..
+            // TODO::File dialog paths to the settings..
+            if (odImage.ShowDialog() == DialogResult.OK)
+            {
+                var cardType = CardTypes.FirstOrDefault(f => f.CardTypeName == clbCardTypes.SelectedItem.ToString());
+                if (cardType != null)
+                {
+                    var image = Image.FromFile(odImage.FileName);
+                    cardType.TypeImage = image.ToBytes();
+                }
+            }
+        }
+
+        private void btCardListFont_Click(object sender, EventArgs e)
+        {
+            if (fdFont.ShowDialog() == DialogResult.OK)
+            {
+                var font = fdFont.Font;
+                lbCardListFontValue.Tag = font;
+                lbCardListFontValue.Text = font.Name + @";" + font.SizeInPoints;
+                CardFile.AdditionalData2 = font.SerializeObjectBinary().Base64Value;
+            }
+        }
     }
 }

@@ -382,7 +382,7 @@ namespace EasyCardFile.CardFileHandler
             ToolTip = new ToolTip(this); // we do need a tool tip!
 
             // create the card file list box..
-            ListBoxCards = new RefreshListBox {Dock = DockStyle.Fill};
+            ListBoxCards = new RefreshListBoxCards(CardFileDb.CardFile) {Dock = DockStyle.Fill};
             tableLayoutPanel.Controls.Add(ListBoxCards, 0, 1);
             tableLayoutPanel.SetColumnSpan(ListBoxCards, 2);
 
@@ -626,7 +626,7 @@ namespace EasyCardFile.CardFileHandler
         /// <summary>
         /// The <see cref="RefreshListBox"/> control with a filtered list of card within the card file.
         /// </summary>
-        private RefreshListBox ListBoxCards { get; set; }
+        private RefreshListBoxCards ListBoxCards { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="ToolTip"/> used by the card file list box.

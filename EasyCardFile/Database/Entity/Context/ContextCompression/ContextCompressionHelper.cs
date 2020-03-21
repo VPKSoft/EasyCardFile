@@ -65,6 +65,10 @@ namespace EasyCardFile.Database.Entity.Context.ContextCompression
                 foreach (var cardType in cardFile.CardTypes)
                 {
                     cardType.CardTypeName = cardType.CardTypeName.CompressToBase64(encoding);
+                    if (cardType.TypeImage != null)
+                    {
+                        cardType.TypeImage = DatabaseCompressionHelper.CompressData(cardType.TypeImage);
+                    }
                 }
 
                 cardFileDbContext.SaveChanges();
@@ -110,6 +114,10 @@ namespace EasyCardFile.Database.Entity.Context.ContextCompression
                 foreach (var cardType in cardFile.CardTypes)
                 {
                     cardType.CardTypeName = cardType.CardTypeName.DecompressFromBase64(encoding);
+                    if (cardType.TypeImage != null)
+                    {
+                        cardType.TypeImage = DatabaseCompressionHelper.DecompressData(cardType.TypeImage);
+                    }
                 }
             }
             catch (Exception ex)

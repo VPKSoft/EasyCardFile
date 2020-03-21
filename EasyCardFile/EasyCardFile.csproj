@@ -128,6 +128,7 @@
       <DependentUpon>FormDialogCardFileNaming.cs</DependentUpon>
     </Compile>
     <Compile Include="Database\Entity\Enumerations\CardSortType.cs" />
+    <Compile Include="Database\Entity\ModelHelpers\ByteImageHelper.cs" />
     <Compile Include="Database\NoEntity\CardTypeNoEntity.cs" />
     <Compile Include="CardFileHandler\CardFilePreferences\FormDialogCardFilePreferences.cs">
       <SubType>Form</SubType>
@@ -198,6 +199,9 @@
     <Compile Include="UtilityClasses\ProjectControls\RefreshListBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UtilityClasses\ProjectControls\RefreshListBoxCards.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UtilityClasses\ProjectControls\TextBoxButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -252,11 +256,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="62941cardfilebox_109271.ico" />
-    <Content Include="DBLocalization.exe" />
+    <Content Include="DBLocalization.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="history.txt" />
     <None Include="Resources\colorize-2.png" />
     <None Include="Resources\color-fill.png" />
     <None Include="Resources\image.png" />
+    <None Include="Resources\education-languages.png" />
+    <None Include="Resources\database-go.png" />
     <Content Include="VPKSoft.ico" />
     <None Include="Resources\About.png" />
     <None Include="Resources\document-print-preview-4.png" />
@@ -291,9 +299,7 @@
       <Name>LegacySupportQTVersion</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Database\Entity\ModelHelpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

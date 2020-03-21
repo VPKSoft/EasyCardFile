@@ -29,7 +29,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using EasyCardFile.CardFileHandler.CardFileNaming;
+using EasyCardFile.CardFileHandler.CardFilePreferences;
+using EasyCardFile.Settings;
 using EasyCardFile.UtilityClasses.Constants;
+using EasyCardFile.UtilityClasses.Miscellaneous.Dialogs;
 using VPKSoft.ErrorLogger;
 using VPKSoft.IPC;
 using VPKSoft.PosLib;
@@ -45,10 +49,53 @@ namespace EasyCardFile
         [STAThread]
         static void Main()
         {
+            // localizeProcess (user wishes to localize the software)..
+            Process localizeProcess = VPKSoft.LangLib.Utils.CreateDBLocalizeProcess(Paths.AppInstallDir);
+
+            // if the localize process was requested via the command line..
+            if (localizeProcess != null)
+            {
+                // start the DBLocalization.exe and return..
+                localizeProcess.Start();
+                return;
+            }
+
             string[] args = Environment.GetCommandLineArgs();
 
             if (AppRunning.CheckIfRunningNoAdd("VPKSoft.EasyCardFile.Application.2020"))
             {
+                if (!Debugger.IsAttached) // this is too efficient, the exceptions aren't caught by the ide :-)
+                {
+                    ExceptionLogger.Bind(); // bind before any visual objects are created
+                    ExceptionLogger.ApplicationCrashData += ExceptionLogger_ApplicationCrashData;
+                }
+
+
+                // Save languages..
+                if (VPKSoft.LangLib.Utils.ShouldLocalize() != null)
+                {
+                    // ReSharper disable once ObjectCreationAsStatement
+                    new FormMain();
+                    // ReSharper disable once ObjectCreationAsStatement
+                    new FormDialogAddRenameCard();
+                    // ReSharper disable once ObjectCreationAsStatement
+                    new FormDialogCardFileNaming();
+                    // ReSharper disable once ObjectCreationAsStatement
+                    new FormDialogCardFilePreferences();
+                    // ReSharper disable once ObjectCreationAsStatement
+                    new FormDialogSettings();
+                    // ReSharper disable once ObjectCreationAsStatement
+                    new FormDialogSelectImageArea();
+
+                    if (!Debugger.IsAttached)
+                    {
+                        ExceptionLogger.UnBind(); // unbind so the truncate thread is stopped successfully..
+                    }
+
+                    ExceptionLogger.ApplicationCrashData -= ExceptionLogger_ApplicationCrashData;
+                    return;
+                }
+
                 ExceptionLogger.LogMessage($"Application is running. Checking for open file requests. The current directory is: '{Environment.CurrentDirectory}'.");
                 try
                 {
@@ -113,6 +160,7 @@ namespace EasyCardFile
 
             if (!Debugger.IsAttached)
             {
+                ExceptionLogger.ApplicationCrashData -= ExceptionLogger_ApplicationCrashData;
                 ExceptionLogger.UnBind(); // unbind so the truncate thread is stopped successfully..
             }
         }

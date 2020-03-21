@@ -24,9 +24,12 @@ SOFTWARE.
 */
 #endregion
 
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
+using System.IO;
 using SQLite.CodeFirst;
+using VPKSoft.ErrorLogger;
 
 namespace EasyCardFile.Database.Entity.Entities
 {
