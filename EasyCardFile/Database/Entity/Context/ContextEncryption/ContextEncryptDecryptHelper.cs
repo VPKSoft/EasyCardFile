@@ -262,6 +262,7 @@ namespace EasyCardFile.Database.Entity.Context.ContextEncryption
                     }
 
                     var testPassword = validationBase64.DecryptBase64(key, encoding);
+                    testPassword = GenerateHashBase64(testPassword);
 
                     if (testPassword != valueBase64)
                     {

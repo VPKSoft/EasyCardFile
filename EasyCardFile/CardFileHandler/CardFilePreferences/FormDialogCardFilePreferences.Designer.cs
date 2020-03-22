@@ -392,21 +392,25 @@
             // 
             this.pnCartTypeForeground.BackColor = System.Drawing.SystemColors.ControlText;
             this.pnCartTypeForeground.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnCartTypeForeground.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pnCartTypeForeground.Location = new System.Drawing.Point(0, 40);
             this.pnCartTypeForeground.Margin = new System.Windows.Forms.Padding(0);
             this.pnCartTypeForeground.Name = "pnCartTypeForeground";
             this.pnCartTypeForeground.Size = new System.Drawing.Size(42, 42);
             this.pnCartTypeForeground.TabIndex = 3;
+            this.pnCartTypeForeground.Click += new System.EventHandler(this.tsbForegroundColor_Click);
             // 
             // pnCartTypeBackground
             // 
             this.pnCartTypeBackground.BackColor = System.Drawing.SystemColors.Window;
             this.pnCartTypeBackground.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnCartTypeBackground.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pnCartTypeBackground.Location = new System.Drawing.Point(129, 40);
             this.pnCartTypeBackground.Margin = new System.Windows.Forms.Padding(0);
             this.pnCartTypeBackground.Name = "pnCartTypeBackground";
             this.pnCartTypeBackground.Size = new System.Drawing.Size(42, 42);
             this.pnCartTypeBackground.TabIndex = 4;
+            this.pnCartTypeBackground.Click += new System.EventHandler(this.tsbForegroundColor_Click);
             // 
             // pbCardTypeImage
             // 
@@ -654,7 +658,7 @@
             // 
             // odImage
             // 
-            this.odImage.Filter = "Image files|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
+            this.odImage.Filter = "Image files|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff";
             // 
             // lbCardListFont
             // 
@@ -700,6 +704,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Card file preferences";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormDialogCardFilePreferences_FormClosed);
             this.Shown += new System.EventHandler(this.FormDialogCardFilePreferences_Shown);
             this.tsbCardTypes.ResumeLayout(false);
             this.tsbCardTypes.PerformLayout();

@@ -228,6 +228,8 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
                 ? cardType.BackColor != default ? ColorTranslator.FromHtml(cardType.BackColor) : SystemColors.Window
                 : SystemColors.Window;
 
+            pbCardTypeImage.Image?.Dispose();
+
             // set the image if one exists..
             pbCardTypeImage.Image = cardType == null ? null : FromByteArray(cardType.TypeImage);
         }
@@ -563,7 +565,10 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
                     {
                         CardTypeName = cardTypeNoEntity.CardTypeName,
                         CardNamingInstruction = cardTypeNoEntity.CardNamingInstruction,
-                        AdditionalData1 = cardTypeNoEntity.AdditionalData1
+                        AdditionalData1 = cardTypeNoEntity.AdditionalData1, 
+                        BackColor = cardTypeNoEntity.BackColor,
+                        ForeColor = cardTypeNoEntity.ForeColor, 
+                        TypeImage = cardTypeNoEntity.TypeImage,
                     });
                 }
             }
@@ -803,7 +808,7 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
 
         private void tsbForegroundColor_Click(object sender, EventArgs e)
         {
-            ChangeColor(sender.Equals(tsbForegroundColor));
+            ChangeColor(sender.Equals(tsbForegroundColor) || sender.Equals(pnCartTypeForeground));
         }
 
         private void nudWidth_ValueChanged(object sender, EventArgs e)
@@ -831,14 +836,18 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
         private void pbCardTypeImage_Click(object sender, EventArgs e)
         {
             // TODO::Localize the filters..
-            // TODO::File dialog paths to the settings..
+            odImage.InitialDirectory = FormMain.Settings.PathImageDialogPreference;
+
             if (odImage.ShowDialog() == DialogResult.OK)
             {
+                FormMain.Settings.PathImageDialogPreference = odImage.FileName.GetPath();
                 var cardType = CardTypes.FirstOrDefault(f => f.CardTypeName == clbCardTypes.SelectedItem.ToString());
                 if (cardType != null)
                 {
                     var image = Image.FromFile(odImage.FileName);
                     cardType.TypeImage = image.ToBytes();
+                    pbCardTypeImage.Image?.Dispose();
+                    pbCardTypeImage.Image = image;
                 }
             }
         }
@@ -852,6 +861,11 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
                 lbCardListFontValue.Text = font.Name + @";" + font.SizeInPoints;
                 CardFile.AdditionalData2 = font.SerializeObjectBinary().Base64Value;
             }
+        }
+
+        private void FormDialogCardFilePreferences_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            pbCardTypeImage.Image?.Dispose();
         }
     }
 }

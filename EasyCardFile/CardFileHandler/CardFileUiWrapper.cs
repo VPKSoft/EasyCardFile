@@ -275,6 +275,14 @@ namespace EasyCardFile.CardFileHandler
 
         #region Interaction                
         /// <summary>
+        /// Repaints the card ListBox.
+        /// </summary>
+        public void RepaintCardListBox()
+        {
+            ListBoxCards.ClearCache();
+        }
+
+        /// <summary>
         /// <summary>Gets or sets the location of the splitter, in pixels, from the left or top edge of the <see cref="CardFileUiWrapper.SplitContainer" />.</summary>
         /// </summary>
         public int SplitterDistance 
@@ -603,6 +611,10 @@ namespace EasyCardFile.CardFileHandler
         private void ComboBoxCardType_SelectedValueChanged(object sender, EventArgs e)
         {
             SetCardChanges(ListBoxCards.SelectedItem, ((ComboBox)sender).SelectedItem);
+            if (!SuspendCardChanged)
+            {
+                ListBoxCards.Invalidate();
+            }
         }
 
         private void SearchTextBox_TextChanged(object sender, EventArgs e)
@@ -719,6 +731,7 @@ namespace EasyCardFile.CardFileHandler
             }
 
             DisplayCard(ListBoxCards.SelectedItem);
+            RepaintCardListBox();
         }
 
         /// <summary>

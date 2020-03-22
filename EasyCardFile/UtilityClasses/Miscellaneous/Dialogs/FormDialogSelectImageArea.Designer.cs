@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDialogSelectImageArea));
             this.imageAreaSelector1 = new VPKSoft.ImageAreaSelector.ImageAreaSelector();
+            this.odImage = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
             // imageAreaSelector1
@@ -44,6 +45,10 @@
             this.imageAreaSelector1.SelectionBoxColor = System.Drawing.Color.Blue;
             this.imageAreaSelector1.Size = new System.Drawing.Size(379, 317);
             this.imageAreaSelector1.TabIndex = 1;
+            // 
+            // odImage
+            // 
+            this.odImage.Filter = "Image files|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff";
             // 
             // FormDialogSelectImageArea
             // 
@@ -61,5 +66,6 @@
         #endregion
 
         private VPKSoft.ImageAreaSelector.ImageAreaSelector imageAreaSelector1;
+        private System.Windows.Forms.OpenFileDialog odImage;
     }
 }

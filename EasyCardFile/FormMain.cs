@@ -39,6 +39,7 @@ using EasyCardFile.Settings.TypeConverters;
 using EasyCardFile.UtilityClasses.Constants;
 using EasyCardFile.UtilityClasses.FileAssociation;
 using EasyCardFile.UtilityClasses.Localization;
+using EasyCardFile.UtilityClasses.Miscellaneous;
 using VPKSoft.ErrorLogger;
 using VPKSoft.LangLib;
 using VPKSoft.MessageBoxExtended;
@@ -112,7 +113,10 @@ namespace EasyCardFile
             RtfPrint.Owner = this; // mother of all dialogs..
         }
 
-        private Settings.Settings Settings { get; }
+        /// <summary>
+        /// Gets the application settings.
+        /// </summary>
+        public static Settings.Settings Settings { get; set; }
 
         #region InternalEvents
         private void tcCardFiles_PageChanged(object sender, Manina.Windows.Forms.PageChangedEventArgs e)
@@ -138,7 +142,11 @@ namespace EasyCardFile
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            CardFileSaveClose.RunSaveCheckApplicationClose(tcCardFiles, this, sdCardFile, Settings.AutoSave);
+            sdCardFile.InitialDirectory = Settings.PathFileDialogMainSave;
+            if (CardFileSaveClose.RunSaveCheckApplicationClose(tcCardFiles, this, sdCardFile, Settings.AutoSave))
+            {
+                Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath();
+            }
 
             CardFileSaveClose.HandleTabsAfterClose(tcCardFiles);
 
@@ -272,8 +280,9 @@ namespace EasyCardFile
 
         /// <summary>
         /// Sets the title of the main window of this software.
+        /// <param name="refresh">A value indicating whether to repaint the card list box.</param>
         /// </summary>
-        private void SetTitle()
+        private void SetTitle(bool refresh = false)
         {
             if (tcCardFiles.SelectedTab == null)
             {
@@ -288,6 +297,12 @@ namespace EasyCardFile
 
             Text = EasyCardFileConstants.SoftwareName + @" [" + wrapper.CardFileName + @" | " + wrapper.FileName +
                    (wrapper.Changed ? @" *" : "") + @"]";
+
+            if (refresh)
+            {
+                Application.DoEvents();
+                wrapper.RefreshCardList();
+            }
         }
         #endregion
 
@@ -300,6 +315,8 @@ namespace EasyCardFile
                 wrapper.Changed = true;
                 wrapper.UpdateTitle();
                 wrapper.RefreshUi();
+                Application.DoEvents();
+                wrapper.RefreshCardList();
             }
         }
 
@@ -312,19 +329,29 @@ namespace EasyCardFile
 
         private void mnuOpen_Click(object sender, EventArgs e)
         {
+            odCardFile.InitialDirectory = Settings.PathFileDialogMainOpen;
             if (odCardFile.ShowDialog() == DialogResult.OK)
             {
                 // ReSharper disable once StringLiteralTypo
                 if (string.Equals(Path.GetExtension(odCardFile.FileName), ".ecfp", StringComparison.OrdinalIgnoreCase))
                 {
+                    odCardFileLegacy.InitialDirectory = Settings.PathFileDialogMainOpenLegacy;
                     if (CardFileLegacyReader.Convert(odCardFileLegacy, sdCardFile, this))
                     {
-                        OpenCardFile(sdCardFile.FileName);
+                        sdCardFile.InitialDirectory = Settings.PathFileDialogMainSave;
+                        if (OpenCardFile(sdCardFile.FileName))
+                        {
+                            Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath();
+                            Settings.PathFileDialogMainOpenLegacy = odCardFileLegacy.FileName.GetPath();
+                        }
                     }
                     return;
                 }
 
-                OpenCardFile(odCardFile.FileName, true);
+                if (OpenCardFile(odCardFile.FileName, true))
+                {
+                    Settings.PathFileDialogMainOpen = odCardFile.FileName.GetPath();
+                }
             }
         }
 
@@ -381,14 +408,22 @@ namespace EasyCardFile
 
         private void mnuSaveAs_Click(object sender, EventArgs e)
         {
-            CardFileSaveClose.SaveCardFileAs(tcCardFiles, sdCardFile, false);
-            SetTitle();
+            sdCardFile.InitialDirectory = Settings.PathFileDialogMainSave;
+            if (CardFileSaveClose.SaveCardFileAs(tcCardFiles, sdCardFile, false))
+            {
+                Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath();
+            }
+            SetTitle(true);
         }
 
         private void mnuSave_Click(object sender, EventArgs e)
         {
-            CardFileSaveClose.SaveCardFile(tcCardFiles, sdCardFile, false);
-            SetTitle();
+            sdCardFile.InitialDirectory = Settings.PathFileDialogMainSave;
+            if (CardFileSaveClose.SaveCardFile(tcCardFiles, sdCardFile, false))
+            {
+                Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath();
+            }
+            SetTitle(true);
         }
 
         private void tsbRenameCard_Click(object sender, EventArgs e)
@@ -420,9 +455,15 @@ namespace EasyCardFile
 
         private void mnuImportLegacy_Click(object sender, EventArgs e)
         {
+            odCardFileLegacy.InitialDirectory = Settings.PathFileDialogMainOpenLegacy;
+            sdCardFile.InitialDirectory = Settings.PathFileDialogMainSave;
             if (CardFileLegacyReader.Convert(odCardFileLegacy, sdCardFile, this))
             {
-                OpenCardFile(sdCardFile.FileName);
+                Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath();
+                if (OpenCardFile(sdCardFile.FileName))
+                {
+                    Settings.PathFileDialogMainOpenLegacy = odCardFileLegacy.FileName.GetPath();
+                }
             }
         }
         #endregion
@@ -437,6 +478,7 @@ namespace EasyCardFile
                               Path.Combine(
                                   Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                                   "EasyCardFile",
+                                  // ReSharper disable once StringLiteralTypo
                                   "localization.sqlite") + "\"";
 
                 Process.Start(Application.ExecutablePath, args);

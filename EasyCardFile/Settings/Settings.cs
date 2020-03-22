@@ -27,7 +27,10 @@ SOFTWARE.
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using EasyCardFile.CardFileHandler;
+using EasyCardFile.CardFileHandler.CardFilePreferences;
+using EasyCardFile.UtilityClasses.Miscellaneous.Dialogs;
 using VPKSoft.Utils;
 using VPKSoft.Utils.XmlSettingsMisc;
 
@@ -70,6 +73,36 @@ namespace EasyCardFile.Settings
         /// </summary>
         [IsSetting]
         public int SessionActiveTabIndex { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path of the image dialog in the <see cref="FormDialogCardFilePreferences"/> dialog.
+        /// </summary>
+        [IsSetting]
+        public string PathImageDialogPreference { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path of the image dialog in the <see cref="FormDialogSelectImageArea"/> dialog.
+        /// </summary>
+        [IsSetting]
+        public string PathImageDialogSelectImageArea { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path of the file dialog to open legacy card files in the <see cref="FormMain"/> from.
+        /// </summary>
+        [IsSetting]
+        public string PathFileDialogMainOpenLegacy { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path of the file dialog to save a card file in the <see cref="FormMain"/> from.
+        /// </summary>
+        [IsSetting]
+        public string PathFileDialogMainSave { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path of the file dialog to open a card file in the <see cref="FormMain"/> from.
+        /// </summary>
+        [IsSetting]
+        public string PathFileDialogMainOpen { get; set; }
 
         /// <summary>
         /// Sets the files belonging to the current session.

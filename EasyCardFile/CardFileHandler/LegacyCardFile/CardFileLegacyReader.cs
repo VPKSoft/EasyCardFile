@@ -33,6 +33,7 @@ using System.Windows.Forms;
 using EasyCardFile.Database.Entity.Context;
 using EasyCardFile.Database.Entity.Entities;
 using EasyCardFile.UtilityClasses.ErrorHandling;
+using EasyCardFile.UtilityClasses.Miscellaneous;
 using LegacySupportQTVersion;
 using VPKSoft.LangLib;
 using VPKSoft.MessageBoxExtended;
@@ -58,7 +59,7 @@ namespace EasyCardFile.CardFileHandler.LegacyCardFile
             {
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    saveFileDialog.InitialDirectory = Path.GetDirectoryName(openFileDialog.FileName);
+                    saveFileDialog.InitialDirectory = openFileDialog.FileName.GetPath();
                     saveFileDialog.FileName = Path.ChangeExtension(Path.GetFileName(openFileDialog.FileName), ".ecff");
                     if (saveFileDialog.ShowDialog() == DialogResult.OK)
                     {

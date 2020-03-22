@@ -193,6 +193,7 @@
       <DependentUpon>FormDialogSelectImageArea.cs</DependentUpon>
     </Compile>
     <Compile Include="UtilityClasses\Miscellaneous\Pair.cs" />
+    <Compile Include="UtilityClasses\Miscellaneous\StringHelperGetPath.cs" />
     <Compile Include="UtilityClasses\ProjectControls\RefreshCheckListBox.cs">
       <SubType>Component</SubType>
     </Compile>
