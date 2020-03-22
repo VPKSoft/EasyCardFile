@@ -24,6 +24,8 @@ SOFTWARE.
 */
 #endregion
 
+using System.Windows.Forms;
+using EasyCardFile.Database.Entity.Entities;
 using VPKSoft.LangLib;
 
 namespace EasyCardFile.UtilityClasses.Miscellaneous.Dialogs
@@ -55,6 +57,29 @@ namespace EasyCardFile.UtilityClasses.Miscellaneous.Dialogs
 
             // initialize the language/localization database..
             DBLangEngine.InitializeLanguage("EasyCardFile.UtilityClasses.Localization.Messages");
+        }
+
+        private CardType CardType { get; set; }
+
+        /// <summary>
+        /// <summary>Shows the form as a modal dialog box with the specified owner.</summary>
+        /// </summary>
+        /// <param name="owner">Any object that implements <see cref="T:System.Windows.Forms.IWin32Window" /> that represents the top-level window that will own the modal dialog box. </param>
+        /// <param name="cardType">Type of the card to select an image for.</param>
+        /// <returns>One of the <see cref="T:System.Windows.Forms.DialogResult" /> values.</returns>
+        /// <exception cref="T:System.ArgumentException">The form specified in the <paramref name="owner" /> parameter is the same as the form being shown.</exception>
+        /// <exception cref="T:System.InvalidOperationException">The form being shown is already visible.-or- The form being shown is disabled.-or- The form being shown is not a top-level window.-or- The form being shown as a dialog box is already a modal form.-or-The current process is not running in user interactive mode (for more information, see <see cref="P:System.Windows.Forms.SystemInformation.UserInteractive" />).</exception>
+        public static DialogResult ShowDialog(IWin32Window owner, CardType cardType)
+        {
+            var form = new FormDialogSelectImageArea {CardType = cardType};
+            return form.ShowDialog();
+        }
+
+        private void FormDialogSelectImageArea_Shown(object sender, System.EventArgs e)
+        {
+            Text = DBLangEngine.GetMessage("msgSelectCardImageTitle",
+                "Select an image for the card type '[{0}]'|A title for a dialog to select a part of an image to be used with a card type.");
+
         }
     }
 }

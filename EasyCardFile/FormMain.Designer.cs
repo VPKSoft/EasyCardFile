@@ -113,7 +113,9 @@
             // 
             this.mnuNew.Image = ((System.Drawing.Image)(resources.GetObject("mnuNew.Image")));
             this.mnuNew.Name = "mnuNew";
-            this.mnuNew.Size = new System.Drawing.Size(114, 22);
+            this.mnuNew.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.N)));
+            this.mnuNew.Size = new System.Drawing.Size(180, 22);
             this.mnuNew.Text = "New";
             this.mnuNew.Click += new System.EventHandler(this.mnuNew_Click);
             // 
@@ -121,7 +123,8 @@
             // 
             this.mnuOpen.Image = ((System.Drawing.Image)(resources.GetObject("mnuOpen.Image")));
             this.mnuOpen.Name = "mnuOpen";
-            this.mnuOpen.Size = new System.Drawing.Size(114, 22);
+            this.mnuOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.mnuOpen.Size = new System.Drawing.Size(180, 22);
             this.mnuOpen.Text = "Open...";
             this.mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
             // 
@@ -129,7 +132,8 @@
             // 
             this.mnuSave.Image = ((System.Drawing.Image)(resources.GetObject("mnuSave.Image")));
             this.mnuSave.Name = "mnuSave";
-            this.mnuSave.Size = new System.Drawing.Size(114, 22);
+            this.mnuSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.mnuSave.Size = new System.Drawing.Size(180, 22);
             this.mnuSave.Text = "Save";
             this.mnuSave.Click += new System.EventHandler(this.mnuSave_Click);
             // 
@@ -137,19 +141,21 @@
             // 
             this.mnuSaveAs.Image = ((System.Drawing.Image)(resources.GetObject("mnuSaveAs.Image")));
             this.mnuSaveAs.Name = "mnuSaveAs";
-            this.mnuSaveAs.Size = new System.Drawing.Size(114, 22);
+            this.mnuSaveAs.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.S)));
+            this.mnuSaveAs.Size = new System.Drawing.Size(180, 22);
             this.mnuSaveAs.Text = "Save As";
             this.mnuSaveAs.Click += new System.EventHandler(this.mnuSaveAs_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(111, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
             // 
             // mnuTest
             // 
             this.mnuTest.Name = "mnuTest";
-            this.mnuTest.Size = new System.Drawing.Size(114, 22);
+            this.mnuTest.Size = new System.Drawing.Size(180, 22);
             this.mnuTest.Text = "Test";
             this.mnuTest.Click += new System.EventHandler(this.mnuTest_Click);
             // 
@@ -157,7 +163,8 @@
             // 
             this.mnuExit.Image = ((System.Drawing.Image)(resources.GetObject("mnuExit.Image")));
             this.mnuExit.Name = "mnuExit";
-            this.mnuExit.Size = new System.Drawing.Size(114, 22);
+            this.mnuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
+            this.mnuExit.Size = new System.Drawing.Size(180, 22);
             this.mnuExit.Text = "Exit";
             this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
             // 
@@ -181,7 +188,7 @@
             this.mnuNewCard.Image = ((System.Drawing.Image)(resources.GetObject("mnuNewCard.Image")));
             this.mnuNewCard.Name = "mnuNewCard";
             this.mnuNewCard.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.mnuNewCard.Size = new System.Drawing.Size(184, 22);
+            this.mnuNewCard.Size = new System.Drawing.Size(218, 22);
             this.mnuNewCard.Text = "New card";
             this.mnuNewCard.Click += new System.EventHandler(this.tsbNewCard_Click);
             // 
@@ -190,7 +197,7 @@
             this.mnuRenameCard.Image = ((System.Drawing.Image)(resources.GetObject("mnuRenameCard.Image")));
             this.mnuRenameCard.Name = "mnuRenameCard";
             this.mnuRenameCard.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.mnuRenameCard.Size = new System.Drawing.Size(184, 22);
+            this.mnuRenameCard.Size = new System.Drawing.Size(218, 22);
             this.mnuRenameCard.Text = "Rename card";
             this.mnuRenameCard.Click += new System.EventHandler(this.tsbRenameCard_Click);
             // 
@@ -199,20 +206,21 @@
             this.mnuDeleteCard.Image = ((System.Drawing.Image)(resources.GetObject("mnuDeleteCard.Image")));
             this.mnuDeleteCard.Name = "mnuDeleteCard";
             this.mnuDeleteCard.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Delete)));
-            this.mnuDeleteCard.Size = new System.Drawing.Size(184, 22);
+            this.mnuDeleteCard.Size = new System.Drawing.Size(218, 22);
             this.mnuDeleteCard.Text = "Delete card";
             this.mnuDeleteCard.Click += new System.EventHandler(this.tsbDeleteCard_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(181, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(215, 6);
             // 
             // mnuPrint
             // 
             this.mnuPrint.Image = ((System.Drawing.Image)(resources.GetObject("mnuPrint.Image")));
             this.mnuPrint.Name = "mnuPrint";
-            this.mnuPrint.Size = new System.Drawing.Size(184, 22);
+            this.mnuPrint.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.mnuPrint.Size = new System.Drawing.Size(218, 22);
             this.mnuPrint.Text = "Print card";
             this.mnuPrint.Click += new System.EventHandler(this.tsbPrint_Click);
             // 
@@ -220,20 +228,22 @@
             // 
             this.printPreviewToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("printPreviewToolStripMenuItem.Image")));
             this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
-            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.printPreviewToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.O)));
+            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
             this.printPreviewToolStripMenuItem.Text = "Print preview";
             this.printPreviewToolStripMenuItem.Click += new System.EventHandler(this.tsbPrintPreview_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(181, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(215, 6);
             // 
             // mnuCardFilePreferences
             // 
             this.mnuCardFilePreferences.Image = ((System.Drawing.Image)(resources.GetObject("mnuCardFilePreferences.Image")));
             this.mnuCardFilePreferences.Name = "mnuCardFilePreferences";
-            this.mnuCardFilePreferences.Size = new System.Drawing.Size(184, 22);
+            this.mnuCardFilePreferences.Size = new System.Drawing.Size(218, 22);
             this.mnuCardFilePreferences.Text = "Preferences";
             this.mnuCardFilePreferences.Click += new System.EventHandler(this.tsbCardFilePreferences_Click);
             // 
@@ -251,6 +261,7 @@
             // 
             this.mnuSettings.Image = ((System.Drawing.Image)(resources.GetObject("mnuSettings.Image")));
             this.mnuSettings.Name = "mnuSettings";
+            this.mnuSettings.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F12)));
             this.mnuSettings.Size = new System.Drawing.Size(226, 22);
             this.mnuSettings.Text = "Settings";
             this.mnuSettings.Click += new System.EventHandler(this.mnuSettings_Click);
@@ -293,7 +304,7 @@
             // 
             this.mnuAbout.Image = ((System.Drawing.Image)(resources.GetObject("mnuAbout.Image")));
             this.mnuAbout.Name = "mnuAbout";
-            this.mnuAbout.Size = new System.Drawing.Size(107, 22);
+            this.mnuAbout.Size = new System.Drawing.Size(180, 22);
             this.mnuAbout.Text = "About";
             this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
             // 

@@ -246,6 +246,9 @@
   <data name="msgSearchTextDescription" xml:space="preserve">
     <value>Search:|A text for a label near a search text box.</value>
   </data>
+  <data name="msgSelectCardImageTitle" xml:space="preserve">
+    <value>Select an image for the card type '[{0}]'|A title for a dialog to select a part of an image to be used with a card type.</value>
+  </data>
   <data name="msgTextEditorRowColumnSelection" xml:space="preserve">
     <value>Row: {0}, Column: {1}, Selection {2}|A message for a status strip to describe a row, column and a selection length of a text editor.</value>
   </data>

@@ -390,7 +390,7 @@ namespace EasyCardFile
                 {
                     wrapper.Changed = true;
                     wrapper.RefreshUi(card);
-                    SetTitle();
+                    SetTitle(true);
                 }
             }
         }
@@ -402,7 +402,7 @@ namespace EasyCardFile
             if (changed != null && changed == true)
             {
                 wrapper.Changed = true;
-                SetTitle();
+                SetTitle(true);
             }
         }
 

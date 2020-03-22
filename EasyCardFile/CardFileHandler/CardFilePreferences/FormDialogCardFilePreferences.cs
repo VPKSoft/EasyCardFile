@@ -541,7 +541,11 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
                                 replaceCard != null && t.CardTypeName == replaceCard.CardTypeName));
 
 
-                CardFileDbContext.CardFile.CardTypes.Remove(removeCardEntity);
+                if (removeCardEntity != null)
+                {
+                    CardFileDbContext.CardFile.CardTypes.Remove(removeCardEntity);
+                    CardFileDbContext.Set<CardType>()?.Remove(removeCardEntity);
+                }
             }
 
             CardFileDbContext.CardFile.ImageWidth = (int) nudWidth.Value;
@@ -568,7 +572,8 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
                         AdditionalData1 = cardTypeNoEntity.AdditionalData1, 
                         BackColor = cardTypeNoEntity.BackColor,
                         ForeColor = cardTypeNoEntity.ForeColor, 
-                        TypeImage = cardTypeNoEntity.TypeImage,
+                        TypeImage = cardTypeNoEntity.TypeImage, 
+                        CardFile = CardFileDbContext.CardFile,
                     });
                 }
             }
@@ -835,7 +840,6 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
 
         private void pbCardTypeImage_Click(object sender, EventArgs e)
         {
-            // TODO::Localize the filters..
             odImage.InitialDirectory = FormMain.Settings.PathImageDialogPreference;
 
             if (odImage.ShowDialog() == DialogResult.OK)

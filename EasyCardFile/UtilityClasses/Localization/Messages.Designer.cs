@@ -448,6 +448,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select an image for the card type &apos;[{0}]&apos;|A title for a dialog to select a part of an image to be used with a card type..
+        /// </summary>
+        internal static string msgSelectCardImageTitle {
+            get {
+                return ResourceManager.GetString("msgSelectCardImageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Row: {0}, Column: {1}, Selection {2}|A message for a status strip to describe a row, column and a selection length of a text editor..
         /// </summary>
         internal static string msgTextEditorRowColumnSelection {

@@ -61,7 +61,7 @@ namespace EasyCardFile.UtilityClasses.ProjectControls
             }
         }
 
-        private void RefreshListBoxCards_Disposed(object sender, System.EventArgs e)
+        private void RefreshListBoxCards_Disposed(object sender, EventArgs e)
         {
             DrawItem -= RefreshListBoxCards_DrawItem;
             Disposed -= RefreshListBoxCards_Disposed;
@@ -190,7 +190,7 @@ namespace EasyCardFile.UtilityClasses.ProjectControls
             Image image;
 
             // ..check if one exists..
-            if (ImageCache.Any(f => f.Key == card.CardType.Id))
+            if (ImageCache.Count > 0 && ImageCache.Any(f => f.Key == card.CardType.Id))
             {
                 // get the image matching the card type id..
                 image = ImageCache.FirstOrDefault(f => f.Key == card.CardType.Id).Value;
@@ -209,7 +209,7 @@ namespace EasyCardFile.UtilityClasses.ProjectControls
                 }
 
                 // ..get the image from the card type..
-                image = card.CardType?.TypeImage.FromBytes();
+                image = card.CardType?.TypeImage?.FromBytes();
 
                 if (image != null)
                 {
