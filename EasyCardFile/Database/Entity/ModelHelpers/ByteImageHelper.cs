@@ -26,6 +26,7 @@ SOFTWARE.
 
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using EasyCardFile.UtilityClasses.ErrorHandling;
 
@@ -47,7 +48,16 @@ namespace EasyCardFile.Database.Entity.ModelHelpers
             {
                 using (var memoryStream = new MemoryStream())
                 {
-                    image.Save(memoryStream, image.RawFormat);
+                    try // the raw format may fail..
+                    {
+                        image.Save(memoryStream, image.RawFormat);
+                    }
+                    catch
+                    {
+                        // ..upon failure try the Png compression..
+                        image.Save(memoryStream, ImageFormat.Png);
+                    }
+
                     return memoryStream.ToArray();
                 }
             }

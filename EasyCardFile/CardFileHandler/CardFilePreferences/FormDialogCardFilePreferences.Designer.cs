@@ -62,8 +62,11 @@
             this.cdButtonColors = new System.Windows.Forms.ColorDialog();
             this.tcMain = new System.Windows.Forms.TabControl();
             this.tabGeneralPreferences = new System.Windows.Forms.TabPage();
-            this.lbCartTypeImageDimensions = new System.Windows.Forms.Label();
+            this.btCardListFont = new System.Windows.Forms.Button();
+            this.lbCardListFontValue = new System.Windows.Forms.Label();
+            this.lbCardListFont = new System.Windows.Forms.Label();
             this.tlpCardTypeImageDimension = new System.Windows.Forms.TableLayoutPanel();
+            this.lbCartTypeImageDimensions = new System.Windows.Forms.Label();
             this.lbWidth = new System.Windows.Forms.Label();
             this.lbHeight = new System.Windows.Forms.Label();
             this.lbLockAspectRatio = new System.Windows.Forms.Label();
@@ -71,14 +74,11 @@
             this.nudHeight = new System.Windows.Forms.NumericUpDown();
             this.cbLockAspectRatio = new System.Windows.Forms.CheckBox();
             this.lbCardTypeImageDimension = new System.Windows.Forms.Label();
-            this.tbbCardNamingInstruction = new EasyCardFile.UtilityClasses.ProjectControls.TextBoxButton();
             this.tabCardTypes = new System.Windows.Forms.TabPage();
-            this.clbCardTypes = new EasyCardFile.UtilityClasses.ProjectControls.RefreshCheckListBox();
             this.odImage = new System.Windows.Forms.OpenFileDialog();
-            this.lbCardListFont = new System.Windows.Forms.Label();
             this.fdFont = new System.Windows.Forms.FontDialog();
-            this.lbCardListFontValue = new System.Windows.Forms.Label();
-            this.btCardListFont = new System.Windows.Forms.Button();
+            this.tbbCardNamingInstruction = new EasyCardFile.UtilityClasses.ProjectControls.TextBoxButton();
+            this.clbCardTypes = new EasyCardFile.UtilityClasses.ProjectControls.RefreshCheckListBox();
             this.tsbCardTypes.SuspendLayout();
             this.pnChangePassword.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbChangePassword)).BeginInit();
@@ -177,9 +177,9 @@
             this.tsbBackgroundColor,
             this.tsbTypeImage});
             this.tsbCardTypes.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.tsbCardTypes.Location = new System.Drawing.Point(357, 3);
+            this.tsbCardTypes.Location = new System.Drawing.Point(326, 3);
             this.tsbCardTypes.Name = "tsbCardTypes";
-            this.tsbCardTypes.Size = new System.Drawing.Size(196, 25);
+            this.tsbCardTypes.Size = new System.Drawing.Size(227, 25);
             this.tsbCardTypes.TabIndex = 14;
             // 
             // tsbAddCardType
@@ -189,7 +189,7 @@
             this.tsbAddCardType.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbAddCardType.Name = "tsbAddCardType";
             this.tsbAddCardType.Size = new System.Drawing.Size(23, 22);
-            this.tsbAddCardType.Text = "toolStripButton1";
+            this.tsbAddCardType.Text = "Add a new card type";
             this.tsbAddCardType.Click += new System.EventHandler(this.tsbAddCardType_Click);
             // 
             // tsbRemoveCardType
@@ -205,7 +205,7 @@
             // tsbRename
             // 
             this.tsbRename.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbRename.Image = global::EasyCardFile.Properties.Resources.Modify;
+            this.tsbRename.Image = ((System.Drawing.Image)(resources.GetObject("tsbRename.Image")));
             this.tsbRename.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbRename.Name = "tsbRename";
             this.tsbRename.Size = new System.Drawing.Size(23, 22);
@@ -260,6 +260,7 @@
             this.tsbTypeImage.Name = "tsbTypeImage";
             this.tsbTypeImage.Size = new System.Drawing.Size(23, 22);
             this.tsbTypeImage.Text = "Type image";
+            this.tsbTypeImage.Click += new System.EventHandler(this.tsbTypeImage_Click);
             // 
             // lbRowErrorText
             // 
@@ -475,14 +476,33 @@
             this.tabGeneralPreferences.Text = "General";
             this.tabGeneralPreferences.UseVisualStyleBackColor = true;
             // 
-            // lbCartTypeImageDimensions
+            // btCardListFont
             // 
-            this.lbCartTypeImageDimensions.AutoSize = true;
-            this.lbCartTypeImageDimensions.Location = new System.Drawing.Point(4, 1);
-            this.lbCartTypeImageDimensions.Name = "lbCartTypeImageDimensions";
-            this.lbCartTypeImageDimensions.Size = new System.Drawing.Size(104, 13);
-            this.lbCartTypeImageDimensions.TabIndex = 35;
-            this.lbCartTypeImageDimensions.Text = "Card type image size";
+            this.btCardListFont.Location = new System.Drawing.Point(458, 181);
+            this.btCardListFont.Name = "btCardListFont";
+            this.btCardListFont.Size = new System.Drawing.Size(92, 23);
+            this.btCardListFont.TabIndex = 37;
+            this.btCardListFont.Text = "Font...";
+            this.btCardListFont.UseVisualStyleBackColor = true;
+            this.btCardListFont.Click += new System.EventHandler(this.btCardListFont_Click);
+            // 
+            // lbCardListFontValue
+            // 
+            this.lbCardListFontValue.AutoSize = true;
+            this.lbCardListFontValue.Location = new System.Drawing.Point(215, 186);
+            this.lbCardListFontValue.Name = "lbCardListFontValue";
+            this.lbCardListFontValue.Size = new System.Drawing.Size(137, 13);
+            this.lbCardListFontValue.TabIndex = 36;
+            this.lbCardListFontValue.Text = "Microsoft Sans Serif; 8,25pt";
+            // 
+            // lbCardListFont
+            // 
+            this.lbCardListFont.AutoSize = true;
+            this.lbCardListFont.Location = new System.Drawing.Point(9, 186);
+            this.lbCardListFont.Name = "lbCardListFont";
+            this.lbCardListFont.Size = new System.Drawing.Size(142, 13);
+            this.lbCardListFont.TabIndex = 35;
+            this.lbCardListFont.Text = "Font to use with the card list:";
             // 
             // tlpCardTypeImageDimension
             // 
@@ -510,6 +530,15 @@
             this.tlpCardTypeImageDimension.Size = new System.Drawing.Size(538, 43);
             this.tlpCardTypeImageDimension.TabIndex = 34;
             // 
+            // lbCartTypeImageDimensions
+            // 
+            this.lbCartTypeImageDimensions.AutoSize = true;
+            this.lbCartTypeImageDimensions.Location = new System.Drawing.Point(4, 1);
+            this.lbCartTypeImageDimensions.Name = "lbCartTypeImageDimensions";
+            this.lbCartTypeImageDimensions.Size = new System.Drawing.Size(104, 13);
+            this.lbCartTypeImageDimensions.TabIndex = 35;
+            this.lbCartTypeImageDimensions.Text = "Card type image size";
+            // 
             // lbWidth
             // 
             this.lbWidth.AutoSize = true;
@@ -533,9 +562,9 @@
             this.lbLockAspectRatio.AutoSize = true;
             this.lbLockAspectRatio.Location = new System.Drawing.Point(414, 1);
             this.lbLockAspectRatio.Name = "lbLockAspectRatio";
-            this.lbLockAspectRatio.Size = new System.Drawing.Size(89, 13);
+            this.lbLockAspectRatio.Size = new System.Drawing.Size(99, 13);
             this.lbLockAspectRatio.TabIndex = 36;
-            this.lbLockAspectRatio.Text = "Lock aspect ratio";
+            this.lbLockAspectRatio.Text = "Square aspect ratio";
             // 
             // nudWidth
             // 
@@ -590,8 +619,6 @@
             // cbLockAspectRatio
             // 
             this.cbLockAspectRatio.AutoSize = true;
-            this.cbLockAspectRatio.Checked = true;
-            this.cbLockAspectRatio.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbLockAspectRatio.Dock = System.Windows.Forms.DockStyle.Right;
             this.cbLockAspectRatio.Location = new System.Drawing.Point(519, 18);
             this.cbLockAspectRatio.Name = "cbLockAspectRatio";
@@ -608,6 +635,25 @@
             this.lbCardTypeImageDimension.Size = new System.Drawing.Size(138, 13);
             this.lbCardTypeImageDimension.TabIndex = 33;
             this.lbCardTypeImageDimension.Text = "Card type image dimensions";
+            // 
+            // tabCardTypes
+            // 
+            this.tabCardTypes.Controls.Add(this.lbCardTypes);
+            this.tabCardTypes.Controls.Add(this.lbCardTypeProperties);
+            this.tabCardTypes.Controls.Add(this.tsbCardTypes);
+            this.tabCardTypes.Controls.Add(this.tlpCardTypeProperties);
+            this.tabCardTypes.Controls.Add(this.clbCardTypes);
+            this.tabCardTypes.Location = new System.Drawing.Point(4, 22);
+            this.tabCardTypes.Name = "tabCardTypes";
+            this.tabCardTypes.Padding = new System.Windows.Forms.Padding(3);
+            this.tabCardTypes.Size = new System.Drawing.Size(559, 273);
+            this.tabCardTypes.TabIndex = 1;
+            this.tabCardTypes.Text = "Card types";
+            this.tabCardTypes.UseVisualStyleBackColor = true;
+            // 
+            // odImage
+            // 
+            this.odImage.Filter = "Image files|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff";
             // 
             // tbbCardNamingInstruction
             // 
@@ -627,21 +673,6 @@
             this.tbbCardNamingInstruction.TextChanged += new System.EventHandler(this.tbbCardNamingInstruction_TextChanged);
             this.tbbCardNamingInstruction.Click += new System.EventHandler(this.tbbCardNamingInstruction_Click);
             // 
-            // tabCardTypes
-            // 
-            this.tabCardTypes.Controls.Add(this.lbCardTypes);
-            this.tabCardTypes.Controls.Add(this.lbCardTypeProperties);
-            this.tabCardTypes.Controls.Add(this.tsbCardTypes);
-            this.tabCardTypes.Controls.Add(this.tlpCardTypeProperties);
-            this.tabCardTypes.Controls.Add(this.clbCardTypes);
-            this.tabCardTypes.Location = new System.Drawing.Point(4, 22);
-            this.tabCardTypes.Name = "tabCardTypes";
-            this.tabCardTypes.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCardTypes.Size = new System.Drawing.Size(559, 273);
-            this.tabCardTypes.TabIndex = 1;
-            this.tabCardTypes.Text = "Card types";
-            this.tabCardTypes.UseVisualStyleBackColor = true;
-            // 
             // clbCardTypes
             // 
             this.clbCardTypes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -655,38 +686,6 @@
             this.clbCardTypes.TabIndex = 33;
             this.clbCardTypes.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCardTypes_ItemCheck);
             this.clbCardTypes.SelectedValueChanged += new System.EventHandler(this.clbCardTypes_SelectedValueChanged);
-            // 
-            // odImage
-            // 
-            this.odImage.Filter = "Image files|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff";
-            // 
-            // lbCardListFont
-            // 
-            this.lbCardListFont.AutoSize = true;
-            this.lbCardListFont.Location = new System.Drawing.Point(9, 186);
-            this.lbCardListFont.Name = "lbCardListFont";
-            this.lbCardListFont.Size = new System.Drawing.Size(142, 13);
-            this.lbCardListFont.TabIndex = 35;
-            this.lbCardListFont.Text = "Font to use with the card list:";
-            // 
-            // lbCardListFontValue
-            // 
-            this.lbCardListFontValue.AutoSize = true;
-            this.lbCardListFontValue.Location = new System.Drawing.Point(215, 186);
-            this.lbCardListFontValue.Name = "lbCardListFontValue";
-            this.lbCardListFontValue.Size = new System.Drawing.Size(137, 13);
-            this.lbCardListFontValue.TabIndex = 36;
-            this.lbCardListFontValue.Text = "Microsoft Sans Serif; 8,25pt";
-            // 
-            // btCardListFont
-            // 
-            this.btCardListFont.Location = new System.Drawing.Point(458, 181);
-            this.btCardListFont.Name = "btCardListFont";
-            this.btCardListFont.Size = new System.Drawing.Size(92, 23);
-            this.btCardListFont.TabIndex = 37;
-            this.btCardListFont.Text = "Font...";
-            this.btCardListFont.UseVisualStyleBackColor = true;
-            this.btCardListFont.Click += new System.EventHandler(this.btCardListFont_Click);
             // 
             // FormDialogCardFilePreferences
             // 

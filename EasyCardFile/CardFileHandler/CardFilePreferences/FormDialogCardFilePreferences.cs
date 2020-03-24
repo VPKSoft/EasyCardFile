@@ -40,6 +40,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EasyCardFile.Database.Entity.ModelHelpers;
+using EasyCardFile.UtilityClasses.Miscellaneous.Dialogs;
 using VPKSoft.ErrorLogger;
 using VPKSoft.LangLib;
 using VPKSoft.MessageBoxExtended;
@@ -870,6 +871,15 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
         private void FormDialogCardFilePreferences_FormClosed(object sender, FormClosedEventArgs e)
         {
             pbCardTypeImage.Image?.Dispose();
+        }
+
+        private void tsbTypeImage_Click(object sender, EventArgs e)
+        {
+            var cardType = CardTypes.FirstOrDefault(f => f.CardTypeName == clbCardTypes.SelectedItem.ToString());
+            if (cardType != null && FormDialogSelectImageArea.ShowDialog(this, cardType, cbLockAspectRatio.Checked) == DialogResult.OK)
+            {
+                pbCardTypeImage.Image = new Bitmap(cardType.TypeImage.FromBytes());
+            }
         }
     }
 }
