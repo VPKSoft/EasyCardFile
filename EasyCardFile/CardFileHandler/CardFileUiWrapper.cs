@@ -36,10 +36,12 @@ using EasyCardFile.Database.Entity.Context.ContextCompression;
 using EasyCardFile.Database.Entity.Context.ContextEncryption;
 using EasyCardFile.Database.Entity.Entities;
 using EasyCardFile.UtilityClasses.ErrorHandling;
+using EasyCardFile.UtilityClasses.Localization;
 using EasyCardFile.UtilityClasses.Miscellaneous;
 using EasyCardFile.UtilityClasses.ProjectControls;
 using Manina.Windows.Forms;
 using VPKSoft.LangLib;
+using VPKSoft.MessageBoxExtended;
 using VPKSoft.RichTextEdit;
 using VPKSoft.WinFormsRtfPrint;
 using TabControl = Manina.Windows.Forms.TabControl;
@@ -177,6 +179,11 @@ namespace EasyCardFile.CardFileHandler
         private static string PrintPreviewDialogTitle { get; set; }
 
         /// <summary>
+        /// Gets or sets the localized card delete confirmation query.
+        /// </summary>
+        private static string ConfirmDeleteCardQuery { get; set; }
+
+        /// <summary>
         /// Localizes the texts used with the CardFile UI.
         /// </summary>
         internal static void LocalizeTexts()
@@ -213,6 +220,9 @@ namespace EasyCardFile.CardFileHandler
 
             TextEditorCardCreatedDate = DBLangEngine.GetStatMessage("msgEditorCardCreated",
                 "Created: {0}|A message for a status strip to indicate a date and time the card was created.");
+
+            ConfirmDeleteCardQuery = DBLangEngine.GetStatMessage("msgQueryConfirmDeleteCard",
+                "Delete the card: '{0}'?|A message asking from the user for confirmation of deletion of a card from the card file.");
         }
         #endregion
 
@@ -227,6 +237,23 @@ namespace EasyCardFile.CardFileHandler
         /// </summary>
         internal static string TemporaryPath { get; set; }
         #endregion
+
+        #region Events        
+        /// <summary>
+        /// Occurs when the <see cref="CardFile"/> of this UI wrapper has changed.
+        /// </summary>
+        public EventHandler CardFileChanged;
+        #endregion
+
+        #region Interaction        
+        /// <summary>
+        /// Sets input focus to the <see cref="RichTextBox"/> control text area.
+        /// </summary>
+        /// <returns><see langword="true" /> if the input focus request was successful; otherwise, <see langword="false" />.</returns>
+        public bool FocusRichTextBox()
+        {
+            return RichTextBox.RichTextBox.Focus();
+        }
 
         /// <summary>
         /// Opens an existing card file.
@@ -266,14 +293,6 @@ namespace EasyCardFile.CardFileHandler
             }
         }
 
-        #region Events        
-        /// <summary>
-        /// Occurs when the <see cref="CardFile"/> of this UI wrapper has changed.
-        /// </summary>
-        public EventHandler CardFileChanged;
-        #endregion
-
-        #region Interaction                
         /// <summary>
         /// Repaints the card ListBox.
         /// </summary>
@@ -328,6 +347,13 @@ namespace EasyCardFile.CardFileHandler
             var card = (Card) ListBoxCards.SelectedItem;
             if (card != null)
             {
+                if (MessageBox.Show(Application.OpenForms[0], string.Format(ConfirmDeleteCardQuery, card.CardName),
+                    LocalizeStaticProperties.DialogConfirmTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Question,
+                    MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+                {
+                    return false;
+                }
+
                 var index = ListBoxCards.SelectedIndex;
 
                 CardFileDb.CardFile.Cards.Remove(card);
@@ -342,6 +368,8 @@ namespace EasyCardFile.CardFileHandler
                 {
                     ListBoxCards.SelectedIndex = index;
                 }
+
+                FocusRichTextBox();
 
                 return true;
             }
@@ -370,29 +398,29 @@ namespace EasyCardFile.CardFileHandler
             SplitContainer = new SplitContainer {Dock = DockStyle.Fill,};
 
             // create a table layout panel for the search box and for the card list..
-            var tableLayoutPanel = new TableLayoutPanel {Dock = DockStyle.Fill, RowCount = 3, ColumnCount = 2,};
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            tableLayoutPanel.RowStyles.Add(new RowStyle{ SizeType = SizeType.AutoSize});
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            tableLayoutPanel.RowStyles.Add(new RowStyle{ SizeType = SizeType.AutoSize});
-            SplitContainer.Panel1.Controls.Add(tableLayoutPanel);
+            TableLayoutMain = new TableLayoutPanel {Dock = DockStyle.Fill, RowCount = 3, ColumnCount = 2,};
+            TableLayoutMain.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            TableLayoutMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            TableLayoutMain.RowStyles.Add(new RowStyle{ SizeType = SizeType.AutoSize});
+            TableLayoutMain.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            TableLayoutMain.RowStyles.Add(new RowStyle{ SizeType = SizeType.AutoSize});
+            SplitContainer.Panel1.Controls.Add(TableLayoutMain);
 
             // create the search label to indicate that the next control will search something..
             var label = new Label {Text = SearchDescription, Padding = new Padding(2), Margin = new Padding(3),};
-            tableLayoutPanel.Controls.Add(label, 0, 0);
+            TableLayoutMain.Controls.Add(label, 0, 0);
 
             // create the search text box..
             SearchTextBox = new TextBox { Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top};
-            tableLayoutPanel.Controls.Add(SearchTextBox, 1, 0);
+            TableLayoutMain.Controls.Add(SearchTextBox, 1, 0);
             SearchTextBox.TextChanged += SearchTextBox_TextChanged;
 
             ToolTip = new ToolTip(this); // we do need a tool tip!
 
             // create the card file list box..
             ListBoxCards = new RefreshListBoxCards(CardFileDb.CardFile) {Dock = DockStyle.Fill};
-            tableLayoutPanel.Controls.Add(ListBoxCards, 0, 1);
-            tableLayoutPanel.SetColumnSpan(ListBoxCards, 2);
+            TableLayoutMain.Controls.Add(ListBoxCards, 0, 1);
+            TableLayoutMain.SetColumnSpan(ListBoxCards, 2);
 
             // add the cards within the card file to the list box..
             if (CardFileDb.CardFile.Cards != null)
@@ -405,7 +433,7 @@ namespace EasyCardFile.CardFileHandler
 
             // create the label to indicate that the next control will be the card type combo box..
             label = new Label {Text = CardTypeDescription, Padding = new Padding(2), Margin = new Padding(3),};
-            tableLayoutPanel.Controls.Add(label, 0, 2);
+            TableLayoutMain.Controls.Add(label, 0, 2);
 
             // create the combo box for the card type..
             CardTypeComboBox = new ComboBox
@@ -418,17 +446,17 @@ namespace EasyCardFile.CardFileHandler
 
             CardTypeComboBox.SelectedValueChanged += ComboBoxCardType_SelectedValueChanged;
 
-            tableLayoutPanel.Controls.Add(CardTypeComboBox, 1, 2);
+            TableLayoutMain.Controls.Add(CardTypeComboBox, 1, 2);
             foreach (var cardType in CardFileDb.CardFile.CardTypes)
             {
                 CardTypeComboBox.Items.Add(cardType);
             }
 
             // create another table layout panel for the card editor and for the status strip..
-            tableLayoutPanel = new TableLayoutPanel {Dock = DockStyle.Fill, RowCount = 2, ColumnCount = 1,};
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            tableLayoutPanel.RowStyles.Add(new RowStyle( SizeType.Percent, 100));
-            tableLayoutPanel.RowStyles.Add(new RowStyle{ SizeType = SizeType.AutoSize});
+            TableLayoutMain = new TableLayoutPanel {Dock = DockStyle.Fill, RowCount = 2, ColumnCount = 1,};
+            TableLayoutMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            TableLayoutMain.RowStyles.Add(new RowStyle( SizeType.Percent, 100));
+            TableLayoutMain.RowStyles.Add(new RowStyle{ SizeType = SizeType.AutoSize});
 
             // create a RichTextBoxWithToolStrip for the card file card contents..
             RichTextBox = new RichTextBoxWithToolStrip {Dock = DockStyle.Fill,};
@@ -439,7 +467,7 @@ namespace EasyCardFile.CardFileHandler
             RichTextBox.AutomaticColorText = AutomaticColorText;
             RichTextBox.MoreColorsText = MoreColorsText;
 
-            tableLayoutPanel.Controls.Add(RichTextBox, 0, 0);
+            TableLayoutMain.Controls.Add(RichTextBox, 0, 0);
 
             // subscribe the selected cardEntity changed event handler..
             ListBoxCards.SelectedValueChanged += ListBoxCards_SelectedValueChanged;
@@ -447,14 +475,14 @@ namespace EasyCardFile.CardFileHandler
 
             // create a status strip for the card editor/viewer..
             var statusStrip = new StatusStrip {Dock = DockStyle.Fill,};
-            tableLayoutPanel.Controls.Add(statusStrip, 0, 1);
+            TableLayoutMain.Controls.Add(statusStrip, 0, 1);
 
             ItemRowColumnSelection = statusStrip.Items.Add(string.Format(TextEditorRowColumnSelection, 1, 1, 0));
             ItemModifiedDateTime = statusStrip.Items.Add("");
             ItemCreatedDateTime = statusStrip.Items.Add("");
 
             // add the controls to right split panel..
-            SplitContainer.Panel2.Controls.Add(tableLayoutPanel);
+            SplitContainer.Panel2.Controls.Add(TableLayoutMain);
 
             Tab.Controls.Add(SplitContainer);
             tabControl.Tabs.Add(Tab);
@@ -634,6 +662,11 @@ namespace EasyCardFile.CardFileHandler
         /// Gets or sets the split container of the card file UI wrapper.
         /// </summary>
         internal SplitContainer SplitContainer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the main <see cref="TableLayoutPanel"/> instance.
+        /// </summary>
+        internal TableLayoutPanel TableLayoutMain { get; set; }
 
         /// <summary>
         /// The <see cref="RefreshListBox"/> control with a filtered list of card within the card file.

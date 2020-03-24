@@ -435,9 +435,9 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
 
             ChangePasswordEnabled = CardFile.Encrypted;
 
-            var font = (CardFile.AdditionalData2 == null
+            var font = (CardFile.CardFont == null
                 ? Font
-                : (Font) CardFile.AdditionalData2.DeserializeObjectBinary());
+                : (Font) CardFile.CardFont.DeserializeObjectBinary());
 
             lbCardListFontValue.Tag = font;
             lbCardListFontValue.Text = font.Name + @";" + font.SizeInPoints;
@@ -864,7 +864,7 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
                 var font = fdFont.Font;
                 lbCardListFontValue.Tag = font;
                 lbCardListFontValue.Text = font.Name + @";" + font.SizeInPoints;
-                CardFile.AdditionalData2 = font.SerializeObjectBinary().Base64Value;
+                CardFile.CardFont = font.SerializeObjectBinary().Base64Value;
             }
         }
 

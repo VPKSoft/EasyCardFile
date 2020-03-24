@@ -128,6 +128,7 @@
       <DependentUpon>FormDialogCardFileNaming.cs</DependentUpon>
     </Compile>
     <Compile Include="Database\Entity\Enumerations\CardSortType.cs" />
+    <Compile Include="Database\Entity\Enumerations\CardSortTypeLocalize.cs" />
     <Compile Include="Database\Entity\ModelHelpers\ByteImageHelper.cs" />
     <Compile Include="Database\NoEntity\CardTypeNoEntity.cs" />
     <Compile Include="CardFileHandler\CardFilePreferences\FormDialogCardFilePreferences.cs">

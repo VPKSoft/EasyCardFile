@@ -74,11 +74,11 @@
             this.nudHeight = new System.Windows.Forms.NumericUpDown();
             this.cbLockAspectRatio = new System.Windows.Forms.CheckBox();
             this.lbCardTypeImageDimension = new System.Windows.Forms.Label();
+            this.tbbCardNamingInstruction = new EasyCardFile.UtilityClasses.ProjectControls.TextBoxButton();
             this.tabCardTypes = new System.Windows.Forms.TabPage();
+            this.clbCardTypes = new EasyCardFile.UtilityClasses.ProjectControls.RefreshCheckListBox();
             this.odImage = new System.Windows.Forms.OpenFileDialog();
             this.fdFont = new System.Windows.Forms.FontDialog();
-            this.tbbCardNamingInstruction = new EasyCardFile.UtilityClasses.ProjectControls.TextBoxButton();
-            this.clbCardTypes = new EasyCardFile.UtilityClasses.ProjectControls.RefreshCheckListBox();
             this.tsbCardTypes.SuspendLayout();
             this.pnChangePassword.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbChangePassword)).BeginInit();
@@ -177,9 +177,9 @@
             this.tsbBackgroundColor,
             this.tsbTypeImage});
             this.tsbCardTypes.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.tsbCardTypes.Location = new System.Drawing.Point(326, 3);
+            this.tsbCardTypes.Location = new System.Drawing.Point(357, 3);
             this.tsbCardTypes.Name = "tsbCardTypes";
-            this.tsbCardTypes.Size = new System.Drawing.Size(227, 25);
+            this.tsbCardTypes.Size = new System.Drawing.Size(196, 25);
             this.tsbCardTypes.TabIndex = 14;
             // 
             // tsbAddCardType
@@ -636,25 +636,6 @@
             this.lbCardTypeImageDimension.TabIndex = 33;
             this.lbCardTypeImageDimension.Text = "Card type image dimensions";
             // 
-            // tabCardTypes
-            // 
-            this.tabCardTypes.Controls.Add(this.lbCardTypes);
-            this.tabCardTypes.Controls.Add(this.lbCardTypeProperties);
-            this.tabCardTypes.Controls.Add(this.tsbCardTypes);
-            this.tabCardTypes.Controls.Add(this.tlpCardTypeProperties);
-            this.tabCardTypes.Controls.Add(this.clbCardTypes);
-            this.tabCardTypes.Location = new System.Drawing.Point(4, 22);
-            this.tabCardTypes.Name = "tabCardTypes";
-            this.tabCardTypes.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCardTypes.Size = new System.Drawing.Size(559, 273);
-            this.tabCardTypes.TabIndex = 1;
-            this.tabCardTypes.Text = "Card types";
-            this.tabCardTypes.UseVisualStyleBackColor = true;
-            // 
-            // odImage
-            // 
-            this.odImage.Filter = "Image files|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff";
-            // 
             // tbbCardNamingInstruction
             // 
             this.tbbCardNamingInstruction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -673,6 +654,21 @@
             this.tbbCardNamingInstruction.TextChanged += new System.EventHandler(this.tbbCardNamingInstruction_TextChanged);
             this.tbbCardNamingInstruction.Click += new System.EventHandler(this.tbbCardNamingInstruction_Click);
             // 
+            // tabCardTypes
+            // 
+            this.tabCardTypes.Controls.Add(this.lbCardTypes);
+            this.tabCardTypes.Controls.Add(this.lbCardTypeProperties);
+            this.tabCardTypes.Controls.Add(this.tsbCardTypes);
+            this.tabCardTypes.Controls.Add(this.tlpCardTypeProperties);
+            this.tabCardTypes.Controls.Add(this.clbCardTypes);
+            this.tabCardTypes.Location = new System.Drawing.Point(4, 22);
+            this.tabCardTypes.Name = "tabCardTypes";
+            this.tabCardTypes.Padding = new System.Windows.Forms.Padding(3);
+            this.tabCardTypes.Size = new System.Drawing.Size(559, 273);
+            this.tabCardTypes.TabIndex = 1;
+            this.tabCardTypes.Text = "Card types";
+            this.tabCardTypes.UseVisualStyleBackColor = true;
+            // 
             // clbCardTypes
             // 
             this.clbCardTypes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -686,6 +682,10 @@
             this.clbCardTypes.TabIndex = 33;
             this.clbCardTypes.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCardTypes_ItemCheck);
             this.clbCardTypes.SelectedValueChanged += new System.EventHandler(this.clbCardTypes_SelectedValueChanged);
+            // 
+            // odImage
+            // 
+            this.odImage.Filter = "Image files|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff";
             // 
             // FormDialogCardFilePreferences
             // 

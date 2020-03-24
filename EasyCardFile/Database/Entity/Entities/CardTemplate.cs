@@ -52,5 +52,10 @@ namespace EasyCardFile.Database.Entity.Entities
         /// Gets or sets the additional data 1. This property is currently not in use and is intended to be used if there are some missing properties with the model.
         /// </summary>
         public string AdditionalData1 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the additional numeric data 1. This property is currently not in use and is intended to be used if there are some missing properties with the model.
+        /// </summary>
+        public int IntData1 { get; set; }
     }
 }

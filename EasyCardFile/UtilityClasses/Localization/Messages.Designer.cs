@@ -196,6 +196,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm|A title for a dialog confirming something from the user..
+        /// </summary>
+        internal static string msgDialogConfirmTitle {
+            get {
+                return ResourceManager.GetString("msgDialogConfirmTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created: {0}|A message for a status strip to indicate a date and time the card was created..
         /// </summary>
         internal static string msgEditorCardCreated {
@@ -246,6 +255,78 @@ namespace EasyCardFile.UtilityClasses.Localization {
         internal static string msgEnterPasswordConfirm {
             get {
                 return ResourceManager.GetString("msgEnterPasswordConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alphabetical descending|A localized enumeration value for card sort style of: Alphabetical Descending..
+        /// </summary>
+        internal static string msgEnumAlphabeticalDescendingSort {
+            get {
+                return ResourceManager.GetString("msgEnumAlphabeticalDescendingSort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alphabetical|A localized enumeration value for card sort style of: Alphabetical..
+        /// </summary>
+        internal static string msgEnumAlphabeticalSort {
+            get {
+                return ResourceManager.GetString("msgEnumAlphabeticalSort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created descending|A localized enumeration value for card sort style of: Created Descending..
+        /// </summary>
+        internal static string msgEnumCreatedDescendingSort {
+            get {
+                return ResourceManager.GetString("msgEnumCreatedDescendingSort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created|A localized enumeration value for card sort style of: Created..
+        /// </summary>
+        internal static string msgEnumCreatedSort {
+            get {
+                return ResourceManager.GetString("msgEnumCreatedSort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ignore case|A localized enumeration value for card sort style of: Ignore Case..
+        /// </summary>
+        internal static string msgEnumIgnoreCaseSort {
+            get {
+                return ResourceManager.GetString("msgEnumIgnoreCaseSort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modified descending|A localized enumeration value for card sort style of: Modified Descending..
+        /// </summary>
+        internal static string msgEnumModifiedDescendingSort {
+            get {
+                return ResourceManager.GetString("msgEnumModifiedDescendingSort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modified|A localized enumeration value for card sort style of: Modified..
+        /// </summary>
+        internal static string msgEnumModifiedSort {
+            get {
+                return ResourceManager.GetString("msgEnumModifiedSort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None|A localized enumeration value for card sort style of: None..
+        /// </summary>
+        internal static string msgEnumSortNone {
+            get {
+                return ResourceManager.GetString("msgEnumSortNone", resourceCulture);
             }
         }
         
@@ -417,6 +498,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         internal static string msgPrintPreview {
             get {
                 return ResourceManager.GetString("msgPrintPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete the card: &apos;{0}&apos;?|A message asking from the user for confirmation of deletion of a card from the card file..
+        /// </summary>
+        internal static string msgQueryConfirmDeleteCard {
+            get {
+                return ResourceManager.GetString("msgQueryConfirmDeleteCard", resourceCulture);
             }
         }
         

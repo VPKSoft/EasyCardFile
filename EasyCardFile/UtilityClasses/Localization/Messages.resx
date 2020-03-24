@@ -162,6 +162,9 @@
   <data name="msgConfirmAPasswordTitle" xml:space="preserve">
     <value>Confirm the password|A user is asked for a confirmation for a password in a dialog (the second time)</value>
   </data>
+  <data name="msgDialogConfirmTitle" xml:space="preserve">
+    <value>Confirm|A title for a dialog confirming something from the user.</value>
+  </data>
   <data name="msgEditorCardCreated" xml:space="preserve">
     <value>Created: {0}|A message for a status strip to indicate a date and time the card was created.</value>
   </data>
@@ -179,6 +182,30 @@
   </data>
   <data name="msgEnterPasswordConfirm" xml:space="preserve">
     <value>Confirm the password|A message querying a password confirmation from the user with the card file protection</value>
+  </data>
+  <data name="msgEnumAlphabeticalDescendingSort" xml:space="preserve">
+    <value>Alphabetical descending|A localized enumeration value for card sort style of: Alphabetical Descending.</value>
+  </data>
+  <data name="msgEnumAlphabeticalSort" xml:space="preserve">
+    <value>Alphabetical|A localized enumeration value for card sort style of: Alphabetical.</value>
+  </data>
+  <data name="msgEnumCreatedDescendingSort" xml:space="preserve">
+    <value>Created descending|A localized enumeration value for card sort style of: Created Descending.</value>
+  </data>
+  <data name="msgEnumCreatedSort" xml:space="preserve">
+    <value>Created|A localized enumeration value for card sort style of: Created.</value>
+  </data>
+  <data name="msgEnumIgnoreCaseSort" xml:space="preserve">
+    <value>Ignore case|A localized enumeration value for card sort style of: Ignore Case.</value>
+  </data>
+  <data name="msgEnumModifiedDescendingSort" xml:space="preserve">
+    <value>Modified descending|A localized enumeration value for card sort style of: Modified Descending.</value>
+  </data>
+  <data name="msgEnumModifiedSort" xml:space="preserve">
+    <value>Modified|A localized enumeration value for card sort style of: Modified.</value>
+  </data>
+  <data name="msgEnumSortNone" xml:space="preserve">
+    <value>None|A localized enumeration value for card sort style of: None.</value>
   </data>
   <data name="msgError" xml:space="preserve">
     <value>Error|A message describing that some kind of error occurred.</value>
@@ -236,6 +263,9 @@
   </data>
   <data name="msgPrintPreview" xml:space="preserve">
     <value>Print preview|A message for a print preview window title</value>
+  </data>
+  <data name="msgQueryConfirmDeleteCard" xml:space="preserve">
+    <value>Delete the card: '{0}'?|A message asking from the user for confirmation of deletion of a card from the card file.</value>
   </data>
   <data name="msgQueryPassword1" xml:space="preserve">
     <value>Enter a password to protect the card file|A message querying the user to enter a password for the first time to protect the card file</value>

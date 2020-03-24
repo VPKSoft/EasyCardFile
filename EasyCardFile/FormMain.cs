@@ -34,6 +34,7 @@ using EasyCardFile.CardFileHandler;
 using EasyCardFile.CardFileHandler.CardFileNaming;
 using EasyCardFile.CardFileHandler.CardFilePreferences;
 using EasyCardFile.CardFileHandler.LegacyCardFile;
+using EasyCardFile.Database.Entity.Enumerations;
 using EasyCardFile.Settings;
 using EasyCardFile.Settings.TypeConverters;
 using EasyCardFile.UtilityClasses.Constants;
@@ -95,6 +96,7 @@ namespace EasyCardFile
             CardFileUiWrapper.TemporaryPath = CardFileSaveClose.TemporaryPath;
 
             LocalizeStaticProperties.LocalizeStatic();
+            CardSortTypeLocalize.LocalizeEnums();
 
             mnuTest.Visible = Debugger.IsAttached;
 
@@ -391,6 +393,7 @@ namespace EasyCardFile
                     wrapper.Changed = true;
                     wrapper.RefreshUi(card);
                     SetTitle(true);
+                    wrapper.FocusRichTextBox();
                 }
             }
         }

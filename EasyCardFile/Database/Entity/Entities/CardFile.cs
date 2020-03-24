@@ -90,10 +90,24 @@ namespace EasyCardFile.Database.Entity.Entities
         public CardType DefaultCardType { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of how the cards should be sorted.
+        /// Gets or sets the type of how the cards should be sorted, the first ordering.
         /// </summary>
-        [SqlDefaultValue(DefaultValue = "0")]
-        public CardSortType CardSortType { get; set; }
+        public CardSortType CardSortType1 { get; set; } = CardSortType.None;
+
+        /// <summary>
+        /// Gets or sets the type of how the cards should be sorted, the second ordering.
+        /// </summary>
+        public CardSortType CardSortType2 { get; set; } = CardSortType.None;
+
+        /// <summary>
+        /// Gets or sets the type of how the cards should be sorted, the third ordering.
+        /// </summary>
+        public CardSortType CardSortType3 { get; set; } = CardSortType.None;
+
+        /// <summary>
+        /// Gets or sets the type of how the cards should be sorted, the fourth ordering.
+        /// </summary>
+        public CardSortType CardSortType4 { get; set; } = CardSortType.None;
 
         /// <summary>
         /// Gets or sets the encryption password validation randomized value. This is Base64 encoded binary data.
@@ -117,6 +131,11 @@ namespace EasyCardFile.Database.Entity.Entities
         public int ImageHeight { get; set; } = 16;
 
         /// <summary>
+        /// Gets or sets the font to use in the card list.
+        /// </summary>
+        public string CardFont { get; set; }
+
+        /// <summary>
         /// Gets or sets the additional data 1. This property is currently not in use and is intended to be used if there are some missing properties with the model.
         /// </summary>
         public string AdditionalData1 { get; set; }
@@ -125,5 +144,15 @@ namespace EasyCardFile.Database.Entity.Entities
         /// Gets or sets the additional data 2. This property is currently not in use and is intended to be used if there are some missing properties with the model.
         /// </summary>
         public string AdditionalData2 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the additional numeric data 1. This property is currently not in use and is intended to be used if there are some missing properties with the model.
+        /// </summary>
+        public int IntData1 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the additional numeric data 1. This property is currently not in use and is intended to be used if there are some missing properties with the model.
+        /// </summary>
+        public int IntData2 { get; set; }
     }
 }

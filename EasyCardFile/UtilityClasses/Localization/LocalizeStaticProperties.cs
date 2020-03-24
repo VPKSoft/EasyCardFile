@@ -171,6 +171,11 @@ namespace EasyCardFile.UtilityClasses.Localization
         public static string DialogOpenTitle { get; set; }
 
         /// <summary>
+        /// Gets or sets the title for a dialog confirming something from the user.
+        /// </summary>
+        public static string DialogConfirmTitle { get; set; }
+
+        /// <summary>
         /// Localizes the static texts used by the software.
         /// </summary>
         public static void LocalizeStatic()
@@ -256,6 +261,9 @@ namespace EasyCardFile.UtilityClasses.Localization
 
             DialogOpenTitle = DBLangEngine.GetStatMessage("msgDialogOpenTitle",
                 "Open|A title for a Open dialog.");
+
+            DialogConfirmTitle = DBLangEngine.GetStatMessage("msgDialogConfirmTitle",
+                "Confirm|A title for a dialog confirming something from the user.");
         }
 
         /// <summary>

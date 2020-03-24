@@ -54,7 +54,7 @@ namespace EasyCardFile.UtilityClasses.ProjectControls
             ImageWidth = cardFile.ImageWidth < 16 ? 16 : cardFile.ImageWidth;
             ImageHeight = cardFile.ImageHeight < 16 ? 16 : cardFile.ImageHeight;
 
-            var newFont = cardFile.AdditionalData2?.DeserializeObjectBinary<Font>();
+            var newFont = cardFile.CardFont?.DeserializeObjectBinary<Font>();
             if (newFont != null)
             {
                 base.Font = newFont;
