@@ -185,6 +185,7 @@ namespace EasyCardFile.CardFileHandler
                                 wrapper.FileName = wrapper.NewFileName;
                                 wrapper.Changed = false;
                                 wrapper.OpenCardFile(wrapper.FileName);
+                                wrapper.RefreshUi();
                             }
                         }
                         else
@@ -212,6 +213,7 @@ namespace EasyCardFile.CardFileHandler
                                 {
                                     throw new InvalidOperationException("Error opening the card file: " + wrapper.FileName);
                                 }
+                                wrapper.RefreshUi();
                             }
                         }
                     }

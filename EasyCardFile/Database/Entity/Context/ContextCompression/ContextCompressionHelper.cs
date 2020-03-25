@@ -107,7 +107,7 @@ namespace EasyCardFile.Database.Entity.Context.ContextCompression
 
                 foreach (var card in cardFile.Cards)
                 {
-                    card.CardName = card.CardName.DecompressFromBase64(encoding);
+                    card.CardName = card.CardName?.DecompressFromBase64(encoding);
                     card.CardContents = DatabaseCompressionHelper.DecompressData(card.CardContents);
                 }
 

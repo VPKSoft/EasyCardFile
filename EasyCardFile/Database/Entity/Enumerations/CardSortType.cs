@@ -47,5 +47,15 @@ namespace EasyCardFile.Database.Entity.Enumerations
         /// Whether to ignore case in <see cref="Alphabetical"/> and <see cref="AlphabeticalDescending"/> sorting.
         /// </summary>
         IgnoreCase = 64,
+
+        /// <summary>
+        /// Sorting by card type name ascending.
+        /// </summary>
+        CardType,
+
+        /// <summary>
+        /// Sorting by card type name descending.
+        /// </summary>
+        CardTypeDescending,
     }
 }

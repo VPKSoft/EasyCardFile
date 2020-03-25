@@ -41,7 +41,6 @@ using EasyCardFile.UtilityClasses.Miscellaneous;
 using EasyCardFile.UtilityClasses.ProjectControls;
 using Manina.Windows.Forms;
 using VPKSoft.LangLib;
-using VPKSoft.MessageBoxExtended;
 using VPKSoft.RichTextEdit;
 using VPKSoft.WinFormsRtfPrint;
 using TabControl = Manina.Windows.Forms.TabControl;
@@ -422,6 +421,8 @@ namespace EasyCardFile.CardFileHandler
             TableLayoutMain.Controls.Add(ListBoxCards, 0, 1);
             TableLayoutMain.SetColumnSpan(ListBoxCards, 2);
 
+            CardFileDb.CardFile.SortCards();
+
             // add the cards within the card file to the list box..
             if (CardFileDb.CardFile.Cards != null)
             {
@@ -565,8 +566,17 @@ namespace EasyCardFile.CardFileHandler
                 firstSetChanged = false;
                 changed = value;
 
-                // inform the event subscriber(s) of the changes..
-                CardFileChanged?.Invoke(this, new EventArgs());
+                try
+                {
+                    // inform the event subscriber(s) of the changes..
+                    CardFileChanged?.Invoke(this, new EventArgs());
+                }
+                catch (Exception ex)
+                {
+                    // log the exception..
+                    ExceptionLogAction?.Invoke(ex);
+                }
+                
                 UpdateTabText();
             }
         }
@@ -729,11 +739,17 @@ namespace EasyCardFile.CardFileHandler
         /// Refreshes the UI if the was saved as or a non-existing file was saved.
         /// </summary>
         /// <param name="selectCard">An optional instance to a <see cref="Card"/> to select from the list box.</param>
-        internal void RefreshUi(Card selectCard = null)
+        /// <param name="sort">A value indicating whether the card list should be sorted.</param>
+        internal void RefreshUi(Card selectCard = null, bool sort = false)
         {
             SuspendTextHandler = true;
 
             var index = ListBoxCards.SelectedIndex;
+
+            if (sort)
+            {
+                CardFileDb.CardFile.SortCards();
+            }
 
             ListBoxCards.Items.Clear();
 
@@ -981,10 +997,18 @@ namespace EasyCardFile.CardFileHandler
         /// </summary>
         internal void UpdateTabText()
         {
-            var name = CardFileDb.CardFiles.FirstOrDefault()?.Name;
-            var changedText = Changed ? FileChangedIndicator : string.Empty;
+            try
+            {
+                var name = CardFileDb.CardFiles.FirstOrDefault()?.Name;
+                var changedText = Changed ? FileChangedIndicator : string.Empty;
 
-            Tab.Text = name + changedText;
+                Tab.Text = name + changedText;
+            } 
+            catch (Exception ex)
+            {
+                // report the exception..
+                ExceptionLogAction?.Invoke(ex);
+            }
         }
 
         /// <summary>
@@ -1034,8 +1058,9 @@ namespace EasyCardFile.CardFileHandler
                 RichTextBox.TextChanged -= RichTextBox_TextChanged;
                 SearchTextBox.TextChanged -= SearchTextBox_TextChanged;
                 ListBoxCards.SelectedValueChanged -= ListBoxCards_SelectedValueChanged;
-                CardFileDbContext.ReleaseDbContext(CardFileDb, !IsTemporary && SaveChangesOnClose, true);
 
+                CardFileDbContext.ReleaseDbContext(CardFileDb, !IsTemporary && SaveChangesOnClose, true);
+                CardFileDb = null;
                 try
                 {
                     if (IsTemporary && File.Exists(FileName))

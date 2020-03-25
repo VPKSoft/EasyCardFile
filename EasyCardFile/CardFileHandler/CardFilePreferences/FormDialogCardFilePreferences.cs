@@ -39,6 +39,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using EasyCardFile.Database.Entity.Enumerations;
 using EasyCardFile.Database.Entity.ModelHelpers;
 using EasyCardFile.UtilityClasses.Miscellaneous.Dialogs;
 using VPKSoft.ErrorLogger;
@@ -280,6 +281,42 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
         }
 
         /// <summary>
+        /// Lists the sorting styles for the card sorting.
+        /// </summary>
+        private void ListSortingStyles()
+        {
+            cmbSortMethod1.Items.Clear();
+            cmbSortMethod2.Items.Clear();
+            cmbSortMethod3.Items.Clear();
+            cmbSortMethod4.Items.Clear();
+            cmbSortMethod1.ValueMember = "Key";
+            cmbSortMethod1.DisplayMember = "Value";
+            cmbSortMethod2.ValueMember = "Key";
+            cmbSortMethod2.DisplayMember = "Value";
+            cmbSortMethod3.ValueMember = "Key";
+            cmbSortMethod3.DisplayMember = "Value";
+            cmbSortMethod4.ValueMember = "Key";
+            cmbSortMethod4.DisplayMember = "Value";
+
+            foreach (var pair in CardSortTypeLocalize.LocalizedEnum)
+            {
+                cmbSortMethod1.Items.Add(pair);
+                cmbSortMethod2.Items.Add(pair);
+                cmbSortMethod3.Items.Add(pair);
+                cmbSortMethod4.Items.Add(pair);
+            }
+
+            cmbSortMethod1.SelectedItem =
+                CardSortTypeLocalize.LocalizedEnum.FirstOrDefault(f => f.Key == CardFile.CardSortType1);
+            cmbSortMethod2.SelectedItem =
+                CardSortTypeLocalize.LocalizedEnum.FirstOrDefault(f => f.Key == CardFile.CardSortType2);
+            cmbSortMethod3.SelectedItem =
+                CardSortTypeLocalize.LocalizedEnum.FirstOrDefault(f => f.Key == CardFile.CardSortType3);
+            cmbSortMethod4.SelectedItem =
+                CardSortTypeLocalize.LocalizedEnum.FirstOrDefault(f => f.Key == CardFile.CardSortType4);
+        }
+
+        /// <summary>
         /// Creates an <see cref="Image"/> instance from a given byte array.
         /// </summary>
         /// <param name="bytes">The bytes containing the <see cref="Image"/> data.</param>
@@ -443,6 +480,7 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
             lbCardListFontValue.Text = font.Name + @";" + font.SizeInPoints;
 
             ListCardTypes();
+            ListSortingStyles();
 
             EventsSuspended = false;
             SuspendItemCheckHandler = false;
@@ -578,6 +616,11 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
                     });
                 }
             }
+
+            CardFileDbContext.CardFile.CardSortType1 = ((KeyValuePair<CardSortType, string>)cmbSortMethod1.SelectedItem).Key;
+            CardFileDbContext.CardFile.CardSortType2 = ((KeyValuePair<CardSortType, string>)cmbSortMethod2.SelectedItem).Key;
+            CardFileDbContext.CardFile.CardSortType3 = ((KeyValuePair<CardSortType, string>)cmbSortMethod3.SelectedItem).Key;
+            CardFileDbContext.CardFile.CardSortType4 = ((KeyValuePair<CardSortType, string>)cmbSortMethod4.SelectedItem).Key;
 
             DialogResult = DialogResult.OK;
         }

@@ -184,17 +184,17 @@ namespace EasyCardFile.Database.Entity.Context
                         {
                             SaveDbContextWithCompressionEncryption(context);
                         }
-                    }
 
-                    using (connection)
-                    {
-                        context.VacuumDatabase();
-
-                        connection.Close();
-                        if (forceGarbageCollection)
+                        using (connection)
                         {
-                            GC.Collect();
-                            GC.WaitForPendingFinalizers();
+                            context.VacuumDatabase();
+
+                            connection.Close();
+                            if (forceGarbageCollection)
+                            {
+                                GC.Collect();
+                                GC.WaitForPendingFinalizers();
+                            }
                         }
                     }
 

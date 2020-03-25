@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using EasyCardFile.UtilityClasses.ErrorHandling;
 using VPKSoft.LangLib;
 
@@ -51,9 +52,19 @@ namespace EasyCardFile.Database.Entity.Enumerations
         internal static string EnumIgnoreCase { get; set; }
 
         /// <summary>
+        /// Gets or sets the localized name for the <see cref="CardSortType.CardType"/> enumeration value.
+        /// </summary>
+        internal static string EnumCardType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the localized name for the <see cref="CardSortType.CardTypeDescending"/> enumeration value.
+        /// </summary>
+        internal static string CardTypeDescending { get; set; }
+
+        /// <summary>
         /// Gets or sets the localized <see cref="CardSortType"/> enum-string pairs.
         /// </summary>
-        internal static Dictionary<CardSortType, string> LocalizedEnum { get; set; } = new Dictionary<CardSortType, string>();
+        internal static List<KeyValuePair<CardSortType, string>> LocalizedEnum { get; set; } = new List<KeyValuePair<CardSortType, string>>();
 
         /// <summary>
         /// Gets or sets a value indicating whether the enumeration values have already been localize.
@@ -69,7 +80,7 @@ namespace EasyCardFile.Database.Entity.Enumerations
         {
             try
             {
-                return LocalizedEnum[cardSortType];
+                return LocalizedEnum.FirstOrDefault(f => f.Key == cardSortType).Value;
             }
             catch (Exception ex)
             {
@@ -104,15 +115,22 @@ namespace EasyCardFile.Database.Entity.Enumerations
                 "Created descending|A localized enumeration value for card sort style of: Created Descending.");
             EnumIgnoreCase = DBLangEngine.GetStatMessage("msgEnumIgnoreCaseSort",
                 "Ignore case|A localized enumeration value for card sort style of: Ignore Case.");
+            EnumCardType = DBLangEngine.GetStatMessage("msgEnumCardTypeSort",
+                "Card type|A localized enumeration value for card sort style of: Card Type.");
+            CardTypeDescending = DBLangEngine.GetStatMessage("msgEnumCardTypeDescendingSort",
+                "Card type descending|A localized enumeration value for card sort style of: Card Type Descending.");
 
-            LocalizedEnum.Add(CardSortType.None, EnumNone);
-            LocalizedEnum.Add(CardSortType.Alphabetical, EnumAlphabetical);
-            LocalizedEnum.Add(CardSortType.AlphabeticalDescending, EnumAlphabeticalDescending);
-            LocalizedEnum.Add(CardSortType.Modified, EnumModified);
-            LocalizedEnum.Add(CardSortType.ModifiedDescending, EnumModifiedDescending);
-            LocalizedEnum.Add(CardSortType.Created, EnumCreated);
-            LocalizedEnum.Add(CardSortType.CreatedDescending, EnumCreatedDescending);
-            LocalizedEnum.Add(CardSortType.IgnoreCase, EnumIgnoreCase);
+
+            LocalizedEnum.Add(new KeyValuePair<CardSortType, string>(CardSortType.None, EnumNone));
+            LocalizedEnum.Add(new KeyValuePair<CardSortType, string>(CardSortType.Alphabetical, EnumAlphabetical));
+            LocalizedEnum.Add(new KeyValuePair<CardSortType, string>(CardSortType.AlphabeticalDescending, EnumAlphabeticalDescending));
+            LocalizedEnum.Add(new KeyValuePair<CardSortType, string>(CardSortType.Modified, EnumModified));
+            LocalizedEnum.Add(new KeyValuePair<CardSortType, string>(CardSortType.ModifiedDescending, EnumModifiedDescending));
+            LocalizedEnum.Add(new KeyValuePair<CardSortType, string>(CardSortType.Created, EnumCreated));
+            LocalizedEnum.Add(new KeyValuePair<CardSortType, string>(CardSortType.CreatedDescending, EnumCreatedDescending));
+            LocalizedEnum.Add(new KeyValuePair<CardSortType, string>(CardSortType.CardType, EnumCardType));
+            LocalizedEnum.Add(new KeyValuePair<CardSortType, string>(CardSortType.CardTypeDescending, CardTypeDescending));
+            // This is more of a flag: LocalizedEnum.Add(CardSortType.IgnoreCase, EnumIgnoreCase);
 
             Localized = true;
         }

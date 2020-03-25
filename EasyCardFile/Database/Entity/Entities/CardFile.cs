@@ -24,10 +24,11 @@ SOFTWARE.
 */
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using EasyCardFile.Database.Entity.Enumerations;
-using SQLite.CodeFirst;
 
 namespace EasyCardFile.Database.Entity.Entities
 {
@@ -108,6 +109,79 @@ namespace EasyCardFile.Database.Entity.Entities
         /// Gets or sets the type of how the cards should be sorted, the fourth ordering.
         /// </summary>
         public CardSortType CardSortType4 { get; set; } = CardSortType.None;
+
+        /// <summary>
+        /// Gets the four defined card sort types <see cref="CardSortType"/> in a list format.
+        /// </summary>
+        [NotMapped]
+        public List<CardSortType> CardSortTypes => new List<CardSortType>(new []{ CardSortType1, CardSortType2, CardSortType3, CardSortType4});
+
+        /// <summary>
+        /// Sorts the card file cards with the rules defined for the card file.
+        /// </summary>
+        public void SortCards()
+        {
+            Cards = SortCardList(Cards, CardSortType1)?.ToList();
+            Cards = SortCardList(Cards, CardSortType2)?.ToList();
+            Cards = SortCardList(Cards, CardSortType3)?.ToList();
+            Cards = SortCardList(Cards, CardSortType4)?.ToList();
+        }
+
+        /// <summary>
+        /// Sorts the card collection with given <see cref="CardSortType"/> enumeration value.
+        /// </summary>
+        /// <param name="cards">The collection of cards to sort.</param>
+        /// <param name="cardSortType">The <see cref="CardSortType"/> enumeration value indicating the sorting style for the card.</param>
+        /// <returns>IEnumerable&lt;Card&gt;.</returns>
+        public static IEnumerable<Card> SortCardList(ICollection<Card> cards, CardSortType cardSortType)
+        {
+            bool ignoreCase = cardSortType.HasFlag(CardSortType.IgnoreCase);
+            if (cardSortType.HasFlag(CardSortType.Alphabetical))
+            {
+                return cards?.OrderBy(f => f.CardName,
+                    ignoreCase ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
+            }
+
+            if (cardSortType.HasFlag(CardSortType.AlphabeticalDescending))
+            {
+                return cards?.OrderByDescending(f => f.CardName,
+                    ignoreCase ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
+            }
+
+            if (cardSortType.HasFlag(CardSortType.Created))
+            {
+                return cards?.OrderBy(f => f.CreateDateTime);
+            }
+
+            if (cardSortType.HasFlag(CardSortType.CreatedDescending))
+            {
+                return cards?.OrderByDescending(f => f.CreateDateTime);
+            }
+
+            if (cardSortType.HasFlag(CardSortType.Modified))
+            {
+                return cards?.OrderBy(f => f.ModifiedDateTime);
+            }
+
+            if (cardSortType.HasFlag(CardSortType.ModifiedDescending))
+            {
+                return cards?.OrderByDescending(f => f.ModifiedDateTime);
+            }
+
+            if (cardSortType.HasFlag(CardSortType.CardType))
+            {
+                return cards?.OrderByDescending(f => f.CardType?.CardTypeName,
+                    ignoreCase ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
+            }
+
+            if (cardSortType.HasFlag(CardSortType.CardTypeDescending))
+            {
+                return cards?.OrderByDescending(f => f.CardType?.CardTypeName,
+                    ignoreCase ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
+            }
+
+            return cards;
+        }
 
         /// <summary>
         /// Gets or sets the encryption password validation randomized value. This is Base64 encoded binary data.

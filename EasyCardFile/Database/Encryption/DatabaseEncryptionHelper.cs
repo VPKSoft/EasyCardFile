@@ -192,6 +192,11 @@ namespace EasyCardFile.Database.Encryption
         /// <returns>The byte array containing the encrypted data if the operation was successful; otherwise null.</returns>
         public static byte[] EncryptData(string key, byte[] dataToEncrypt, Encoding encoding)
         {
+            if (dataToEncrypt == null)
+            {
+                return null;
+            }
+
             try
             {
                 using (var streamToEncrypt = new MemoryStream(dataToEncrypt))
@@ -364,6 +369,11 @@ namespace EasyCardFile.Database.Encryption
         /// <returns>The byte array containing the decrypted data if the operation was successful; otherwise null.</returns>
         public static byte[] DecryptData(string key, byte[] dataToDecrypt, Encoding encoding)
         {
+            if (dataToDecrypt == null)
+            {
+                return null;
+            }
+
             try
             {
                 using (var streamToDecrypt = new MemoryStream(dataToDecrypt))

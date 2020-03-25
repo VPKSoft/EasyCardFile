@@ -300,6 +300,8 @@ namespace EasyCardFile
             Text = EasyCardFileConstants.SoftwareName + @" [" + wrapper.CardFileName + @" | " + wrapper.FileName +
                    (wrapper.Changed ? @" *" : "") + @"]";
 
+            wrapper.UpdateTitle();
+
             if (refresh)
             {
                 Application.DoEvents();
@@ -391,7 +393,7 @@ namespace EasyCardFile
                 if (FormDialogAddRenameCard.ShowDialog(this, wrapper.CardFileDb.CardFile, out var card) == DialogResult.OK)
                 {
                     wrapper.Changed = true;
-                    wrapper.RefreshUi(card);
+                    wrapper.RefreshUi(card, true);
                     SetTitle(true);
                     wrapper.FocusRichTextBox();
                 }

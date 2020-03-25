@@ -110,6 +110,11 @@ namespace EasyCardFile.Database.Compression
         /// <returns>The byte array containing the compressed data if the operation was successful; otherwise null.</returns>
         public static byte[] CompressData(byte [] dataToCompress)
         {
+            if (dataToCompress == null)
+            {
+                return null;
+            }
+
             try
             {
                 using (var streamToCompress = new MemoryStream(dataToCompress))
@@ -168,6 +173,11 @@ namespace EasyCardFile.Database.Compression
         /// <returns>The byte array containing the decompressed data if the operation was successful; otherwise null.</returns>
         public static byte [] DecompressData(byte[] dataToDecompress)
         {
+            if (dataToDecompress == null)
+            {
+                return null;
+            }
+
             try
             {
                 using (var streamToDecompress = new MemoryStream(dataToDecompress))
