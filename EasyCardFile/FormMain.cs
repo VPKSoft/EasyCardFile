@@ -471,6 +471,53 @@ namespace EasyCardFile
                 }
             }
         }
+
+        private void tsbSortCards_Click(object sender, EventArgs e)
+        {
+            CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles)?.RefreshUi(null, true);
+        }
+
+        private void mnuEdit_DropDownOpening(object sender, EventArgs e)
+        {
+            var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
+            if (wrapper?.SelectedCard == null)
+            {
+                mnuCut.Enabled = false;
+                mnuCopy.Enabled = false;
+                mnuPaste.Enabled = false;
+                mnuPasteWithoutFormatting.Enabled = false;
+                return;
+            }
+
+            mnuCut.Enabled = wrapper.CanCopyCut;
+            mnuCopy.Enabled = wrapper.CanCopyCut;
+            mnuPaste.Enabled = wrapper.CanPaste;
+            mnuPasteWithoutFormatting.Enabled = wrapper.CanPaste;
+        }
+
+        private void MenuCopyCutPaste_Click(object sender, EventArgs e)
+        {
+            var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
+            if (sender.Equals(mnuCut))
+            {
+                wrapper?.Cut();
+            }
+
+            if (sender.Equals(mnuCopy))
+            {
+                wrapper?.Copy();
+            }
+
+            if (sender.Equals(mnuPaste))
+            {
+                wrapper?.Paste();
+            }
+
+            if (sender.Equals(mnuPasteWithoutFormatting))
+            {
+                wrapper?.PasteWithoutFormatting();
+            }
+        }
         #endregion
 
         #region LocalizeForFreeTM

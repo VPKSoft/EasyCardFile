@@ -196,6 +196,24 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy|A message for a menu item indicating a copy function..
+        /// </summary>
+        internal static string msgCopy {
+            get {
+                return ResourceManager.GetString("msgCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cut|A message for a menu item indicating a cut function..
+        /// </summary>
+        internal static string msgCut {
+            get {
+                return ResourceManager.GetString("msgCut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm|A title for a dialog confirming something from the user..
         /// </summary>
         internal static string msgDialogConfirmTitle {
@@ -489,6 +507,24 @@ namespace EasyCardFile.UtilityClasses.Localization {
         internal static string msgPasswordRequired {
             get {
                 return ResourceManager.GetString("msgPasswordRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste|A message for a menu item indicating a paste function..
+        /// </summary>
+        internal static string msgPaste {
+            get {
+                return ResourceManager.GetString("msgPaste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste without formatting|A message for a menu item indicating a paste without formatting function..
+        /// </summary>
+        internal static string msgPasteWithoutFormatting {
+            get {
+                return ResourceManager.GetString("msgPasteWithoutFormatting", resourceCulture);
             }
         }
         

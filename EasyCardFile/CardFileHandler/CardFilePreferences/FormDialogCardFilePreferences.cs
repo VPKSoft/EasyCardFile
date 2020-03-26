@@ -530,6 +530,7 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
                 }
 
                 ChangePasswordEnabled = checkBox.Checked;
+                EventsSuspended = false;
             }
             else if (checkBox.Equals(cbCompression))
             {

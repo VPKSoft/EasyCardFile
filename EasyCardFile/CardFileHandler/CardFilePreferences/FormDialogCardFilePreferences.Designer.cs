@@ -74,25 +74,25 @@
             this.nudHeight = new System.Windows.Forms.NumericUpDown();
             this.cbLockAspectRatio = new System.Windows.Forms.CheckBox();
             this.lbCardTypeImageDimension = new System.Windows.Forms.Label();
+            this.tbbCardNamingInstruction = new EasyCardFile.UtilityClasses.ProjectControls.TextBoxButton();
             this.tabCardTypes = new System.Windows.Forms.TabPage();
+            this.clbCardTypes = new EasyCardFile.UtilityClasses.ProjectControls.RefreshCheckListBox();
+            this.tabCardSorting = new System.Windows.Forms.TabPage();
+            this.tlpCardSorting = new System.Windows.Forms.TableLayoutPanel();
+            this.cmbSortMethod1 = new System.Windows.Forms.ComboBox();
+            this.cmbSortMethod4 = new System.Windows.Forms.ComboBox();
+            this.cbIgnoreCase4 = new System.Windows.Forms.CheckBox();
+            this.lbSortMethod4 = new System.Windows.Forms.Label();
+            this.cmbSortMethod3 = new System.Windows.Forms.ComboBox();
+            this.cbIgnoreCase3 = new System.Windows.Forms.CheckBox();
+            this.lbSortMethod3 = new System.Windows.Forms.Label();
+            this.cmbSortMethod2 = new System.Windows.Forms.ComboBox();
+            this.cbIgnoreCase2 = new System.Windows.Forms.CheckBox();
+            this.lbSortMethod2 = new System.Windows.Forms.Label();
+            this.lbSortMethod1 = new System.Windows.Forms.Label();
+            this.cbIgnoreCase1 = new System.Windows.Forms.CheckBox();
             this.odImage = new System.Windows.Forms.OpenFileDialog();
             this.fdFont = new System.Windows.Forms.FontDialog();
-            this.tabCardSorting = new System.Windows.Forms.TabPage();
-            this.lbSortMethod1 = new System.Windows.Forms.Label();
-            this.cmbSortMethod1 = new System.Windows.Forms.ComboBox();
-            this.cbIgnoreCase1 = new System.Windows.Forms.CheckBox();
-            this.tlpCardSorting = new System.Windows.Forms.TableLayoutPanel();
-            this.lbSortMethod2 = new System.Windows.Forms.Label();
-            this.cbIgnoreCase2 = new System.Windows.Forms.CheckBox();
-            this.cmbSortMethod2 = new System.Windows.Forms.ComboBox();
-            this.lbSortMethod3 = new System.Windows.Forms.Label();
-            this.cbIgnoreCase3 = new System.Windows.Forms.CheckBox();
-            this.cmbSortMethod3 = new System.Windows.Forms.ComboBox();
-            this.lbSortMethod4 = new System.Windows.Forms.Label();
-            this.cbIgnoreCase4 = new System.Windows.Forms.CheckBox();
-            this.cmbSortMethod4 = new System.Windows.Forms.ComboBox();
-            this.tbbCardNamingInstruction = new EasyCardFile.UtilityClasses.ProjectControls.TextBoxButton();
-            this.clbCardTypes = new EasyCardFile.UtilityClasses.ProjectControls.RefreshCheckListBox();
             this.tsbCardTypes.SuspendLayout();
             this.pnChangePassword.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbChangePassword)).BeginInit();
@@ -653,6 +653,24 @@
             this.lbCardTypeImageDimension.TabIndex = 33;
             this.lbCardTypeImageDimension.Text = "Card type image dimensions";
             // 
+            // tbbCardNamingInstruction
+            // 
+            this.tbbCardNamingInstruction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbbCardNamingInstruction.ButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbbCardNamingInstruction.ButtonForeColor = System.Drawing.SystemColors.ControlText;
+            this.tbbCardNamingInstruction.ButtonImage = global::EasyCardFile.Properties.Resources.textfield_rename;
+            this.tbbCardNamingInstruction.ButtonImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tbbCardNamingInstruction.ButtonText = "Configure";
+            this.tbbCardNamingInstruction.ButtonWidth = 101;
+            this.tbbCardNamingInstruction.Location = new System.Drawing.Point(167, 83);
+            this.tbbCardNamingInstruction.Name = "tbbCardNamingInstruction";
+            this.tbbCardNamingInstruction.SelectedText = "";
+            this.tbbCardNamingInstruction.Size = new System.Drawing.Size(383, 20);
+            this.tbbCardNamingInstruction.TabIndex = 8;
+            this.tbbCardNamingInstruction.TextChanged += new System.EventHandler(this.tbbCardNamingInstruction_TextChanged);
+            this.tbbCardNamingInstruction.Click += new System.EventHandler(this.tbbCardNamingInstruction_Click);
+            // 
             // tabCardTypes
             // 
             this.tabCardTypes.Controls.Add(this.lbCardTypes);
@@ -668,9 +686,19 @@
             this.tabCardTypes.Text = "Card types";
             this.tabCardTypes.UseVisualStyleBackColor = true;
             // 
-            // odImage
+            // clbCardTypes
             // 
-            this.odImage.Filter = "Image files|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff";
+            this.clbCardTypes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.clbCardTypes.FormattingEnabled = true;
+            this.clbCardTypes.IntegralHeight = false;
+            this.clbCardTypes.Location = new System.Drawing.Point(9, 31);
+            this.clbCardTypes.Name = "clbCardTypes";
+            this.clbCardTypes.Size = new System.Drawing.Size(544, 151);
+            this.clbCardTypes.TabIndex = 33;
+            this.clbCardTypes.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCardTypes_ItemCheck);
+            this.clbCardTypes.SelectedValueChanged += new System.EventHandler(this.clbCardTypes_SelectedValueChanged);
             // 
             // tabCardSorting
             // 
@@ -682,38 +710,6 @@
             this.tabCardSorting.TabIndex = 2;
             this.tabCardSorting.Text = "Card sorting";
             this.tabCardSorting.UseVisualStyleBackColor = true;
-            // 
-            // lbSortMethod1
-            // 
-            this.lbSortMethod1.AutoSize = true;
-            this.lbSortMethod1.Location = new System.Drawing.Point(3, 0);
-            this.lbSortMethod1.Name = "lbSortMethod1";
-            this.lbSortMethod1.Size = new System.Drawing.Size(76, 13);
-            this.lbSortMethod1.TabIndex = 1;
-            this.lbSortMethod1.Text = "Sort method 1:";
-            // 
-            // cmbSortMethod1
-            // 
-            this.cmbSortMethod1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbSortMethod1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.tlpCardSorting.SetColumnSpan(this.cmbSortMethod1, 2);
-            this.cmbSortMethod1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSortMethod1.FormattingEnabled = true;
-            this.cmbSortMethod1.Location = new System.Drawing.Point(3, 26);
-            this.cmbSortMethod1.Name = "cmbSortMethod1";
-            this.cmbSortMethod1.Size = new System.Drawing.Size(541, 21);
-            this.cmbSortMethod1.TabIndex = 2;
-            // 
-            // cbIgnoreCase1
-            // 
-            this.cbIgnoreCase1.AutoSize = true;
-            this.cbIgnoreCase1.Location = new System.Drawing.Point(194, 3);
-            this.cbIgnoreCase1.Name = "cbIgnoreCase1";
-            this.cbIgnoreCase1.Size = new System.Drawing.Size(147, 17);
-            this.cbIgnoreCase1.TabIndex = 3;
-            this.cbIgnoreCase1.Text = "ignore case (alphabetical)";
-            this.cbIgnoreCase1.UseVisualStyleBackColor = true;
             // 
             // tlpCardSorting
             // 
@@ -746,88 +742,18 @@
             this.tlpCardSorting.Size = new System.Drawing.Size(547, 215);
             this.tlpCardSorting.TabIndex = 4;
             // 
-            // lbSortMethod2
+            // cmbSortMethod1
             // 
-            this.lbSortMethod2.AutoSize = true;
-            this.lbSortMethod2.Location = new System.Drawing.Point(3, 50);
-            this.lbSortMethod2.Name = "lbSortMethod2";
-            this.lbSortMethod2.Size = new System.Drawing.Size(76, 13);
-            this.lbSortMethod2.TabIndex = 4;
-            this.lbSortMethod2.Text = "Sort method 2:";
-            // 
-            // cbIgnoreCase2
-            // 
-            this.cbIgnoreCase2.AutoSize = true;
-            this.cbIgnoreCase2.Location = new System.Drawing.Point(194, 53);
-            this.cbIgnoreCase2.Name = "cbIgnoreCase2";
-            this.cbIgnoreCase2.Size = new System.Drawing.Size(147, 17);
-            this.cbIgnoreCase2.TabIndex = 5;
-            this.cbIgnoreCase2.Text = "ignore case (alphabetical)";
-            this.cbIgnoreCase2.UseVisualStyleBackColor = true;
-            // 
-            // cmbSortMethod2
-            // 
-            this.cmbSortMethod2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cmbSortMethod1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbSortMethod2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.tlpCardSorting.SetColumnSpan(this.cmbSortMethod2, 2);
-            this.cmbSortMethod2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSortMethod2.FormattingEnabled = true;
-            this.cmbSortMethod2.Location = new System.Drawing.Point(3, 76);
-            this.cmbSortMethod2.Name = "cmbSortMethod2";
-            this.cmbSortMethod2.Size = new System.Drawing.Size(541, 21);
-            this.cmbSortMethod2.TabIndex = 6;
-            // 
-            // lbSortMethod3
-            // 
-            this.lbSortMethod3.AutoSize = true;
-            this.lbSortMethod3.Location = new System.Drawing.Point(3, 100);
-            this.lbSortMethod3.Name = "lbSortMethod3";
-            this.lbSortMethod3.Size = new System.Drawing.Size(76, 13);
-            this.lbSortMethod3.TabIndex = 7;
-            this.lbSortMethod3.Text = "Sort method 3:";
-            // 
-            // cbIgnoreCase3
-            // 
-            this.cbIgnoreCase3.AutoSize = true;
-            this.cbIgnoreCase3.Location = new System.Drawing.Point(194, 103);
-            this.cbIgnoreCase3.Name = "cbIgnoreCase3";
-            this.cbIgnoreCase3.Size = new System.Drawing.Size(147, 17);
-            this.cbIgnoreCase3.TabIndex = 8;
-            this.cbIgnoreCase3.Text = "ignore case (alphabetical)";
-            this.cbIgnoreCase3.UseVisualStyleBackColor = true;
-            // 
-            // cmbSortMethod3
-            // 
-            this.cmbSortMethod3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbSortMethod3.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.tlpCardSorting.SetColumnSpan(this.cmbSortMethod3, 2);
-            this.cmbSortMethod3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSortMethod3.FormattingEnabled = true;
-            this.cmbSortMethod3.Location = new System.Drawing.Point(3, 126);
-            this.cmbSortMethod3.Name = "cmbSortMethod3";
-            this.cmbSortMethod3.Size = new System.Drawing.Size(541, 21);
-            this.cmbSortMethod3.TabIndex = 9;
-            // 
-            // lbSortMethod4
-            // 
-            this.lbSortMethod4.AutoSize = true;
-            this.lbSortMethod4.Location = new System.Drawing.Point(3, 150);
-            this.lbSortMethod4.Name = "lbSortMethod4";
-            this.lbSortMethod4.Size = new System.Drawing.Size(76, 13);
-            this.lbSortMethod4.TabIndex = 10;
-            this.lbSortMethod4.Text = "Sort method 4:";
-            // 
-            // cbIgnoreCase4
-            // 
-            this.cbIgnoreCase4.AutoSize = true;
-            this.cbIgnoreCase4.Location = new System.Drawing.Point(194, 153);
-            this.cbIgnoreCase4.Name = "cbIgnoreCase4";
-            this.cbIgnoreCase4.Size = new System.Drawing.Size(147, 17);
-            this.cbIgnoreCase4.TabIndex = 11;
-            this.cbIgnoreCase4.Text = "ignore case (alphabetical)";
-            this.cbIgnoreCase4.UseVisualStyleBackColor = true;
+            this.cmbSortMethod1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.tlpCardSorting.SetColumnSpan(this.cmbSortMethod1, 2);
+            this.cmbSortMethod1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSortMethod1.FormattingEnabled = true;
+            this.cmbSortMethod1.Location = new System.Drawing.Point(3, 26);
+            this.cmbSortMethod1.Name = "cmbSortMethod1";
+            this.cmbSortMethod1.Size = new System.Drawing.Size(541, 21);
+            this.cmbSortMethod1.TabIndex = 2;
             // 
             // cmbSortMethod4
             // 
@@ -842,37 +768,111 @@
             this.cmbSortMethod4.Size = new System.Drawing.Size(541, 21);
             this.cmbSortMethod4.TabIndex = 12;
             // 
-            // tbbCardNamingInstruction
+            // cbIgnoreCase4
             // 
-            this.tbbCardNamingInstruction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cbIgnoreCase4.AutoSize = true;
+            this.cbIgnoreCase4.Location = new System.Drawing.Point(194, 153);
+            this.cbIgnoreCase4.Name = "cbIgnoreCase4";
+            this.cbIgnoreCase4.Size = new System.Drawing.Size(147, 17);
+            this.cbIgnoreCase4.TabIndex = 11;
+            this.cbIgnoreCase4.Text = "ignore case (alphabetical)";
+            this.cbIgnoreCase4.UseVisualStyleBackColor = true;
+            // 
+            // lbSortMethod4
+            // 
+            this.lbSortMethod4.AutoSize = true;
+            this.lbSortMethod4.Location = new System.Drawing.Point(3, 150);
+            this.lbSortMethod4.Name = "lbSortMethod4";
+            this.lbSortMethod4.Size = new System.Drawing.Size(76, 13);
+            this.lbSortMethod4.TabIndex = 10;
+            this.lbSortMethod4.Text = "Sort method 4:";
+            // 
+            // cmbSortMethod3
+            // 
+            this.cmbSortMethod3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbbCardNamingInstruction.ButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbbCardNamingInstruction.ButtonForeColor = System.Drawing.SystemColors.ControlText;
-            this.tbbCardNamingInstruction.ButtonImage = global::EasyCardFile.Properties.Resources.textfield_rename;
-            this.tbbCardNamingInstruction.ButtonImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.tbbCardNamingInstruction.ButtonText = "Configure";
-            this.tbbCardNamingInstruction.ButtonWidth = 101;
-            this.tbbCardNamingInstruction.Location = new System.Drawing.Point(167, 83);
-            this.tbbCardNamingInstruction.Name = "tbbCardNamingInstruction";
-            this.tbbCardNamingInstruction.SelectedText = "";
-            this.tbbCardNamingInstruction.Size = new System.Drawing.Size(383, 20);
-            this.tbbCardNamingInstruction.TabIndex = 8;
-            this.tbbCardNamingInstruction.TextChanged += new System.EventHandler(this.tbbCardNamingInstruction_TextChanged);
-            this.tbbCardNamingInstruction.Click += new System.EventHandler(this.tbbCardNamingInstruction_Click);
+            this.cmbSortMethod3.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.tlpCardSorting.SetColumnSpan(this.cmbSortMethod3, 2);
+            this.cmbSortMethod3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSortMethod3.FormattingEnabled = true;
+            this.cmbSortMethod3.Location = new System.Drawing.Point(3, 126);
+            this.cmbSortMethod3.Name = "cmbSortMethod3";
+            this.cmbSortMethod3.Size = new System.Drawing.Size(541, 21);
+            this.cmbSortMethod3.TabIndex = 9;
             // 
-            // clbCardTypes
+            // cbIgnoreCase3
             // 
-            this.clbCardTypes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.cbIgnoreCase3.AutoSize = true;
+            this.cbIgnoreCase3.Location = new System.Drawing.Point(194, 103);
+            this.cbIgnoreCase3.Name = "cbIgnoreCase3";
+            this.cbIgnoreCase3.Size = new System.Drawing.Size(147, 17);
+            this.cbIgnoreCase3.TabIndex = 8;
+            this.cbIgnoreCase3.Text = "ignore case (alphabetical)";
+            this.cbIgnoreCase3.UseVisualStyleBackColor = true;
+            // 
+            // lbSortMethod3
+            // 
+            this.lbSortMethod3.AutoSize = true;
+            this.lbSortMethod3.Location = new System.Drawing.Point(3, 100);
+            this.lbSortMethod3.Name = "lbSortMethod3";
+            this.lbSortMethod3.Size = new System.Drawing.Size(76, 13);
+            this.lbSortMethod3.TabIndex = 7;
+            this.lbSortMethod3.Text = "Sort method 3:";
+            // 
+            // cmbSortMethod2
+            // 
+            this.cmbSortMethod2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.clbCardTypes.FormattingEnabled = true;
-            this.clbCardTypes.IntegralHeight = false;
-            this.clbCardTypes.Location = new System.Drawing.Point(9, 31);
-            this.clbCardTypes.Name = "clbCardTypes";
-            this.clbCardTypes.Size = new System.Drawing.Size(544, 151);
-            this.clbCardTypes.TabIndex = 33;
-            this.clbCardTypes.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.clbCardTypes_ItemCheck);
-            this.clbCardTypes.SelectedValueChanged += new System.EventHandler(this.clbCardTypes_SelectedValueChanged);
+            this.cmbSortMethod2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.tlpCardSorting.SetColumnSpan(this.cmbSortMethod2, 2);
+            this.cmbSortMethod2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSortMethod2.FormattingEnabled = true;
+            this.cmbSortMethod2.Location = new System.Drawing.Point(3, 76);
+            this.cmbSortMethod2.Name = "cmbSortMethod2";
+            this.cmbSortMethod2.Size = new System.Drawing.Size(541, 21);
+            this.cmbSortMethod2.TabIndex = 6;
+            // 
+            // cbIgnoreCase2
+            // 
+            this.cbIgnoreCase2.AutoSize = true;
+            this.cbIgnoreCase2.Location = new System.Drawing.Point(194, 53);
+            this.cbIgnoreCase2.Name = "cbIgnoreCase2";
+            this.cbIgnoreCase2.Size = new System.Drawing.Size(147, 17);
+            this.cbIgnoreCase2.TabIndex = 5;
+            this.cbIgnoreCase2.Text = "ignore case (alphabetical)";
+            this.cbIgnoreCase2.UseVisualStyleBackColor = true;
+            // 
+            // lbSortMethod2
+            // 
+            this.lbSortMethod2.AutoSize = true;
+            this.lbSortMethod2.Location = new System.Drawing.Point(3, 50);
+            this.lbSortMethod2.Name = "lbSortMethod2";
+            this.lbSortMethod2.Size = new System.Drawing.Size(76, 13);
+            this.lbSortMethod2.TabIndex = 4;
+            this.lbSortMethod2.Text = "Sort method 2:";
+            // 
+            // lbSortMethod1
+            // 
+            this.lbSortMethod1.AutoSize = true;
+            this.lbSortMethod1.Location = new System.Drawing.Point(3, 0);
+            this.lbSortMethod1.Name = "lbSortMethod1";
+            this.lbSortMethod1.Size = new System.Drawing.Size(76, 13);
+            this.lbSortMethod1.TabIndex = 1;
+            this.lbSortMethod1.Text = "Sort method 1:";
+            // 
+            // cbIgnoreCase1
+            // 
+            this.cbIgnoreCase1.AutoSize = true;
+            this.cbIgnoreCase1.Location = new System.Drawing.Point(194, 3);
+            this.cbIgnoreCase1.Name = "cbIgnoreCase1";
+            this.cbIgnoreCase1.Size = new System.Drawing.Size(147, 17);
+            this.cbIgnoreCase1.TabIndex = 3;
+            this.cbIgnoreCase1.Text = "ignore case (alphabetical)";
+            this.cbIgnoreCase1.UseVisualStyleBackColor = true;
+            // 
+            // odImage
+            // 
+            this.odImage.Filter = "Image files|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff";
             // 
             // FormDialogCardFilePreferences
             // 

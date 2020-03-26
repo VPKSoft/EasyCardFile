@@ -119,6 +119,11 @@ namespace EasyCardFile.Database.Entity.Context.ContextEncryption
                     null, true, false,
                     true, password);
 
+                if (password == null)
+                {
+                    return default;
+                }
+
                 var password2 = MessageBoxQueryPassword.Show(dialogOwner,
                     LocalizeStaticProperties.PasswordQueryConfirm,
                     LocalizeStaticProperties.PasswordQueryTitleConfirm,

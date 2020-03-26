@@ -162,6 +162,12 @@
   <data name="msgConfirmAPasswordTitle" xml:space="preserve">
     <value>Confirm the password|A user is asked for a confirmation for a password in a dialog (the second time)</value>
   </data>
+  <data name="msgCopy" xml:space="preserve">
+    <value>Copy|A message for a menu item indicating a copy function.</value>
+  </data>
+  <data name="msgCut" xml:space="preserve">
+    <value>Cut|A message for a menu item indicating a cut function.</value>
+  </data>
   <data name="msgDialogConfirmTitle" xml:space="preserve">
     <value>Confirm|A title for a dialog confirming something from the user.</value>
   </data>
@@ -260,6 +266,12 @@
   </data>
   <data name="msgPasswordRequired" xml:space="preserve">
     <value>Password is required|A short message indicating that some operation requires a valid password for the some operation to continue successfully.</value>
+  </data>
+  <data name="msgPaste" xml:space="preserve">
+    <value>Paste|A message for a menu item indicating a paste function.</value>
+  </data>
+  <data name="msgPasteWithoutFormatting" xml:space="preserve">
+    <value>Paste without formatting|A message for a menu item indicating a paste without formatting function.</value>
   </data>
   <data name="msgPrintPreview" xml:space="preserve">
     <value>Print preview|A message for a print preview window title</value>

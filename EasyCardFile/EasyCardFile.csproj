@@ -127,6 +127,7 @@
     <Compile Include="CardFileHandler\CardFileNaming\FormDialogCardFileNaming.Designer.cs">
       <DependentUpon>FormDialogCardFileNaming.cs</DependentUpon>
     </Compile>
+    <Compile Include="CardFileHandler\RichTextBoxDataFormats.cs" />
     <Compile Include="Database\Entity\Enumerations\CardSortType.cs" />
     <Compile Include="Database\Entity\Enumerations\CardSortTypeLocalize.cs" />
     <Compile Include="Database\Entity\ModelHelpers\ByteImageHelper.cs" />
@@ -267,6 +268,11 @@
     <None Include="Resources\image.png" />
     <None Include="Resources\education-languages.png" />
     <None Include="Resources\database-go.png" />
+    <None Include="Resources\tools-sort-table.png" />
+    <None Include="Resources\Cut.png" />
+    <None Include="Resources\Copy.png" />
+    <None Include="Resources\Paste.png" />
+    <None Include="Resources\edit-paste-3.png" />
     <Content Include="VPKSoft.ico" />
     <None Include="Resources\About.png" />
     <None Include="Resources\document-print-preview-4.png" />

@@ -244,7 +244,60 @@ namespace EasyCardFile.CardFileHandler
         public EventHandler CardFileChanged;
         #endregion
 
+        #region InteractionProperties
+        /// <summary>
+        /// Determines whether you can paste information from the <see cref="Clipboard"/> to the <see cref="RichTextBox"/> control.
+        /// </summary>
+        public bool CanPaste => RichTextBox.RichTextBox.CanPaste();
+
+        /// <summary>
+        /// Determines whether you can copy/cut information to the <see cref="Clipboard"/> from the <see cref="RichTextBox"/> control.
+        /// </summary>
+        /// <value><c>true</c> if this instance can copy; otherwise, <c>false</c>.</value>
+        public bool CanCopyCut => RichTextBox.RichTextBox.SelectionLength > 0;
+        #endregion
+
         #region Interaction        
+        /// <summary>
+        /// Moves the current selection in the text box to the <see cref="Clipboard"/>.
+        /// </summary>
+        public void Cut()
+        {
+            RichTextBox.RichTextBox.Cut();
+        }
+
+        /// <summary>
+        /// Copies the current selection in the text box to the <see cref="Clipboard"/>.
+        /// </summary>
+        public void Copy()
+        {
+            RichTextBox.RichTextBox.Copy();
+        }
+
+        /// <summary>
+        /// Replaces the current selection in the text box with the contents of the <see cref="Clipboard"/>.
+        /// </summary>
+        public void Paste()
+        {
+            RichTextBox.RichTextBox.Paste();
+        }
+
+        /// <summary>
+        /// Replaces the current selection in the text box with the contents of the <see cref="Clipboard"/> as unformatted text.
+        /// </summary>
+        public void PasteWithoutFormatting()
+        {
+            try
+            {
+                RichTextBox.RichTextBox.SelectedText = (string) Clipboard.GetData(DataFormats.Text);
+            }
+            catch (Exception ex)
+            {
+                // log the exception..
+                ExceptionLogAction?.Invoke(ex);
+            }
+        }
+
         /// <summary>
         /// Sets input focus to the <see cref="RichTextBox"/> control text area.
         /// </summary>
@@ -485,6 +538,14 @@ namespace EasyCardFile.CardFileHandler
             // add the controls to right split panel..
             SplitContainer.Panel2.Controls.Add(TableLayoutMain);
 
+            // create a simple context menu for the rich text box area of the control..
+            RichTextBoxContextMenu = new ContextMenuStrip();
+            Add(RichTextBoxContextMenu);
+            CreateContextMenu();
+            RichTextBoxContextMenu.Opening += RichTextBoxContextMenu_Opening;
+
+            RichTextBox.RichTextBox.ContextMenuStrip = RichTextBoxContextMenu;
+
             Tab.Controls.Add(SplitContainer);
             tabControl.Tabs.Add(Tab);
             tabControl.SelectedTab = Tab;
@@ -509,19 +570,41 @@ namespace EasyCardFile.CardFileHandler
 
         private Card PreviousItemAtMousePoint { get; set; }
 
-        private void ListBoxCards_MouseMove(object sender, MouseEventArgs e)
+        /// <summary>
+        /// Creates the menu items for the <see cref="RichTextBoxContextMenu"/> context menu.
+        /// </summary>
+        private void CreateContextMenu()
         {
-            var listBox = (RefreshListBox) sender;
-            var item = (Card)listBox.GetItemAtPoint(e.Location);
+            var menuText = DBLangEngine.GetStatMessage("msgCut",
+                "Cut|A message for a menu item indicating a cut function.");
 
-            if (Equals(PreviousItemAtMousePoint, item))
+            RichTextBoxContextMenu.Items.Add(new ToolStripMenuItem(menuText, null,
+                    (sender, args) => Cut())
+                {ShortcutKeys = Keys.Control | Keys.X, Tag = 0, Image = Properties.Resources.Cut});
+
+            menuText = DBLangEngine.GetStatMessage("msgCopy",
+                "Copy|A message for a menu item indicating a copy function.");
+
+            RichTextBoxContextMenu.Items.Add(new ToolStripMenuItem(menuText, null,
+                    (sender, args) => Copy())
+                {ShortcutKeys = Keys.Control | Keys.C, Tag = 1, Image = Properties.Resources.Copy});
+
+            menuText = DBLangEngine.GetStatMessage("msgPaste",
+                "Paste|A message for a menu item indicating a paste function.");
+
+            RichTextBoxContextMenu.Items.Add(new ToolStripMenuItem(menuText, null,
+                    (sender, args) => Paste())
+                {ShortcutKeys = Keys.Control | Keys.V, Tag = 2, Image = Properties.Resources.Paste});
+
+            menuText = DBLangEngine.GetStatMessage("msgPasteWithoutFormatting",
+                "Paste without formatting|A message for a menu item indicating a paste without formatting function.");
+
+            RichTextBoxContextMenu.Items.Add(new ToolStripMenuItem(menuText, null,
+                (sender, args) => PasteWithoutFormatting())
             {
-                return;
-            }
-
-            PreviousItemAtMousePoint = item;
-
-            ToolTip.SetToolTip(listBox, item?.CardName);
+                ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.V, Tag = 3,
+                Image = Properties.Resources.edit_paste_3
+            });
         }
         #endregion
 
@@ -613,6 +696,35 @@ namespace EasyCardFile.CardFileHandler
         #endregion
 
         #region EventHandlers
+        private void RichTextBoxContextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            var menu = (ContextMenuStrip) sender;
+            foreach (ToolStripMenuItem menuItem in menu.Items)
+            {
+                menuItem.Enabled =
+                    (int) menuItem.Tag == 0 && CanCopyCut ||
+                    (int) menuItem.Tag == 1 && CanCopyCut ||
+                    (int) menuItem.Tag == 2 && CanPaste ||
+                    (int) menuItem.Tag == 3 && CanPaste;
+            }
+        }
+
+
+        private void ListBoxCards_MouseMove(object sender, MouseEventArgs e)
+        {
+            var listBox = (RefreshListBox) sender;
+            var item = (Card)listBox.GetItemAtPoint(e.Location);
+
+            if (Equals(PreviousItemAtMousePoint, item))
+            {
+                return;
+            }
+
+            PreviousItemAtMousePoint = item;
+
+            ToolTip.SetToolTip(listBox, item?.CardName);
+        }
+
         private void ListBoxCards_SelectedValueChanged(object sender, EventArgs e)
         {
             if (SuspendCardChanged)
@@ -662,7 +774,12 @@ namespace EasyCardFile.CardFileHandler
         }
         #endregion
 
-        #region Controls
+        #region Controls                
+        /// <summary>
+        /// Gets or sets the rich text box context menu.
+        /// </summary>
+        internal ContextMenuStrip RichTextBoxContextMenu { get; set; }
+
         /// <summary>
         /// The <see cref="RichTextBoxWithToolStrip"/> control to edit and display the selected card contents within the card file.
         /// </summary>
@@ -720,7 +837,7 @@ namespace EasyCardFile.CardFileHandler
         private ToolStripItem ItemCreatedDateTime { get; set; }
         #endregion
 
-        #region HeplerMethods        
+        #region HelperMethods        
         /// <summary>
         /// Updates the row, column and selection length to the status strip of the tab.
         /// </summary>
@@ -1058,6 +1175,7 @@ namespace EasyCardFile.CardFileHandler
                 RichTextBox.TextChanged -= RichTextBox_TextChanged;
                 SearchTextBox.TextChanged -= SearchTextBox_TextChanged;
                 ListBoxCards.SelectedValueChanged -= ListBoxCards_SelectedValueChanged;
+                RichTextBoxContextMenu.Opening -= RichTextBoxContextMenu_Opening;
 
                 CardFileDbContext.ReleaseDbContext(CardFileDb, !IsTemporary && SaveChangesOnClose, true);
                 CardFileDb = null;
