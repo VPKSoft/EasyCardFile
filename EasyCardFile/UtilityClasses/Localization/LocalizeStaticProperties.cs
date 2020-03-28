@@ -176,6 +176,37 @@ namespace EasyCardFile.UtilityClasses.Localization
         public static string DialogConfirmTitle { get; set; }
 
         /// <summary>
+        /// Gets or sets the title for a file dialog to open image files.
+        /// </summary>
+        public static string DialogImageFileOpenTitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the filter for a file dialog to open image files.
+        /// </summary>
+        public static string DialogImageFileFilter { get; set; }
+
+        /// <summary>
+        /// Gets or sets the filter for a file dialog to save RTF files.
+        /// </summary>
+        public static string DialogRtfFileFilterExport { get; set; }
+
+        /// <summary>
+        /// Gets or sets the filter for a file dialog to open RTF files.
+        /// </summary>
+        public static string DialogRtfFileFilterImport { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets the dialog title to import a RTF file to the card contents.
+        /// </summary>
+        public static string DialogRtfFileImportTitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dialog title to export the card contents to a RTF file.
+        /// </summary>
+        public static string DialogRtfFileExportTitle { get; set; }
+
+        /// <summary>
         /// Localizes the static texts used by the software.
         /// </summary>
         public static void LocalizeStatic()
@@ -264,6 +295,24 @@ namespace EasyCardFile.UtilityClasses.Localization
 
             DialogConfirmTitle = DBLangEngine.GetStatMessage("msgDialogConfirmTitle",
                 "Confirm|A title for a dialog confirming something from the user.");
+
+            DialogImageFileOpenTitle = DBLangEngine.GetStatMessage("msgDialogImageFileOpenTitle",
+                "Open image file|A title for a dialog asking the user to open an image file.");
+
+            DialogImageFileFilter = DBLangEngine.GetStatMessage("msgDialogImageFileFilter",
+                "Image files|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff|A filter for a file dialog to open image files.");
+
+            DialogRtfFileFilterExport = DBLangEngine.GetStatMessage("msgDialogRtfFileFilterExport",
+                "Rtf files|*.rtf|A filter for a file dialog to save RTF files.");
+
+            DialogRtfFileFilterImport = DBLangEngine.GetStatMessage("msgDialogRtfFileFilterImport",
+                "Rtf files|*.rtf|Text files|*.txt|Any file|*.*|A filter for a file dialog to open RTF files.");
+
+            DialogRtfFileImportTitle = DBLangEngine.GetStatMessage("msgDialogRtfFileImportTitle",
+                "Import Rtf file|A dialog title to import a RTF file to the card contents.");
+
+            DialogRtfFileExportTitle = DBLangEngine.GetStatMessage("msgDialogRtfFileExportTitle",
+                "Export as Rtf file|A dialog title to export the card contents to a RTF file.");
         }
 
         /// <summary>
@@ -285,6 +334,30 @@ namespace EasyCardFile.UtilityClasses.Localization
             sdCardFile.Title = DialogSaveAsTitle;
 
             odCardFile.Title = DialogOpenTitle;
+        }
+
+        /// <summary>
+        /// Localizes the import/export Rtf file dialogs.
+        /// </summary>
+        /// <param name="odRtf">The open dialog for a Rtf file.</param>
+        /// <param name="sdRtf">The save dialog for a Rtf file.</param>
+        internal static void LocalizeRtfDialogs(OpenFileDialog odRtf, SaveFileDialog sdRtf)
+        {
+            odRtf.Filter = DialogRtfFileFilterImport;
+            sdRtf.Filter = DialogRtfFileFilterExport;
+
+            odRtf.Title = DialogRtfFileImportTitle;
+            sdRtf.Title = DialogRtfFileExportTitle;
+        }
+
+        /// <summary>
+        /// Localizes a dialog to open an image file.
+        /// </summary>
+        /// <param name="dialog">The dialog to localize.</param>
+        internal static void LocalizeDialogOpenImageFile(OpenFileDialog dialog)
+        {
+            dialog.Title = DialogImageFileOpenTitle;
+            dialog.Filter = DialogImageFileFilter;
         }
     }
 }

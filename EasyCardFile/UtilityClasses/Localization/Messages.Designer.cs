@@ -223,6 +223,60 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Image files|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff|A filter for a file dialog to open image files..
+        /// </summary>
+        internal static string msgDialogImageFileFilter {
+            get {
+                return ResourceManager.GetString("msgDialogImageFileFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open image file|A title for a dialog asking the user to open an image file..
+        /// </summary>
+        internal static string msgDialogImageFileOpenTitle {
+            get {
+                return ResourceManager.GetString("msgDialogImageFileOpenTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export as Rtf file|A dialog title to export the card contents to a RTF file..
+        /// </summary>
+        internal static string msgDialogRtfFileExportTitle {
+            get {
+                return ResourceManager.GetString("msgDialogRtfFileExportTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rtf files|*.rtf|A filter for a file dialog to save RTF files..
+        /// </summary>
+        internal static string msgDialogRtfFileFilterExport {
+            get {
+                return ResourceManager.GetString("msgDialogRtfFileFilterExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rtf files|*.rtf|Text files|*.txt|Any file|*.*|A filter for a file dialog to open RTF files..
+        /// </summary>
+        internal static string msgDialogRtfFileFilterImport {
+            get {
+                return ResourceManager.GetString("msgDialogRtfFileFilterImport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Rtf file|A dialog title to import a RTF file to the card contents..
+        /// </summary>
+        internal static string msgDialogRtfFileImportTitle {
+            get {
+                return ResourceManager.GetString("msgDialogRtfFileImportTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created: {0}|A message for a status strip to indicate a date and time the card was created..
         /// </summary>
         internal static string msgEditorCardCreated {

@@ -107,6 +107,7 @@ namespace EasyCardFile
                 Environment.SpecialFolder.LocalApplicationData));
 
             LocalizeStaticProperties.LocalizeFileDialogs(sdCardFile, odCardFile);
+            LocalizeStaticProperties.LocalizeRtfDialogs(odRtf, sdRtf);
 
             tmRemoteOpenFileQueue.Enabled = true;
 
@@ -124,6 +125,7 @@ namespace EasyCardFile
         private void tcCardFiles_PageChanged(object sender, Manina.Windows.Forms.PageChangedEventArgs e)
         {
             SetTitle();
+            SetGuiState();
         }
 
         private void Settings_RequestTypeConverter(object sender, RequestTypeConverterEventArgs e)
@@ -236,6 +238,7 @@ namespace EasyCardFile
                 newWrapper.CardFileChanged += CardFileChanged;
 
                 SetTitle();
+                SetGuiState();
                 return true;
             }
             catch (Exception ex)
@@ -308,6 +311,52 @@ namespace EasyCardFile
                 wrapper.RefreshCardList();
             }
         }
+
+        /// <summary>
+        /// Sets the state of the GUI.
+        /// </summary>
+        private void SetGuiState()
+        {
+            var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
+            // delete a card..
+            tsbDeleteCard.Enabled = wrapper?.SelectedCard != null;
+            mnuDeleteCard.Enabled = wrapper?.SelectedCard != null;
+
+            // add a card..
+            tsbNewCard.Enabled = wrapper != null;
+            mnuNewCard.Enabled = wrapper != null;
+
+            // save the card file
+            tsbSave.Enabled = wrapper != null && wrapper.Changed;
+            mnuSave.Enabled = wrapper != null && wrapper.Changed;
+
+            // printing..
+            tsbPrint.Enabled = wrapper?.SelectedCard != null;
+            mnuPrint.Enabled = wrapper?.SelectedCard != null;
+            tsbPrintPreview.Enabled = wrapper?.SelectedCard != null;
+            mnuPrintPreview.Enabled = wrapper?.SelectedCard != null;
+
+            // card contents import/export..
+            mnuImportFromRtfDocument.Enabled = wrapper?.SelectedCard != null;
+            mnuExportToRtfDocument.Enabled = wrapper?.SelectedCard != null;
+
+            // rename card..
+            tsbRenameCard.Enabled = wrapper?.SelectedCard != null;
+            mnuRenameCard.Enabled = wrapper?.SelectedCard != null;
+
+            // card file preferences..
+            tsbCardFilePreferences.Enabled = wrapper != null;
+            mnuCardFilePreferences.Enabled = wrapper != null;
+
+            // the sort cards function..
+            tsbSortCards.Enabled = wrapper != null && wrapper.HasCards;
+            mnuSortCards.Enabled = wrapper != null && wrapper.HasCards;
+
+            // save the card file as..
+            tsbSaveAs.Enabled = wrapper != null;
+            mnuSaveAs.Enabled = wrapper != null;
+        }
+
         #endregion
 
         #region UserInteractionEvents
@@ -318,7 +367,7 @@ namespace EasyCardFile
             {
                 wrapper.Changed = true;
                 wrapper.UpdateTitle();
-                wrapper.RefreshUi();
+                wrapper.RefreshUi(null, true, true);
                 Application.DoEvents();
                 wrapper.RefreshCardList();
             }
@@ -408,6 +457,7 @@ namespace EasyCardFile
             {
                 wrapper.Changed = true;
                 SetTitle(true);
+                SetGuiState();
             }
         }
 
@@ -516,6 +566,37 @@ namespace EasyCardFile
             if (sender.Equals(mnuPasteWithoutFormatting))
             {
                 wrapper?.PasteWithoutFormatting();
+            }
+        }
+
+        private void mnuExportToRtfDocument_Click(object sender, EventArgs e)
+        {
+            var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
+            if (wrapper?.SelectedCard != null)
+            {
+                sdRtf.InitialDirectory = Settings.PathFileDialogRtfSave;
+                sdRtf.FileName = Path.ChangeExtension(wrapper.CardFileSaveRtfName, ".rtf");
+                if (sdRtf.ShowDialog() == DialogResult.OK)
+                {
+                    if (wrapper.ExportRtf(sdRtf.FileName))
+                    {
+                        Settings.PathFileDialogRtfSave = sdRtf.FileName.GetPath();
+                    }
+                }
+            }
+        }
+
+        private void mnuImportFromRtfDocument_Click(object sender, EventArgs e)
+        {
+            var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
+            odRtf.InitialDirectory = Settings.PathFileDialogRtfOpen;
+
+            if (wrapper.SelectedCard != null && odRtf.ShowDialog() == DialogResult.OK)
+            {
+                if (wrapper.ImportRtf(odRtf.FileName))
+                {
+                    Settings.PathFileDialogRtfOpen = odRtf.FileName.GetPath();
+                }
             }
         }
         #endregion

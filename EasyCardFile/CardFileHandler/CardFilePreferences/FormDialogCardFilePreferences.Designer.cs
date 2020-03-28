@@ -79,7 +79,6 @@
             this.clbCardTypes = new EasyCardFile.UtilityClasses.ProjectControls.RefreshCheckListBox();
             this.tabCardSorting = new System.Windows.Forms.TabPage();
             this.tlpCardSorting = new System.Windows.Forms.TableLayoutPanel();
-            this.cmbSortMethod1 = new System.Windows.Forms.ComboBox();
             this.cmbSortMethod4 = new System.Windows.Forms.ComboBox();
             this.cbIgnoreCase4 = new System.Windows.Forms.CheckBox();
             this.lbSortMethod4 = new System.Windows.Forms.Label();
@@ -90,6 +89,7 @@
             this.cbIgnoreCase2 = new System.Windows.Forms.CheckBox();
             this.lbSortMethod2 = new System.Windows.Forms.Label();
             this.lbSortMethod1 = new System.Windows.Forms.Label();
+            this.cmbSortMethod1 = new System.Windows.Forms.ComboBox();
             this.cbIgnoreCase1 = new System.Windows.Forms.CheckBox();
             this.odImage = new System.Windows.Forms.OpenFileDialog();
             this.fdFont = new System.Windows.Forms.FontDialog();
@@ -742,19 +742,6 @@
             this.tlpCardSorting.Size = new System.Drawing.Size(547, 215);
             this.tlpCardSorting.TabIndex = 4;
             // 
-            // cmbSortMethod1
-            // 
-            this.cmbSortMethod1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbSortMethod1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.tlpCardSorting.SetColumnSpan(this.cmbSortMethod1, 2);
-            this.cmbSortMethod1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSortMethod1.FormattingEnabled = true;
-            this.cmbSortMethod1.Location = new System.Drawing.Point(3, 26);
-            this.cmbSortMethod1.Name = "cmbSortMethod1";
-            this.cmbSortMethod1.Size = new System.Drawing.Size(541, 21);
-            this.cmbSortMethod1.TabIndex = 2;
-            // 
             // cmbSortMethod4
             // 
             this.cmbSortMethod4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -859,6 +846,19 @@
             this.lbSortMethod1.Size = new System.Drawing.Size(76, 13);
             this.lbSortMethod1.TabIndex = 1;
             this.lbSortMethod1.Text = "Sort method 1:";
+            // 
+            // cmbSortMethod1
+            // 
+            this.cmbSortMethod1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbSortMethod1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.tlpCardSorting.SetColumnSpan(this.cmbSortMethod1, 2);
+            this.cmbSortMethod1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSortMethod1.FormattingEnabled = true;
+            this.cmbSortMethod1.Location = new System.Drawing.Point(3, 26);
+            this.cmbSortMethod1.Name = "cmbSortMethod1";
+            this.cmbSortMethod1.Size = new System.Drawing.Size(541, 21);
+            this.cmbSortMethod1.TabIndex = 2;
             // 
             // cbIgnoreCase1
             // 

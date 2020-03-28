@@ -243,6 +243,7 @@
       <DependentUpon>TextBoxButton.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="EasyCardfile.licenseheader" />
+    <None Include="Installer\setup_easycardfile.nsi" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -273,6 +274,8 @@
     <None Include="Resources\Copy.png" />
     <None Include="Resources\Paste.png" />
     <None Include="Resources\edit-paste-3.png" />
+    <None Include="Resources\export_document.png" />
+    <None Include="Resources\import_document2.png" />
     <Content Include="VPKSoft.ico" />
     <None Include="Resources\About.png" />
     <None Include="Resources\document-print-preview-4.png" />

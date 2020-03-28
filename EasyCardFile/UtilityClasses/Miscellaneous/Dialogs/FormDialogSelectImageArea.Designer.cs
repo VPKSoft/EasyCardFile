@@ -93,7 +93,6 @@
             this.cbZoomImage.Text = "Zoom the selected image area";
             this.cbZoomImage.UseVisualStyleBackColor = true;
             this.cbZoomImage.CheckedChanged += new System.EventHandler(this.cbZoomImage_CheckedChanged);
-            this.cbZoomImage.Click += new System.EventHandler(this.cbZoomImage_Click);
             // 
             // btCancel
             // 

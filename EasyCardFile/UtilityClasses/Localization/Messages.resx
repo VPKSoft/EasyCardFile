@@ -171,6 +171,24 @@
   <data name="msgDialogConfirmTitle" xml:space="preserve">
     <value>Confirm|A title for a dialog confirming something from the user.</value>
   </data>
+  <data name="msgDialogImageFileFilter" xml:space="preserve">
+    <value>Image files|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff|A filter for a file dialog to open image files.</value>
+  </data>
+  <data name="msgDialogImageFileOpenTitle" xml:space="preserve">
+    <value>Open image file|A title for a dialog asking the user to open an image file.</value>
+  </data>
+  <data name="msgDialogRtfFileExportTitle" xml:space="preserve">
+    <value>Export as Rtf file|A dialog title to export the card contents to a RTF file.</value>
+  </data>
+  <data name="msgDialogRtfFileFilterExport" xml:space="preserve">
+    <value>Rtf files|*.rtf|A filter for a file dialog to save RTF files.</value>
+  </data>
+  <data name="msgDialogRtfFileFilterImport" xml:space="preserve">
+    <value>Rtf files|*.rtf|Text files|*.txt|Any file|*.*|A filter for a file dialog to open RTF files.</value>
+  </data>
+  <data name="msgDialogRtfFileImportTitle" xml:space="preserve">
+    <value>Import Rtf file|A dialog title to import a RTF file to the card contents.</value>
+  </data>
   <data name="msgEditorCardCreated" xml:space="preserve">
     <value>Created: {0}|A message for a status strip to indicate a date and time the card was created.</value>
   </data>

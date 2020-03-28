@@ -43,11 +43,21 @@
             this.mnuNewCard = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuRenameCard = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuDeleteCard = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuExportToRtfDocument = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuImportFromRtfDocument = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuSortCards = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuPrint = new System.Windows.Forms.ToolStripMenuItem();
-            this.printPreviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuPrintPreview = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuCardFilePreferences = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuCut = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuPaste = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuPasteWithoutFormatting = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTools = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuImportLegacy = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,11 +65,6 @@
             this.mnuDumpLanguage = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuCut = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuCopy = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuPaste = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuPasteWithoutFormatting = new System.Windows.Forms.ToolStripMenuItem();
             this.tab3 = new Manina.Windows.Forms.Tab();
             this.tab1 = new Manina.Windows.Forms.Tab();
             this.tab2 = new Manina.Windows.Forms.Tab();
@@ -77,6 +82,7 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbPrint = new System.Windows.Forms.ToolStripButton();
             this.tsbPrintPreview = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbSortCards = new System.Windows.Forms.ToolStripButton();
             this.tab5 = new Manina.Windows.Forms.Tab();
             this.odCardFileLegacy = new System.Windows.Forms.OpenFileDialog();
@@ -84,9 +90,8 @@
             this.odCardFile = new System.Windows.Forms.OpenFileDialog();
             this.tmRemoteOpenFileQueue = new System.Windows.Forms.Timer(this.components);
             this.tcCardFiles = new Manina.Windows.Forms.TabControl();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
-            this.mnuSortCards = new System.Windows.Forms.ToolStripMenuItem();
+            this.odRtf = new System.Windows.Forms.OpenFileDialog();
+            this.sdRtf = new System.Windows.Forms.SaveFileDialog();
             this.mnuMain.SuspendLayout();
             this.tsMain.SuspendLayout();
             this.SuspendLayout();
@@ -101,7 +106,7 @@
             this.mnuHelp});
             this.mnuMain.Location = new System.Drawing.Point(0, 0);
             this.mnuMain.Name = "mnuMain";
-            this.mnuMain.Size = new System.Drawing.Size(955, 24);
+            this.mnuMain.Size = new System.Drawing.Size(1000, 24);
             this.mnuMain.TabIndex = 0;
             this.mnuMain.Text = "menuStrip1";
             // 
@@ -184,11 +189,14 @@
             this.mnuNewCard,
             this.mnuRenameCard,
             this.mnuDeleteCard,
+            this.toolStripMenuItem6,
+            this.mnuExportToRtfDocument,
+            this.mnuImportFromRtfDocument,
             this.toolStripMenuItem1,
             this.mnuSortCards,
             this.toolStripMenuItem4,
             this.mnuPrint,
-            this.printPreviewToolStripMenuItem,
+            this.mnuPrintPreview,
             this.toolStripMenuItem3,
             this.mnuCardFilePreferences});
             this.mnuCardFile.Name = "mnuCardFile";
@@ -222,10 +230,44 @@
             this.mnuDeleteCard.Text = "Delete card";
             this.mnuDeleteCard.Click += new System.EventHandler(this.tsbDeleteCard_Click);
             // 
+            // toolStripMenuItem6
+            // 
+            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(215, 6);
+            // 
+            // mnuExportToRtfDocument
+            // 
+            this.mnuExportToRtfDocument.Image = global::EasyCardFile.Properties.Resources.export_document;
+            this.mnuExportToRtfDocument.Name = "mnuExportToRtfDocument";
+            this.mnuExportToRtfDocument.Size = new System.Drawing.Size(218, 22);
+            this.mnuExportToRtfDocument.Text = "Export to Rtf document";
+            this.mnuExportToRtfDocument.Click += new System.EventHandler(this.mnuExportToRtfDocument_Click);
+            // 
+            // mnuImportFromRtfDocument
+            // 
+            this.mnuImportFromRtfDocument.Image = global::EasyCardFile.Properties.Resources.import_document2;
+            this.mnuImportFromRtfDocument.Name = "mnuImportFromRtfDocument";
+            this.mnuImportFromRtfDocument.Size = new System.Drawing.Size(218, 22);
+            this.mnuImportFromRtfDocument.Text = "Import from Rtf document";
+            this.mnuImportFromRtfDocument.Click += new System.EventHandler(this.mnuImportFromRtfDocument_Click);
+            // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(215, 6);
+            // 
+            // mnuSortCards
+            // 
+            this.mnuSortCards.Image = global::EasyCardFile.Properties.Resources.tools_sort_table;
+            this.mnuSortCards.Name = "mnuSortCards";
+            this.mnuSortCards.Size = new System.Drawing.Size(218, 22);
+            this.mnuSortCards.Text = "Sort cards";
+            this.mnuSortCards.Click += new System.EventHandler(this.tsbSortCards_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(215, 6);
             // 
             // mnuPrint
             // 
@@ -236,15 +278,15 @@
             this.mnuPrint.Text = "Print card";
             this.mnuPrint.Click += new System.EventHandler(this.tsbPrint_Click);
             // 
-            // printPreviewToolStripMenuItem
+            // mnuPrintPreview
             // 
-            this.printPreviewToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("printPreviewToolStripMenuItem.Image")));
-            this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
-            this.printPreviewToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            this.mnuPrintPreview.Image = ((System.Drawing.Image)(resources.GetObject("mnuPrintPreview.Image")));
+            this.mnuPrintPreview.Name = "mnuPrintPreview";
+            this.mnuPrintPreview.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.O)));
-            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
-            this.printPreviewToolStripMenuItem.Text = "Print preview";
-            this.printPreviewToolStripMenuItem.Click += new System.EventHandler(this.tsbPrintPreview_Click);
+            this.mnuPrintPreview.Size = new System.Drawing.Size(218, 22);
+            this.mnuPrintPreview.Text = "Print preview";
+            this.mnuPrintPreview.Click += new System.EventHandler(this.tsbPrintPreview_Click);
             // 
             // toolStripMenuItem3
             // 
@@ -258,6 +300,56 @@
             this.mnuCardFilePreferences.Size = new System.Drawing.Size(218, 22);
             this.mnuCardFilePreferences.Text = "Preferences";
             this.mnuCardFilePreferences.Click += new System.EventHandler(this.tsbCardFilePreferences_Click);
+            // 
+            // mnuEdit
+            // 
+            this.mnuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuCut,
+            this.mnuCopy,
+            this.mnuPaste,
+            this.mnuPasteWithoutFormatting});
+            this.mnuEdit.Name = "mnuEdit";
+            this.mnuEdit.Size = new System.Drawing.Size(39, 20);
+            this.mnuEdit.Text = "Edit";
+            this.mnuEdit.DropDownOpening += new System.EventHandler(this.mnuEdit_DropDownOpening);
+            // 
+            // mnuCut
+            // 
+            this.mnuCut.Image = global::EasyCardFile.Properties.Resources.Cut;
+            this.mnuCut.Name = "mnuCut";
+            this.mnuCut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
+            this.mnuCut.Size = new System.Drawing.Size(302, 22);
+            this.mnuCut.Text = "Cut";
+            this.mnuCut.Click += new System.EventHandler(this.MenuCopyCutPaste_Click);
+            // 
+            // mnuCopy
+            // 
+            this.mnuCopy.Image = global::EasyCardFile.Properties.Resources.Copy;
+            this.mnuCopy.Name = "mnuCopy";
+            this.mnuCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.mnuCopy.Size = new System.Drawing.Size(302, 22);
+            this.mnuCopy.Text = "Copy";
+            this.mnuCopy.Click += new System.EventHandler(this.MenuCopyCutPaste_Click);
+            // 
+            // mnuPaste
+            // 
+            this.mnuPaste.Image = global::EasyCardFile.Properties.Resources.Paste;
+            this.mnuPaste.Name = "mnuPaste";
+            this.mnuPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            this.mnuPaste.Size = new System.Drawing.Size(302, 22);
+            this.mnuPaste.Text = "Paste";
+            this.mnuPaste.Click += new System.EventHandler(this.MenuCopyCutPaste_Click);
+            // 
+            // mnuPasteWithoutFormatting
+            // 
+            this.mnuPasteWithoutFormatting.Image = global::EasyCardFile.Properties.Resources.edit_paste_3;
+            this.mnuPasteWithoutFormatting.Name = "mnuPasteWithoutFormatting";
+            this.mnuPasteWithoutFormatting.ShortcutKeys = ((System.Windows.Forms.Keys)((((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
+            | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.V)));
+            this.mnuPasteWithoutFormatting.Size = new System.Drawing.Size(302, 22);
+            this.mnuPasteWithoutFormatting.Text = "Paste without formatting";
+            this.mnuPasteWithoutFormatting.Click += new System.EventHandler(this.MenuCopyCutPaste_Click);
             // 
             // mnuTools
             // 
@@ -320,56 +412,6 @@
             this.mnuAbout.Text = "About";
             this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
             // 
-            // mnuEdit
-            // 
-            this.mnuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuCut,
-            this.mnuCopy,
-            this.mnuPaste,
-            this.mnuPasteWithoutFormatting});
-            this.mnuEdit.Name = "mnuEdit";
-            this.mnuEdit.Size = new System.Drawing.Size(39, 20);
-            this.mnuEdit.Text = "Edit";
-            this.mnuEdit.DropDownOpening += new System.EventHandler(this.mnuEdit_DropDownOpening);
-            // 
-            // mnuCut
-            // 
-            this.mnuCut.Image = global::EasyCardFile.Properties.Resources.Cut;
-            this.mnuCut.Name = "mnuCut";
-            this.mnuCut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.mnuCut.Size = new System.Drawing.Size(302, 22);
-            this.mnuCut.Text = "Cut";
-            this.mnuCut.Click += new System.EventHandler(this.MenuCopyCutPaste_Click);
-            // 
-            // mnuCopy
-            // 
-            this.mnuCopy.Image = global::EasyCardFile.Properties.Resources.Copy;
-            this.mnuCopy.Name = "mnuCopy";
-            this.mnuCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.mnuCopy.Size = new System.Drawing.Size(302, 22);
-            this.mnuCopy.Text = "Copy";
-            this.mnuCopy.Click += new System.EventHandler(this.MenuCopyCutPaste_Click);
-            // 
-            // mnuPaste
-            // 
-            this.mnuPaste.Image = global::EasyCardFile.Properties.Resources.Paste;
-            this.mnuPaste.Name = "mnuPaste";
-            this.mnuPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.mnuPaste.Size = new System.Drawing.Size(302, 22);
-            this.mnuPaste.Text = "Paste";
-            this.mnuPaste.Click += new System.EventHandler(this.MenuCopyCutPaste_Click);
-            // 
-            // mnuPasteWithoutFormatting
-            // 
-            this.mnuPasteWithoutFormatting.Image = global::EasyCardFile.Properties.Resources.edit_paste_3;
-            this.mnuPasteWithoutFormatting.Name = "mnuPasteWithoutFormatting";
-            this.mnuPasteWithoutFormatting.ShortcutKeys = ((System.Windows.Forms.Keys)((((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
-            | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.V)));
-            this.mnuPasteWithoutFormatting.Size = new System.Drawing.Size(302, 22);
-            this.mnuPasteWithoutFormatting.Text = "Paste without formatting";
-            this.mnuPasteWithoutFormatting.Click += new System.EventHandler(this.MenuCopyCutPaste_Click);
-            // 
             // tab3
             // 
             this.tab3.Location = new System.Drawing.Point(1, 24);
@@ -411,7 +453,7 @@
             this.tsbSortCards});
             this.tsMain.Location = new System.Drawing.Point(0, 24);
             this.tsMain.Name = "tsMain";
-            this.tsMain.Size = new System.Drawing.Size(955, 25);
+            this.tsMain.Size = new System.Drawing.Size(1000, 25);
             this.tsMain.TabIndex = 4;
             this.tsMain.Text = "toolStrip1";
             // 
@@ -530,6 +572,11 @@
             this.tsbPrintPreview.Text = "Print preview";
             this.tsbPrintPreview.Click += new System.EventHandler(this.tsbPrintPreview_Click);
             // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
             // tsbSortCards
             // 
             this.tsbSortCards.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -575,34 +622,25 @@
             this.tcCardFiles.Name = "tcCardFiles";
             this.tcCardFiles.SelectedIndex = -1;
             this.tcCardFiles.ShowCloseTabButtons = true;
-            this.tcCardFiles.Size = new System.Drawing.Size(931, 433);
+            this.tcCardFiles.Size = new System.Drawing.Size(976, 533);
             this.tcCardFiles.TabIndex = 2;
             this.tcCardFiles.CloseTabButtonClick += new System.EventHandler<Manina.Windows.Forms.CancelTabEventArgs>(this.tcCardFiles_CloseTabButtonClick);
             this.tcCardFiles.PageChanged += new System.EventHandler<Manina.Windows.Forms.PageChangedEventArgs>(this.tcCardFiles_PageChanged);
             // 
-            // toolStripSeparator4
+            // odRtf
             // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            this.odRtf.Filter = "Rtf files|*.rtf|Text files|*.txt|Any file|*.*";
             // 
-            // toolStripMenuItem4
+            // sdRtf
             // 
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(215, 6);
-            // 
-            // mnuSortCards
-            // 
-            this.mnuSortCards.Image = global::EasyCardFile.Properties.Resources.tools_sort_table;
-            this.mnuSortCards.Name = "mnuSortCards";
-            this.mnuSortCards.Size = new System.Drawing.Size(218, 22);
-            this.mnuSortCards.Text = "Sort cards";
-            this.mnuSortCards.Click += new System.EventHandler(this.tsbSortCards_Click);
+            this.sdRtf.DefaultExt = "*.rtf";
+            this.sdRtf.Filter = "Rtf files|*.rtf";
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(955, 497);
+            this.ClientSize = new System.Drawing.Size(1000, 597);
             this.Controls.Add(this.tcCardFiles);
             this.Controls.Add(this.tsMain);
             this.Controls.Add(this.mnuMain);
@@ -667,7 +705,7 @@
         private System.Windows.Forms.ToolStripButton tsbPrintPreview;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem mnuPrint;
-        private System.Windows.Forms.ToolStripMenuItem printPreviewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnuPrintPreview;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem mnuLocalization;
         private System.Windows.Forms.ToolStripMenuItem mnuDumpLanguage;
@@ -680,6 +718,11 @@
         private System.Windows.Forms.ToolStripMenuItem mnuSortCards;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
+        private System.Windows.Forms.ToolStripMenuItem mnuExportToRtfDocument;
+        private System.Windows.Forms.ToolStripMenuItem mnuImportFromRtfDocument;
+        private System.Windows.Forms.OpenFileDialog odRtf;
+        private System.Windows.Forms.SaveFileDialog sdRtf;
     }
 }
 

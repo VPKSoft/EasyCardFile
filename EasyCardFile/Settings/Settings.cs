@@ -105,6 +105,18 @@ namespace EasyCardFile.Settings
         public string PathFileDialogMainOpen { get; set; }
 
         /// <summary>
+        /// Gets or sets the path of the file dialog to import Rtf files to card contents in the <see cref="FormMain"/> from.
+        /// </summary>
+        [IsSetting]
+        public string PathFileDialogRtfOpen { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path of the file dialog to export Rtf files from card contents in the <see cref="FormMain"/> from.
+        /// </summary>
+        [IsSetting]
+        public string PathFileDialogRtfSave { get; set; }
+
+        /// <summary>
         /// Sets the files belonging to the current session.
         /// </summary>
         /// <param name="tabControl">The tab control witch the active card files reside.</param>

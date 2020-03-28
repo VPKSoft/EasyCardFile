@@ -251,13 +251,107 @@ namespace EasyCardFile.CardFileHandler
         public bool CanPaste => RichTextBox.RichTextBox.CanPaste();
 
         /// <summary>
+        /// Gets a value indicating whether this card file has any cards.
+        /// </summary>
+        public bool HasCards => ListBoxCards.Items.Count > 0;
+
+        /// <summary>
         /// Determines whether you can copy/cut information to the <see cref="Clipboard"/> from the <see cref="RichTextBox"/> control.
         /// </summary>
         /// <value><c>true</c> if this instance can copy; otherwise, <c>false</c>.</value>
         public bool CanCopyCut => RichTextBox.RichTextBox.SelectionLength > 0;
+
+        /// <summary>
+        /// Gets the name of the card as a valid file name, which can be used to save the card contents as Rtf document.
+        /// </summary>
+        /// <value>The name of the card file save RTF.</value>
+        public string CardFileSaveRtfName
+        {
+            get
+            {
+                var name = SelectedCard?.CardName;
+                var split = name?.Split(Path.GetInvalidFileNameChars());
+                if (split != null)
+                {
+                    if (split.Length == 1)
+                    {
+                        return split[0];
+                    }
+
+                    return string.Join("_", split);
+                }
+
+                return "";
+            }
+        }
         #endregion
 
         #region Interaction        
+        /// <summary>
+        /// Exports the the contents of the selected card to a given Rtf document.
+        /// </summary>
+        /// <param name="fileName">Name of the file to export the card contents to.</param>
+        /// <returns><c>true</c> if the card contents were successfully exported, <c>false</c> otherwise.</returns>
+        public bool ExportRtf(string fileName)
+        {
+            if (SelectedCard != null)
+            {
+                try
+                {
+                    RichTextBox.RichTextBox.SaveFile(fileName);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    // log the exception..
+                    ExceptionLogAction?.Invoke(ex);
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Imports the the contents of a given file name to the selected card contents.
+        /// </summary>
+        /// <param name="fileName">Name of the file to import the card contents from.</param>
+        /// <returns><c>true</c> if the card contents were successfully imported, <c>false</c> otherwise.</returns>
+        public bool ImportRtf(string fileName)
+        {
+            if (SelectedCard != null)
+            {
+                try
+                {
+                    if (fileName != null)
+                    {
+                        // https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.richtextbox.loadfile
+                        // ...
+                        // UTF not ASCII: "Loads a rich text format (RTF) or standard ASCII text file into the RichTextBox control."
+                        // ...
+                        if (!string.Equals(Path.GetExtension(fileName), ".rtf", StringComparison.OrdinalIgnoreCase))
+                        {
+                            RichTextBox.RichTextBox.Text = File.ReadAllText(fileName);
+                        }
+                        else
+                        {
+                            RichTextBox.RichTextBox.LoadFile(fileName);
+                        }
+
+                        return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // log the exception..
+                    ExceptionLogAction?.Invoke(ex);
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Moves the current selection in the text box to the <see cref="Clipboard"/>.
         /// </summary>
@@ -857,7 +951,8 @@ namespace EasyCardFile.CardFileHandler
         /// </summary>
         /// <param name="selectCard">An optional instance to a <see cref="Card"/> to select from the list box.</param>
         /// <param name="sort">A value indicating whether the card list should be sorted.</param>
-        internal void RefreshUi(Card selectCard = null, bool sort = false)
+        /// <param name="clearListBoxImageCache">A value indicating whether the image cache of the <see cref="RefreshListBoxCards"/> instance should be cleared.</param>
+        internal void RefreshUi(Card selectCard = null, bool sort = false, bool clearListBoxImageCache = false)
         {
             SuspendTextHandler = true;
 
@@ -866,6 +961,11 @@ namespace EasyCardFile.CardFileHandler
             if (sort)
             {
                 CardFileDb.CardFile.SortCards();
+            }
+
+            if (clearListBoxImageCache)
+            {
+                ListBoxCards.ClearCache();
             }
 
             ListBoxCards.Items.Clear();

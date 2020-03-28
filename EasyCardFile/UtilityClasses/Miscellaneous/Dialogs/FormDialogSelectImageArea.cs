@@ -26,9 +26,9 @@ SOFTWARE.
 
 using System.Drawing;
 using System.Windows.Forms;
-using EasyCardFile.Database.Entity.Entities;
 using EasyCardFile.Database.Entity.ModelHelpers;
 using EasyCardFile.Database.NoEntity;
+using EasyCardFile.UtilityClasses.Localization;
 using VPKSoft.LangLib;
 
 namespace EasyCardFile.UtilityClasses.Miscellaneous.Dialogs
@@ -60,6 +60,9 @@ namespace EasyCardFile.UtilityClasses.Miscellaneous.Dialogs
 
             // initialize the language/localization database..
             DBLangEngine.InitializeLanguage("EasyCardFile.UtilityClasses.Localization.Messages");
+
+            // localize the open image file dialog..
+            LocalizeStaticProperties.LocalizeDialogOpenImageFile(odImage);
         }
 
         private CardTypeNoEntity CardType { get; set; }
@@ -133,11 +136,6 @@ namespace EasyCardFile.UtilityClasses.Miscellaneous.Dialogs
             CardType.TypeImage = pnSelectedImageArea.BackgroundImage.ToBytes();
             pnSelectedImageArea.BackgroundImage.Dispose();
             DialogResult = DialogResult.OK;
-        }
-
-        private void cbZoomImage_Click(object sender, System.EventArgs e)
-        {
-            
         }
 
         private void cbZoomImage_CheckedChanged(object sender, System.EventArgs e)

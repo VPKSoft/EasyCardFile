@@ -76,6 +76,8 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
             DBLangEngine.InitializeLanguage("EasyCardFile.UtilityClasses.Localization.Messages");
 
             MessageBoxQueryPrimitiveValue.ValidateTypeValue += MessageBoxQueryPrimitiveValue_ValidateTypeValue;
+
+            LocalizeStaticProperties.LocalizeDialogOpenImageFile(odImage);
         }
 
         #region PrivateProperties        

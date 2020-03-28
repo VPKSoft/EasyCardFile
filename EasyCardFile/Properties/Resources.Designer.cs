@@ -213,6 +213,16 @@ namespace EasyCardFile.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap export_document {
+            get {
+                object obj = ResourceManager.GetObject("export_document", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap folder_database {
             get {
                 object obj = ResourceManager.GetObject("folder-database", resourceCulture);
@@ -236,6 +246,16 @@ namespace EasyCardFile.Properties {
         internal static System.Drawing.Bitmap import_document {
             get {
                 object obj = ResourceManager.GetObject("import_document", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap import_document2 {
+            get {
+                object obj = ResourceManager.GetObject("import_document2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
