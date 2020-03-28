@@ -414,6 +414,7 @@ namespace EasyCardFile
             using (CardFileUiWrapper.GetWrapperByTab(e.Tab))
             {
                 CardFileSaveClose.CloseCardFile(true, e.Tab);
+                SetGuiState();
             }
         }
 
