@@ -378,6 +378,7 @@ namespace EasyCardFile
             // ReSharper disable once ObjectCreationAsStatement
             var wrapper = new CardFileUiWrapper(tcCardFiles);
             wrapper.CardFileChanged += CardFileChanged;
+            SetGuiState();
         }
 
         private void mnuOpen_Click(object sender, EventArgs e)

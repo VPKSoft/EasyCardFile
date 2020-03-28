@@ -33,6 +33,7 @@ using EasyCardFile.CardFileHandler.CardFileNaming;
 using EasyCardFile.CardFileHandler.CardFilePreferences;
 using EasyCardFile.Settings;
 using EasyCardFile.UtilityClasses.Constants;
+using EasyCardFile.UtilityClasses.FileAssociation;
 using EasyCardFile.UtilityClasses.Miscellaneous.Dialogs;
 using VPKSoft.ErrorLogger;
 using VPKSoft.IPC;
@@ -61,6 +62,22 @@ namespace EasyCardFile
             }
 
             string[] args = Environment.GetCommandLineArgs();
+
+            // this is for the installer/un-installer..
+            foreach (var s in args)
+            {
+                if (s.Equals("--un_associate"))
+                {
+                    AssociateFileExtension.RemoveAssociatedFileExtension(EasyCardFileConstants.FileExtension);
+                    return;
+                }
+
+                if (s.Equals("--associate"))
+                {
+                    AssociateFileExtension.AssociateApplicationToFileExtension(EasyCardFileConstants.FileExtension);
+                    return;
+                }
+            }
 
             if (AppRunning.CheckIfRunningNoAdd("VPKSoft.EasyCardFile.Application.2020"))
             {

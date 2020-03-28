@@ -116,6 +116,8 @@ Section -Main SEC0000
     File /r ..\bin\Release\*.exe
     File /r ..\bin\Release\*.xml
     File /r ..\bin\Release\*.config
+
+	ExecWait "$INSTDIR\EasyCardFile.exe --associate"
 		
     SetOutPath "$LOCALAPPDATA\EasyCardFile"
     File ..\UtilityClasses\Localization\localization.sqlite
@@ -180,6 +182,9 @@ Section -un.post UNSEC0001
     DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)"
     Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\$(^UninstallLink).lnk"
     Delete /REBOOTOK $INSTDIR\uninstall_easycardfile.exe
+    
+    ExecWait "$INSTDIR\EasyCardFile.exe --un_associate"
+    
     DeleteRegValue HKLM "${REGKEY}" StartMenuGroup
     DeleteRegValue HKLM "${REGKEY}" Path
     DeleteRegKey /IfEmpty HKLM "${REGKEY}\Components"
