@@ -35,6 +35,7 @@ using EasyCardFile.Database.Entity.Context;
 using EasyCardFile.Database.Entity.Context.ContextCompression;
 using EasyCardFile.Database.Entity.Context.ContextEncryption;
 using EasyCardFile.Database.Entity.Entities;
+using EasyCardFile.Database.Entity.History;
 using EasyCardFile.UtilityClasses.ErrorHandling;
 using EasyCardFile.UtilityClasses.Localization;
 using EasyCardFile.UtilityClasses.Miscellaneous;
@@ -246,6 +247,21 @@ namespace EasyCardFile.CardFileHandler
 
         #region InteractionProperties
         /// <summary>
+        /// Gets a value indicating whether the selected card changes can be undone.
+        /// </summary>
+        public bool CanUndo => UndoRedo.CanUndo;
+
+        /// <summary>
+        /// Gets a value indicating whether the selected card changes can be redone.
+        /// </summary>
+        public bool CanRedo => UndoRedo.CanRedo;
+
+        /// <summary>
+        /// Gets a value indicating whether the selected card has changed.
+        /// </summary>
+        public bool CardChanged => CanRedo | CanUndo;
+
+        /// <summary>
         /// Determines whether you can paste information from the <see cref="Clipboard"/> to the <see cref="RichTextBox"/> control.
         /// </summary>
         public bool CanPaste => RichTextBox.RichTextBox.CanPaste();
@@ -287,6 +303,30 @@ namespace EasyCardFile.CardFileHandler
         #endregion
 
         #region Interaction        
+        /// <summary>
+        /// Undoes the changes to the card selected card.
+        /// </summary>
+        /// <returns><c>true</c> if the changes were undone, <c>false</c> otherwise.</returns>
+        public bool Undo()
+        {
+            var result = UndoRedo.Undo(CardFileDb);
+            ListBoxCards?.ClearCache();
+            ListBoxCards?.RefreshItems();
+            return result;
+        }
+
+        /// <summary>
+        /// Redoes the changes to the card selected card.
+        /// </summary>
+        /// <returns><c>true</c> if the changes were redone, <c>false</c> otherwise.</returns>
+        public bool Redo()
+        {
+            var result = UndoRedo.Redo(CardFileDb);
+            ListBoxCards?.ClearCache();
+            ListBoxCards?.RefreshItems();
+            return result;
+        }
+
         /// <summary>
         /// Exports the the contents of the selected card to a given Rtf document.
         /// </summary>
@@ -530,6 +570,13 @@ namespace EasyCardFile.CardFileHandler
         public Card SelectedCard => (Card) ListBoxCards.SelectedItem;
         #endregion
 
+        #region InteractionEvents
+        /// <summary>
+        /// Occurs when the selected card was changed.
+        /// </summary>
+        public EventHandler SelectedCardChanged;
+        #endregion
+
         #region GUI
         /// <summary>
         /// Performs the creation and the layout for a single card file tab to the <see cref="Manina.Windows.Forms.TabControl"/>
@@ -607,7 +654,7 @@ namespace EasyCardFile.CardFileHandler
             TableLayoutMain.RowStyles.Add(new RowStyle{ SizeType = SizeType.AutoSize});
 
             // create a RichTextBoxWithToolStrip for the card file card contents..
-            RichTextBox = new RichTextBoxWithToolStrip {Dock = DockStyle.Fill,};
+            RichTextBox = new RichTextBoxWithToolStrip {Dock = DockStyle.Fill, Tag = false,};
             RichTextBox.TextChanged += RichTextBox_TextChanged;
             RichTextBox.RichTextBox.SelectionChanged += RichTextBox_SelectionChanged;
 
@@ -789,6 +836,19 @@ namespace EasyCardFile.CardFileHandler
         internal bool IsTemporary { get; set; }
         #endregion
 
+        #region PrivateProperties        
+        /// <summary>
+        /// Gets or sets the undo/redo class instance.
+        /// </summary>
+        private UndoRedo UndoRedo { get; } = new UndoRedo();
+
+        /// <summary>
+        /// Gets or sets the card contents before they were changed.
+        /// </summary>
+        /// <value>The previous card contents.</value>
+        private byte[] PreviousCardContents { get; set; }
+        #endregion
+
         #region EventHandlers
         private void RichTextBoxContextMenu_Opening(object sender, CancelEventArgs e)
         {
@@ -827,7 +887,6 @@ namespace EasyCardFile.CardFileHandler
             }
 
             var listBox = (ListBox) sender;
-
             DisplayCard(listBox.SelectedItem);
         }
 
@@ -854,7 +913,16 @@ namespace EasyCardFile.CardFileHandler
 
         private void ComboBoxCardType_SelectedValueChanged(object sender, EventArgs e)
         {
-            SetCardChanges(ListBoxCards.SelectedItem, ((ComboBox)sender).SelectedItem);
+            if (SuspendCardChanged)
+            {
+                return;
+            }
+
+            var card = (Card) ListBoxCards.SelectedItem;
+            UndoRedo.AddChange(card, UndoRedoType.Modified, PreviousCardContents, card.CardType.UniqueId,
+                ((CardType) ((ComboBox) sender).SelectedItem).UniqueId);
+            SelectedCardChanged?.Invoke(this, new EventArgs());
+            SetCardChanges(card, ((ComboBox)sender).SelectedItem);
             if (!SuspendCardChanged)
             {
                 ListBoxCards.Invalidate();
@@ -1134,17 +1202,29 @@ namespace EasyCardFile.CardFileHandler
         {
             if (SuspendTextHandler)
             {
+                PreviousCardContents = null;
+                RichTextBox.Tag = false;
                 RichTextBox.Clear();
                 return;
             }
 
+            if ((bool)RichTextBox.Tag)
+            {
+                var previousCard = (Card)ListBoxCards.SelectedItem;
+                UndoRedo.AddChange(previousCard, UndoRedoType.Modified, PreviousCardContents, previousCard.UniqueId);
+                SelectedCardChanged?.Invoke(this, new EventArgs());
+            }
+
+            RichTextBox.Tag = false;
             var card = (Card) cardEntity;
             if (card != null)
             {
+                PreviousCardContents = card.CardContents;
                 SuspendCardChanged = true;
                 if (card.CardContents != null)
                 {
-                    RichTextBox.Rtf = Encoding.UTF8.GetString(card.CardContents);
+                    var rtf = Encoding.UTF8.GetString(card.CardContents);
+                    RichTextBox.Rtf = rtf;
                 }
                 else
                 {

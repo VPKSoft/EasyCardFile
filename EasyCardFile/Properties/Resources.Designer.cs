@@ -193,6 +193,26 @@ namespace EasyCardFile.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap edit_redo_5 {
+            get {
+                object obj = ResourceManager.GetObject("edit-redo-5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap edit_undo_5 {
+            get {
+                object obj = ResourceManager.GetObject("edit-undo-5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap education_languages {
             get {
                 object obj = ResourceManager.GetObject("education-languages", resourceCulture);

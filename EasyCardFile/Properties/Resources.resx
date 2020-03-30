@@ -130,6 +130,9 @@
   <data name="Refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="edit-undo-5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\edit-undo-5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="card_file_preferences" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\card_file_preferences.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -138,6 +141,9 @@
   </data>
   <data name="Modify" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Modify.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="import_document2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\import_document2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="edit-delete-6" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\edit-delete-6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -223,7 +229,7 @@
   <data name="database-go" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\database-go.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="import_document2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\import_document2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="edit-redo-5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\edit-redo-5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

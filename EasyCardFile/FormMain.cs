@@ -41,6 +41,7 @@ using EasyCardFile.UtilityClasses.Constants;
 using EasyCardFile.UtilityClasses.FileAssociation;
 using EasyCardFile.UtilityClasses.Localization;
 using EasyCardFile.UtilityClasses.Miscellaneous;
+using EasyCardFile.UtilityClasses.ProjectControls;
 using VPKSoft.ErrorLogger;
 using VPKSoft.LangLib;
 using VPKSoft.MessageBoxExtended;
@@ -226,11 +227,11 @@ namespace EasyCardFile
                 foreach (var tab in tcCardFiles.Tabs)
                 {
                     var wrapper = CardFileUiWrapper.GetWrapperByTab(tab);
-                    if (wrapper.FileName == fileName)
+
+                    if (wrapper != null && wrapper.FileName == fileName)
                     {
                         tcCardFiles.SelectedTab = tab;
                         return false;
-
                     }
                 }
 
@@ -600,6 +601,16 @@ namespace EasyCardFile
                     Settings.PathFileDialogRtfOpen = odRtf.FileName.GetPath();
                 }
             }
+        }
+
+        private void tsbUndo_Click(object sender, EventArgs e)
+        {
+            CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles)?.Undo();
+        }
+
+        private void tsbRedo_Click(object sender, EventArgs e)
+        {
+            CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles)?.Redo();
         }
         #endregion
 

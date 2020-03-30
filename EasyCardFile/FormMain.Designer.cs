@@ -84,14 +84,17 @@
             this.tsbPrintPreview = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbSortCards = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbUndo = new System.Windows.Forms.ToolStripButton();
+            this.tsbRedo = new System.Windows.Forms.ToolStripButton();
             this.tab5 = new Manina.Windows.Forms.Tab();
             this.odCardFileLegacy = new System.Windows.Forms.OpenFileDialog();
             this.sdCardFile = new System.Windows.Forms.SaveFileDialog();
             this.odCardFile = new System.Windows.Forms.OpenFileDialog();
             this.tmRemoteOpenFileQueue = new System.Windows.Forms.Timer(this.components);
-            this.tcCardFiles = new Manina.Windows.Forms.TabControl();
             this.odRtf = new System.Windows.Forms.OpenFileDialog();
             this.sdRtf = new System.Windows.Forms.SaveFileDialog();
+            this.tcCardFiles = new Manina.Windows.Forms.TabControl();
             this.mnuMain.SuspendLayout();
             this.tsMain.SuspendLayout();
             this.SuspendLayout();
@@ -450,7 +453,10 @@
             this.tsbPrint,
             this.tsbPrintPreview,
             this.toolStripSeparator4,
-            this.tsbSortCards});
+            this.tsbSortCards,
+            this.toolStripSeparator5,
+            this.tsbUndo,
+            this.tsbRedo});
             this.tsMain.Location = new System.Drawing.Point(0, 24);
             this.tsMain.Name = "tsMain";
             this.tsMain.Size = new System.Drawing.Size(1000, 25);
@@ -587,6 +593,31 @@
             this.tsbSortCards.Text = "Sort cards";
             this.tsbSortCards.Click += new System.EventHandler(this.tsbSortCards_Click);
             // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsbUndo
+            // 
+            this.tsbUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbUndo.Image = global::EasyCardFile.Properties.Resources.edit_undo_5;
+            this.tsbUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbUndo.Name = "tsbUndo";
+            this.tsbUndo.Size = new System.Drawing.Size(23, 22);
+            this.tsbUndo.Text = "Undo";
+            this.tsbUndo.Click += new System.EventHandler(this.tsbUndo_Click);
+            // 
+            // tsbRedo
+            // 
+            this.tsbRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbRedo.Image = global::EasyCardFile.Properties.Resources.edit_redo_5;
+            this.tsbRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbRedo.Name = "tsbRedo";
+            this.tsbRedo.Size = new System.Drawing.Size(23, 22);
+            this.tsbRedo.Text = "Redo";
+            this.tsbRedo.Click += new System.EventHandler(this.tsbRedo_Click);
+            // 
             // tab5
             // 
             this.tab5.Location = new System.Drawing.Point(1, 24);
@@ -613,6 +644,15 @@
             // 
             this.tmRemoteOpenFileQueue.Tick += new System.EventHandler(this.tmRemoteOpenFileQueue_Tick);
             // 
+            // odRtf
+            // 
+            this.odRtf.Filter = "Rtf files|*.rtf|Text files|*.txt|Any file|*.*";
+            // 
+            // sdRtf
+            // 
+            this.sdRtf.DefaultExt = "*.rtf";
+            this.sdRtf.Filter = "Rtf files|*.rtf";
+            // 
             // tcCardFiles
             // 
             this.tcCardFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -626,15 +666,6 @@
             this.tcCardFiles.TabIndex = 2;
             this.tcCardFiles.CloseTabButtonClick += new System.EventHandler<Manina.Windows.Forms.CancelTabEventArgs>(this.tcCardFiles_CloseTabButtonClick);
             this.tcCardFiles.PageChanged += new System.EventHandler<Manina.Windows.Forms.PageChangedEventArgs>(this.tcCardFiles_PageChanged);
-            // 
-            // odRtf
-            // 
-            this.odRtf.Filter = "Rtf files|*.rtf|Text files|*.txt|Any file|*.*";
-            // 
-            // sdRtf
-            // 
-            this.sdRtf.DefaultExt = "*.rtf";
-            this.sdRtf.Filter = "Rtf files|*.rtf";
             // 
             // FormMain
             // 
@@ -723,6 +754,9 @@
         private System.Windows.Forms.ToolStripMenuItem mnuImportFromRtfDocument;
         private System.Windows.Forms.OpenFileDialog odRtf;
         private System.Windows.Forms.SaveFileDialog sdRtf;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripButton tsbUndo;
+        private System.Windows.Forms.ToolStripButton tsbRedo;
     }
 }
 

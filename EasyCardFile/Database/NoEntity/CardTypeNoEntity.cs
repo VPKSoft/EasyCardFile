@@ -38,23 +38,57 @@ namespace EasyCardFile.Database.NoEntity
         /// </summary>
         /// <param name="cardType">Type of the card.</param>
         /// <param name="isDefaultType">A value indicating whether the instance represents the default card type of a <see cref="CardFile"/>.</param>
-        /// <returns>CardTypeNoEntity.</returns>
+        /// <returns>An instance to the <see cref="CardTypeNoEntity"/> class.</returns>
         public static CardTypeNoEntity FromEntity(CardType cardType, bool isDefaultType)
         {
             return cardType == null
-                ? new CardTypeNoEntity {CardTypeName = CardType.NewCardTypeNameLocalized, DefaultCardType = true, Id = -1}
+                ? new CardTypeNoEntity {CardTypeName = CardType.NewCardTypeNameLocalized, DefaultCardType = true}
                 : new CardTypeNoEntity
                 {
-                    Id = cardType.Id, 
                     CardTypeName = cardType.CardTypeName, 
                     AdditionalData1 = cardType.AdditionalData1,
                     DefaultCardType = isDefaultType, 
                     ForeColor = cardType.ForeColor, 
                     BackColor = cardType.BackColor, 
                     TypeImage = cardType.TypeImage, 
-                    CardNamingInstruction = cardType.CardNamingInstruction
+                    CardNamingInstruction = cardType.CardNamingInstruction,
+                    UniqueId = cardType.UniqueId,
                 };
         }
+
+        /// <summary>
+        /// Sets a <see cref="CardType"/> entity data from the given <see cref="CardTypeNoEntity"/> data.
+        /// </summary>
+        /// <param name="cardType">An instance to a <see cref="CardType"/> entity.</param>
+        /// <param name="cardTypeNoEntity">An instance to a <see cref="CardTypeNoEntity"/> to set the card type data from.</param>
+        public static void ToEntity(CardType cardType, CardTypeNoEntity cardTypeNoEntity)
+        {
+            cardType.CardTypeName = cardTypeNoEntity.CardTypeName;
+            cardType.AdditionalData1 = cardTypeNoEntity.AdditionalData1;
+            cardType.ForeColor = cardTypeNoEntity.ForeColor;
+            cardType.BackColor = cardTypeNoEntity.BackColor;
+            cardType.TypeImage = cardTypeNoEntity.TypeImage;
+            cardType.CardNamingInstruction = cardTypeNoEntity.CardNamingInstruction;
+        }
+
+        /// <summary>
+        /// Sets a <see cref="CardType"/> entity data from this <see cref="CardTypeNoEntity"/> data.
+        /// </summary>
+        /// <param name="cardType">An instance to a <see cref="CardType"/> entity.</param>
+        public void ToEntity(CardType cardType)
+        {
+            ToEntity(cardType, this);
+        }
+
+        /// <summary>
+        /// Gets or sets the identifier for the entity.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the an unique run-time identifier for the class instance.
+        /// </summary>
+        public int UniqueId { get; set; }
 
         /// <summary>
         /// Sets the matching values to <see cref="CardFile"/> class instance.
@@ -70,11 +104,6 @@ namespace EasyCardFile.Database.NoEntity
             cardType.BackColor = cardTypeNoEntity.BackColor;
             cardType.TypeImage = cardTypeNoEntity.TypeImage;
         }
-
-        /// <summary>
-        /// Gets or sets the identifier for the entity.
-        /// </summary>
-        public int Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the card type.

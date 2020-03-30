@@ -24,12 +24,8 @@ SOFTWARE.
 */
 #endregion
 
-using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Drawing;
-using System.IO;
 using SQLite.CodeFirst;
-using VPKSoft.ErrorLogger;
 
 namespace EasyCardFile.Database.Entity.Entities
 {
@@ -39,6 +35,14 @@ namespace EasyCardFile.Database.Entity.Entities
     /// </summary>
     public class CardType: IEntity
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CardType"/> class.
+        /// </summary>
+        public CardType()
+        {
+            UniqueId = _uniqueIdCounter++;
+        }
+
         /// <summary>
         /// Gets or sets the identifier for the entity.
         /// </summary>
@@ -91,6 +95,14 @@ namespace EasyCardFile.Database.Entity.Entities
         /// Gets or sets the additional numeric data 1. This property is currently not in use and is intended to be used if there are some missing properties with the model.
         /// </summary>
         public int IntData1 { get; set; }
+
+        private static int _uniqueIdCounter;
+
+        /// <summary>
+        /// Gets the an unique run-time identifier for the class instance.
+        /// </summary>
+        [NotMapped]
+        public int UniqueId { get; }
 
         /// <summary>
         /// Returns a <see cref="System.String"/> that represents this instance.

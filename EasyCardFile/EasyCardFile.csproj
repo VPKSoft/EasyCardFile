@@ -130,7 +130,11 @@
     <Compile Include="CardFileHandler\RichTextBoxDataFormats.cs" />
     <Compile Include="Database\Entity\Enumerations\CardSortType.cs" />
     <Compile Include="Database\Entity\Enumerations\CardSortTypeLocalize.cs" />
+    <Compile Include="Database\Entity\History\UndoRedo.cs" />
+    <Compile Include="Database\Entity\History\UndoRedoItem.cs" />
+    <Compile Include="Database\Entity\History\UndoRedoType.cs" />
     <Compile Include="Database\Entity\ModelHelpers\ByteImageHelper.cs" />
+    <Compile Include="Database\NoEntity\CardNoEntity.cs" />
     <Compile Include="Database\NoEntity\CardTypeNoEntity.cs" />
     <Compile Include="CardFileHandler\CardFilePreferences\FormDialogCardFilePreferences.cs">
       <SubType>Form</SubType>
@@ -276,6 +280,8 @@
     <None Include="Resources\edit-paste-3.png" />
     <None Include="Resources\export_document.png" />
     <None Include="Resources\import_document2.png" />
+    <None Include="Resources\edit-undo-5.png" />
+    <None Include="Resources\edit-redo-5.png" />
     <Content Include="VPKSoft.ico" />
     <None Include="Resources\About.png" />
     <None Include="Resources\document-print-preview-4.png" />
