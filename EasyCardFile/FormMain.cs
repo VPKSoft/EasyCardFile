@@ -41,7 +41,6 @@ using EasyCardFile.UtilityClasses.Constants;
 using EasyCardFile.UtilityClasses.FileAssociation;
 using EasyCardFile.UtilityClasses.Localization;
 using EasyCardFile.UtilityClasses.Miscellaneous;
-using EasyCardFile.UtilityClasses.ProjectControls;
 using VPKSoft.ErrorLogger;
 using VPKSoft.LangLib;
 using VPKSoft.MessageBoxExtended;
@@ -166,8 +165,9 @@ namespace EasyCardFile
             foreach (var wrapper in CardFileUiWrapper.GetTabList(tcCardFiles))
             {
                 // ResSharper: Delegate subtraction has unpredictable result? Lets hope not..
-                // ReSharper disable once DelegateSubtraction
+                // ReSharper disable twice DelegateSubtraction
                 wrapper.CardFileChanged -= CardFileChanged;
+                wrapper.UndoRedoChanged -= UndoRedoChanged;
             }
 
             CardFileSaveClose.ClearTemporaryFiles();
@@ -196,6 +196,13 @@ namespace EasyCardFile
         private void CardFileChanged(object sender, EventArgs e)
         {
             SetTitle();
+            SetGuiState();
+        }
+
+        private void UndoRedoChanged(object sender, EventArgs e)
+        {
+            // undo / redo..
+            SetUndoRedoState();
         }
         #endregion
 
@@ -237,6 +244,7 @@ namespace EasyCardFile
 
                 var newWrapper = new CardFileUiWrapper(fileName, tcCardFiles);
                 newWrapper.CardFileChanged += CardFileChanged;
+                newWrapper.UndoRedoChanged += UndoRedoChanged;
 
                 SetTitle();
                 SetGuiState();
@@ -356,6 +364,21 @@ namespace EasyCardFile
             // save the card file as..
             tsbSaveAs.Enabled = wrapper != null;
             mnuSaveAs.Enabled = wrapper != null;
+
+            // undo / redo..
+            SetUndoRedoState();
+        }
+
+        /// <summary>
+        /// Sets the state of the undo and redo buttons and menu items.
+        /// </summary>
+        private void SetUndoRedoState()
+        {
+            var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
+            mnuUndo.Enabled = wrapper != null && wrapper.CanUndo;
+            mnuRedo.Enabled = wrapper != null && wrapper.CanRedo;
+            tsbUndo.Enabled = wrapper != null && wrapper.CanUndo;
+            tsbRedo.Enabled = wrapper != null && wrapper.CanRedo;
         }
 
         #endregion
@@ -379,6 +402,7 @@ namespace EasyCardFile
             // ReSharper disable once ObjectCreationAsStatement
             var wrapper = new CardFileUiWrapper(tcCardFiles);
             wrapper.CardFileChanged += CardFileChanged;
+            wrapper.UndoRedoChanged += UndoRedoChanged;
             SetGuiState();
         }
 
@@ -546,6 +570,8 @@ namespace EasyCardFile
             mnuCopy.Enabled = wrapper.CanCopyCut;
             mnuPaste.Enabled = wrapper.CanPaste;
             mnuPasteWithoutFormatting.Enabled = wrapper.CanPaste;
+            mnuUndo.Enabled = wrapper.CanUndo;
+            mnuRedo.Enabled = wrapper.CanRedo;
         }
 
         private void MenuCopyCutPaste_Click(object sender, EventArgs e)
@@ -606,11 +632,13 @@ namespace EasyCardFile
         private void tsbUndo_Click(object sender, EventArgs e)
         {
             CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles)?.Undo();
+            SetUndoRedoState();
         }
 
         private void tsbRedo_Click(object sender, EventArgs e)
         {
             CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles)?.Redo();
+            SetUndoRedoState();
         }
         #endregion
 

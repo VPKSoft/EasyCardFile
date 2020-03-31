@@ -40,5 +40,10 @@ namespace EasyCardFile.Database.Entity.History
         /// A deletion was made.
         /// </summary>
         Deleted,
+
+        /// <summary>
+        /// A new card was added.
+        /// </summary>
+        Added,
     }
 }

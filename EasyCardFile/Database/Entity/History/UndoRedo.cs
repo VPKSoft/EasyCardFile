@@ -24,11 +24,11 @@ SOFTWARE.
 */
 #endregion
 
-using System.Collections.Generic;
-using System.Linq;
 using EasyCardFile.Database.Entity.Context;
 using EasyCardFile.Database.Entity.Entities;
 using EasyCardFile.Database.NoEntity;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EasyCardFile.Database.Entity.History
 {
@@ -91,7 +91,7 @@ namespace EasyCardFile.Database.Entity.History
         /// <summary>
         /// Gets or sets the maximum change amount saved for each card.
         /// </summary>
-        public static int MaximumChangeAmount { get; set; } = 10000;
+        public static int MaximumChangeAmount { get; set; } = 1000000;
 
         /// <summary>
         /// Gets or sets the undo cursor position within the <see cref="CardChanges"/> buffer containing the history.
@@ -113,12 +113,12 @@ namespace EasyCardFile.Database.Entity.History
         /// Undoes the the changes to a specified card <see cref="CardFileDbContext"/>.
         /// </summary>
         /// <param name="context">The database context of which changes to undo.</param>
-        /// <returns><c>true</c> if the changes were undone, <c>false</c> otherwise.</returns>
-        internal bool Undo(CardFileDbContext context)
+        /// <returns><see cref="Card.UniqueId"/> if the changes were undone, <c>default</c> otherwise.</returns>
+        internal int Undo(CardFileDbContext context)
         {
             if (!CanUndo)
             {
-                return false;
+                return default;
             }
 
             UndoCursorPosition++;
@@ -128,6 +128,7 @@ namespace EasyCardFile.Database.Entity.History
                 var card = context.CardFile.Cards.FirstOrDefault(f =>
                     f.UniqueId == CardChanges[UndoCursorPosition].CardItem.UniqueId);
                 CardNoEntity.ToEntity(card, CardChanges[UndoCursorPosition].CardItem, context.CardFile.CardTypes);
+                return card?.UniqueId ?? default;
             }
             else
             {
@@ -136,21 +137,20 @@ namespace EasyCardFile.Database.Entity.History
                 card.UniqueId = CardChanges[UndoCursorPosition].CardItem.UniqueId;
                 card.CardFile = context.CardFile;
                 context.CardFile.Cards.Add(card);
+                return card.UniqueId;
             }
-
-            return true;
         }
 
         /// <summary>
         /// Redoes the the changes to a specified card <see cref="CardFileDbContext"/>.
         /// </summary>
         /// <param name="context">The database context of which changes to redo.</param>
-        /// <returns><c>true</c> if the changes were redone, <c>false</c> otherwise.</returns>
-        internal bool Redo(CardFileDbContext context)
+        /// <returns><see cref="Card.UniqueId"/> if the changes were undone, <c>default</c> otherwise.</returns>
+        internal int Redo(CardFileDbContext context)
         {
             if (!CanRedo)
             {
-                return false;
+                return default;
             }
 
             UndoCursorPosition--;
@@ -160,15 +160,15 @@ namespace EasyCardFile.Database.Entity.History
                 var card = context.CardFile.Cards.FirstOrDefault(f =>
                     f.UniqueId == CardChanges[UndoCursorPosition].CardItem.UniqueId);
                 CardNoEntity.ToEntity(card, CardChanges[UndoCursorPosition].CardItem, context.CardFile.CardTypes);
+                return card?.UniqueId ?? default;
             }
             else
             {
                 var card = context.CardFile.Cards.FirstOrDefault(f =>
                     f.UniqueId == CardChanges[UndoCursorPosition].CardItem.UniqueId);
                 context.CardFile.Cards.Remove(card);
+                return card?.UniqueId ?? default;
             }
-
-            return true;
         }
 
         /// <summary>

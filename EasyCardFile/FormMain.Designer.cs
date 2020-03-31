@@ -58,6 +58,9 @@
             this.mnuCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuPaste = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuPasteWithoutFormatting = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuUndo = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuRedo = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTools = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuImportLegacy = new System.Windows.Forms.ToolStripMenuItem();
@@ -310,7 +313,10 @@
             this.mnuCut,
             this.mnuCopy,
             this.mnuPaste,
-            this.mnuPasteWithoutFormatting});
+            this.mnuPasteWithoutFormatting,
+            this.toolStripMenuItem5,
+            this.mnuUndo,
+            this.mnuRedo});
             this.mnuEdit.Name = "mnuEdit";
             this.mnuEdit.Size = new System.Drawing.Size(39, 20);
             this.mnuEdit.Text = "Edit";
@@ -353,6 +359,29 @@
             this.mnuPasteWithoutFormatting.Size = new System.Drawing.Size(302, 22);
             this.mnuPasteWithoutFormatting.Text = "Paste without formatting";
             this.mnuPasteWithoutFormatting.Click += new System.EventHandler(this.MenuCopyCutPaste_Click);
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(299, 6);
+            // 
+            // mnuUndo
+            // 
+            this.mnuUndo.Image = global::EasyCardFile.Properties.Resources.edit_undo_5;
+            this.mnuUndo.Name = "mnuUndo";
+            this.mnuUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+            this.mnuUndo.Size = new System.Drawing.Size(302, 22);
+            this.mnuUndo.Text = "Undo";
+            this.mnuUndo.Click += new System.EventHandler(this.tsbUndo_Click);
+            // 
+            // mnuRedo
+            // 
+            this.mnuRedo.Image = global::EasyCardFile.Properties.Resources.edit_redo_5;
+            this.mnuRedo.Name = "mnuRedo";
+            this.mnuRedo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
+            this.mnuRedo.Size = new System.Drawing.Size(302, 22);
+            this.mnuRedo.Text = "Redo";
+            this.mnuRedo.Click += new System.EventHandler(this.tsbRedo_Click);
             // 
             // mnuTools
             // 
@@ -757,6 +786,9 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripButton tsbUndo;
         private System.Windows.Forms.ToolStripButton tsbRedo;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
+        private System.Windows.Forms.ToolStripMenuItem mnuUndo;
+        private System.Windows.Forms.ToolStripMenuItem mnuRedo;
     }
 }
 

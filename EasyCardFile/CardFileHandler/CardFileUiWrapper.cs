@@ -243,6 +243,11 @@ namespace EasyCardFile.CardFileHandler
         /// Occurs when the <see cref="CardFile"/> of this UI wrapper has changed.
         /// </summary>
         public EventHandler CardFileChanged;
+
+        /// <summary>
+        /// Occurs when the <see cref="CardFile"/> undo and redo possibility if of the card file has been changed.
+        /// </summary>
+        public EventHandler UndoRedoChanged;
         #endregion
 
         #region InteractionProperties
@@ -312,7 +317,16 @@ namespace EasyCardFile.CardFileHandler
             var result = UndoRedo.Undo(CardFileDb);
             ListBoxCards?.ClearCache();
             ListBoxCards?.RefreshItems();
-            return result;
+            if (result != default)
+            {
+                var displayCard = CardFileDb.CardFile.Cards.FirstOrDefault(f => f.UniqueId == result);
+                if (displayCard != null && ListBoxCards != null)
+                {
+                    ListBoxCards.SelectedItem = displayCard;
+                }
+            }
+            UndoRedoChanged?.Invoke(this, new EventArgs());
+            return result != default;
         }
 
         /// <summary>
@@ -324,7 +338,16 @@ namespace EasyCardFile.CardFileHandler
             var result = UndoRedo.Redo(CardFileDb);
             ListBoxCards?.ClearCache();
             ListBoxCards?.RefreshItems();
-            return result;
+            if (result != default)
+            {
+                var displayCard = CardFileDb.CardFile.Cards.FirstOrDefault(f => f.UniqueId == result);
+                if (displayCard != null && ListBoxCards != null)
+                {
+                    ListBoxCards.SelectedItem = displayCard;
+                }
+            }
+            UndoRedoChanged?.Invoke(this, new EventArgs());
+            return result != default;
         }
 
         /// <summary>
