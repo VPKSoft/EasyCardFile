@@ -190,7 +190,7 @@ namespace EasyCardFile.UtilityClasses.ProjectControls
             Image image;
 
             // ..check if one exists..
-            if (ImageCache.Count > 0 && ImageCache.Any(f => f.Key == card.CardType.Id))
+            if (ImageCache.Count > 0 && card.CardType != null && ImageCache.Any(f => f.Key == card.CardType.Id)) 
             {
                 // get the image matching the card type id..
                 image = ImageCache.FirstOrDefault(f => f.Key == card.CardType.Id).Value;

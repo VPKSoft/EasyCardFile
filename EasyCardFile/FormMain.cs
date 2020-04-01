@@ -464,15 +464,10 @@ namespace EasyCardFile
         private void tsbNewCard_Click(object sender, EventArgs e)
         {
             var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
-            if (wrapper != null)
+            var changed = wrapper?.AddCard();
+            if (changed == true)
             {
-                if (FormDialogAddRenameCard.ShowDialog(this, wrapper.CardFileDb.CardFile, out var card) == DialogResult.OK)
-                {
-                    wrapper.Changed = true;
-                    wrapper.RefreshUi(card, true);
-                    SetTitle(true);
-                    wrapper.FocusRichTextBox();
-                }
+                SetTitle(true);
             }
         }
 
@@ -480,9 +475,8 @@ namespace EasyCardFile
         {
             var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
             var changed = wrapper?.DeleteCard();
-            if (changed != null && changed == true)
+            if (changed == true)
             {
-                wrapper.Changed = true;
                 SetTitle(true);
                 SetGuiState();
             }

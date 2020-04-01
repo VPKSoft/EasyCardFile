@@ -31,6 +31,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using EasyCardFile.CardFileHandler.CardFileNaming;
 using EasyCardFile.Database.Entity.Context;
 using EasyCardFile.Database.Entity.Context.ContextCompression;
 using EasyCardFile.Database.Entity.Context.ContextEncryption;
@@ -314,9 +315,65 @@ namespace EasyCardFile.CardFileHandler
         /// <returns><c>true</c> if the changes were undone, <c>false</c> otherwise.</returns>
         public bool Undo()
         {
-            var result = UndoRedo.Undo(CardFileDb);
-            ListBoxCards?.ClearCache();
-            ListBoxCards?.RefreshItems();
+            if (RichTextBox.RichTextBox.CanUndo)
+            {
+                RichTextBox.RichTextBox.Undo();
+                return true;
+            }
+
+            var result = UndoRedo.Undo(CardFileDb, out var reListItems);
+
+            SuspendTextHandler = true;
+
+            if (reListItems)
+            {
+                RefreshUi(null, true);
+            }
+            else
+            {
+                ListBoxCards?.ClearCache();
+                ListBoxCards?.RefreshItems();
+            }
+
+            if (result != default)
+            {
+                var displayCard = CardFileDb.CardFile.Cards.FirstOrDefault(f => f.UniqueId == result);
+                if (displayCard != null && ListBoxCards != null)
+                {
+                    ListBoxCards.SelectedItem = displayCard;
+                    DisplayCardContents(displayCard);    
+                }
+            }
+
+            SuspendTextHandler = false;
+            UndoRedoChanged?.Invoke(this, new EventArgs());
+            return result != default;
+        }
+
+        /// <summary>
+        /// Redoes the changes to the card selected card.
+        /// </summary>
+        /// <returns><c>true</c> if the changes were redone, <c>false</c> otherwise.</returns>
+        public bool Redo()
+        {
+            if (RichTextBox.RichTextBox.CanRedo)
+            {
+                RichTextBox.RichTextBox.Redo();
+                return true;
+            }
+
+            var result = UndoRedo.Redo(CardFileDb, out var reListItems);
+
+            if (reListItems)
+            {
+                RefreshUi(null, true);
+            }
+            else
+            {
+                ListBoxCards?.ClearCache();
+                ListBoxCards?.RefreshItems();
+            }
+
             if (result != default)
             {
                 var displayCard = CardFileDb.CardFile.Cards.FirstOrDefault(f => f.UniqueId == result);
@@ -330,24 +387,12 @@ namespace EasyCardFile.CardFileHandler
         }
 
         /// <summary>
-        /// Redoes the changes to the card selected card.
+        /// Clears the undo buffer of the <see cref="CardFileDb"/> of this <see cref="CardFileUiWrapper"/> instance.
         /// </summary>
-        /// <returns><c>true</c> if the changes were redone, <c>false</c> otherwise.</returns>
-        public bool Redo()
+        public void ClearUndo()
         {
-            var result = UndoRedo.Redo(CardFileDb);
-            ListBoxCards?.ClearCache();
-            ListBoxCards?.RefreshItems();
-            if (result != default)
-            {
-                var displayCard = CardFileDb.CardFile.Cards.FirstOrDefault(f => f.UniqueId == result);
-                if (displayCard != null && ListBoxCards != null)
-                {
-                    ListBoxCards.SelectedItem = displayCard;
-                }
-            }
+            UndoRedo.Clear();
             UndoRedoChanged?.Invoke(this, new EventArgs());
-            return result != default;
         }
 
         /// <summary>
@@ -565,6 +610,9 @@ namespace EasyCardFile.CardFileHandler
 
                 var index = ListBoxCards.SelectedIndex;
 
+                // add the deletion to the undo / redo class..
+                UndoRedo.AddChange(card, UndoRedoType.Deleted, card.CardContents, card.CardType.UniqueId);
+
                 CardFileDb.CardFile.Cards.Remove(card);
                 ListBoxCards.Items.Remove(card);
 
@@ -579,6 +627,30 @@ namespace EasyCardFile.CardFileHandler
                 }
 
                 FocusRichTextBox();
+
+                Changed = true;
+                // notify of the change..
+                UndoRedoChanged?.Invoke(this, new EventArgs());
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Adds a new card to the card file.
+        /// </summary>
+        /// <returns><c>true</c> if a card was successfully added, <c>false</c> otherwise.</returns>
+        public bool AddCard()
+        {
+            if (FormDialogAddRenameCard.ShowDialog(Application.OpenForms[0], CardFileDb.CardFile, out var card) == DialogResult.OK)
+            {
+                Changed = true;
+                RefreshUi(card, true);
+                FocusRichTextBox();
+
+                // add the new card addition to the undo / redo class..
+                UndoRedo.AddChange(card, UndoRedoType.Added, card.CardContents, card.CardType.UniqueId);
 
                 return true;
             }
@@ -859,7 +931,12 @@ namespace EasyCardFile.CardFileHandler
         internal bool IsTemporary { get; set; }
         #endregion
 
-        #region PrivateProperties        
+        #region PrivateProperties                
+        /// <summary>
+        /// Gets or sets the previously selected item from the <see cref="ListBoxCards"/> list box.
+        /// </summary>
+        private object PreviousSelectedItem { get; set; }
+
         /// <summary>
         /// Gets or sets the undo/redo class instance.
         /// </summary>
@@ -910,6 +987,7 @@ namespace EasyCardFile.CardFileHandler
             }
 
             var listBox = (ListBox) sender;
+
             DisplayCard(listBox.SelectedItem);
         }
 
@@ -920,10 +998,12 @@ namespace EasyCardFile.CardFileHandler
 
         private void RichTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (SuspendTextHandler)
+            if (SuspendTextHandler || SuspendCardChanged)
             {
                 return;
             }
+
+            RichTextBox.Tag = true;
 
             UpdateRowColumnSelection();
             SetCardChanges(ListBoxCards.SelectedItem, null);
@@ -1218,27 +1298,11 @@ namespace EasyCardFile.CardFileHandler
         }
 
         /// <summary>
-        /// Displays the card's contents suspending the changed event handlers so the displayed card doesn't flag it self as changed.
+        /// Displays the card contents.
         /// </summary>
-        /// <param name="cardEntity"></param>
-        private void DisplayCard(object cardEntity)
+        /// <param name="cardEntity">The card entity <see cref="Card"/> which contents to display.</param>
+        private void DisplayCardContents(object cardEntity)
         {
-            if (SuspendTextHandler)
-            {
-                PreviousCardContents = null;
-                RichTextBox.Tag = false;
-                RichTextBox.Clear();
-                return;
-            }
-
-            if ((bool)RichTextBox.Tag)
-            {
-                var previousCard = (Card)ListBoxCards.SelectedItem;
-                UndoRedo.AddChange(previousCard, UndoRedoType.Modified, PreviousCardContents, previousCard.UniqueId);
-                SelectedCardChanged?.Invoke(this, new EventArgs());
-            }
-
-            RichTextBox.Tag = false;
             var card = (Card) cardEntity;
             if (card != null)
             {
@@ -1263,6 +1327,41 @@ namespace EasyCardFile.CardFileHandler
             {
                 RichTextBox.Clear();
             }
+        }
+
+        /// <summary>
+        /// Displays the card's contents suspending the changed event handlers so the displayed card doesn't flag it self as changed.
+        /// </summary>
+        /// <param name="cardEntity"></param>
+        private void DisplayCard(object cardEntity)
+        {
+            if (SuspendTextHandler)
+            {
+                PreviousSelectedItem = cardEntity;
+                PreviousCardContents = null;
+                RichTextBox.Tag = false;
+                RichTextBox.Clear();
+                return;
+            }
+
+            if ((bool)RichTextBox.Tag)
+            {
+                var previousCard = (Card) PreviousSelectedItem;
+                var newCard = (Card) cardEntity;
+                if (previousCard != null && newCard != null && previousCard != newCard)
+                {
+                    UndoRedo.AddChange(previousCard, UndoRedoType.Modified, PreviousCardContents,
+                        previousCard.CardType.UniqueId);
+                    SelectedCardChanged?.Invoke(this, new EventArgs());
+                    UndoRedoChanged?.Invoke(this, new EventArgs());
+                }
+            }
+
+            PreviousSelectedItem = cardEntity;
+
+            RichTextBox.Tag = false;
+
+            DisplayCardContents(cardEntity);
         }
 
         /// <summary>
@@ -1400,7 +1499,7 @@ namespace EasyCardFile.CardFileHandler
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        #pragma warning disable CA1063 // Implement IDisposable Correctly
+#pragma warning disable CA1063 // Implement IDisposable Correctly
         public void Dispose()
         #pragma warning restore CA1063 // Implement IDisposable Correctly
         {

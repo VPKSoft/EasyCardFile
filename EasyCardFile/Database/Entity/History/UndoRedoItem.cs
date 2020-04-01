@@ -34,9 +34,14 @@ namespace EasyCardFile.Database.Entity.History
     public class UndoRedoItem
     {
         /// <summary>
-        /// Gets or sets the card item.
+        /// Gets or sets the changed card item.
         /// </summary>
-        public CardNoEntity CardItem { get; set; }
+        public CardNoEntity CardItemChanged { get; set; }
+
+        /// <summary>
+        /// Gets or sets the card item before change.
+        /// </summary>
+        public CardNoEntity CardItemBeforeChange { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the undo/redo operation which to negate for.
