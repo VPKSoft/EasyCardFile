@@ -53,6 +53,8 @@ namespace EasyCardFile.Database.NoEntity
                     TypeImage = cardType.TypeImage, 
                     CardNamingInstruction = cardType.CardNamingInstruction,
                     UniqueId = cardType.UniqueId,
+                    Id = cardType.Id,
+                    IntData1 = cardType.IntData1,
                 };
         }
 
@@ -69,6 +71,7 @@ namespace EasyCardFile.Database.NoEntity
             cardType.BackColor = cardTypeNoEntity.BackColor;
             cardType.TypeImage = cardTypeNoEntity.TypeImage;
             cardType.CardNamingInstruction = cardTypeNoEntity.CardNamingInstruction;
+            cardType.IntData1 = cardTypeNoEntity.IntData1;
         }
 
         /// <summary>
@@ -98,11 +101,12 @@ namespace EasyCardFile.Database.NoEntity
         public static void SetToEntity(CardTypeNoEntity cardTypeNoEntity, ref CardType cardType)
         {
             cardType.CardTypeName = cardTypeNoEntity.CardTypeName;
-            cardType.CardNamingInstruction = cardTypeNoEntity.CardNamingInstruction;
             cardType.AdditionalData1 = cardTypeNoEntity.AdditionalData1;
             cardType.ForeColor = cardTypeNoEntity.ForeColor;
             cardType.BackColor = cardTypeNoEntity.BackColor;
             cardType.TypeImage = cardTypeNoEntity.TypeImage;
+            cardType.CardNamingInstruction = cardTypeNoEntity.CardNamingInstruction;
+            cardType.IntData1 = cardTypeNoEntity.IntData1;
         }
 
         /// <summary>
@@ -134,6 +138,11 @@ namespace EasyCardFile.Database.NoEntity
         /// Gets or sets the additional data 1. This property is currently not in use and is intended to be used if there are some missing properties with the model.
         /// </summary>
         public string AdditionalData1 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the additional numeric data 1. This property is currently not in use and is intended to be used if there are some missing properties with the model.
+        /// </summary>
+        public int IntData1 { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance represents the default card type.

@@ -29,7 +29,6 @@ using EasyCardFile.Database.Entity.Entities;
 using EasyCardFile.Database.NoEntity;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace EasyCardFile.Database.Entity.History
 {
@@ -43,10 +42,12 @@ namespace EasyCardFile.Database.Entity.History
         /// </summary>
         /// <param name="card">The card.</param>
         /// <param name="type">The type of the change save for an undo/redo possibility.</param>
+        /// <param name="previousCardOrdering">The previous card ordering before the card was changed.</param>
         /// <param name="previousCardContents">The previous card contents before the card was changed.</param>
         /// <param name="previousCardTypeUniqueId">The value of <see cref="CardType.UniqueId"/> before the card type was changed.</param>
         /// <param name="newCardTypeUniqueId">The value of <see cref="CardType.UniqueId"/> after the card type was changed.</param>
-        internal void AddChange(Card card, UndoRedoType type,  byte[] previousCardContents, int previousCardTypeUniqueId, int newCardTypeUniqueId = -1)
+        internal void AddChange(Card card, UndoRedoType type, int previousCardOrdering, byte[] previousCardContents,
+            int previousCardTypeUniqueId, int newCardTypeUniqueId = -1)
         {
             if (card == null)
             {

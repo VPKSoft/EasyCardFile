@@ -394,6 +394,7 @@ namespace EasyCardFile
                 wrapper.RefreshUi(null, true, true);
                 Application.DoEvents();
                 wrapper.RefreshCardList();
+                wrapper.SetCustomOrdering();
             }
         }
 

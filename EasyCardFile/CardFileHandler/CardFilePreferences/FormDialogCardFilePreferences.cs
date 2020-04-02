@@ -600,7 +600,7 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
             // set the changed values and add the new ones..
             foreach (var cardTypeNoEntity in CardTypes) 
             {
-                var cardType = CardFileDbContext.CardFile.CardTypes.FirstOrDefault(f => f.Id == cardTypeNoEntity.Id);
+                var cardType = CardFileDbContext.CardFile.CardTypes.FirstOrDefault(f => f.UniqueId == cardTypeNoEntity.UniqueId);
                 if (cardType != default)
                 {
                     CardTypeNoEntity.SetToEntity(cardTypeNoEntity, ref cardType);
@@ -616,6 +616,7 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
                         ForeColor = cardTypeNoEntity.ForeColor, 
                         TypeImage = cardTypeNoEntity.TypeImage, 
                         CardFile = CardFileDbContext.CardFile,
+                        IntData1 = cardTypeNoEntity.IntData1,
                     });
                 }
             }

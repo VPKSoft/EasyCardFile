@@ -36,6 +36,7 @@ using EasyCardFile.Database.Entity.Context;
 using EasyCardFile.Database.Entity.Context.ContextCompression;
 using EasyCardFile.Database.Entity.Context.ContextEncryption;
 using EasyCardFile.Database.Entity.Entities;
+using EasyCardFile.Database.Entity.Enumerations;
 using EasyCardFile.Database.Entity.History;
 using EasyCardFile.UtilityClasses.ErrorHandling;
 using EasyCardFile.UtilityClasses.Localization;
@@ -145,6 +146,11 @@ namespace EasyCardFile.CardFileHandler
         private static string CardTypeDescription { get; set; }
 
         /// <summary>
+        /// Gets or sets the localized custom card ordering description text.
+        /// </summary>
+        private static string CardOrderingDescription { get; set; }
+
+        /// <summary>
         /// Gets or sets the card changed indicator text.
         /// </summary>
         private static string FileChangedIndicator { get; set; }
@@ -224,6 +230,9 @@ namespace EasyCardFile.CardFileHandler
 
             ConfirmDeleteCardQuery = DBLangEngine.GetStatMessage("msgQueryConfirmDeleteCard",
                 "Delete the card: '{0}'?|A message asking from the user for confirmation of deletion of a card from the card file.");
+
+            CardOrderingDescription = DBLangEngine.GetStatMessage("msgCardOrderingDescription",
+                "Card ordering:|A description text for a card ordering selection in a numeric query control.");
         }
         #endregion
 
@@ -611,7 +620,8 @@ namespace EasyCardFile.CardFileHandler
                 var index = ListBoxCards.SelectedIndex;
 
                 // add the deletion to the undo / redo class..
-                UndoRedo.AddChange(card, UndoRedoType.Deleted, card.CardContents, card.CardType.UniqueId);
+                UndoRedo.AddChange(card, UndoRedoType.Deleted, card.Ordering, card.CardContents,
+                    card.CardType.UniqueId);
 
                 CardFileDb.CardFile.Cards.Remove(card);
                 ListBoxCards.Items.Remove(card);
@@ -650,12 +660,32 @@ namespace EasyCardFile.CardFileHandler
                 FocusRichTextBox();
 
                 // add the new card addition to the undo / redo class..
-                UndoRedo.AddChange(card, UndoRedoType.Added, card.CardContents, card.CardType.UniqueId);
+                UndoRedo.AddChange(card, UndoRedoType.Added, card.Ordering, card.CardContents, 
+                    card.CardType.UniqueId);
 
                 return true;
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Sets the visibility to control the custom ordering based on the value whether it's used within the card file or not.
+        /// </summary>
+        public void SetCustomOrdering()
+        {
+            var display =
+                CardFileDb.CardFile.CardSortType1.HasFlag(CardSortType.Custom) ||
+                CardFileDb.CardFile.CardSortType1.HasFlag(CardSortType.CustomDescending) ||
+                CardFileDb.CardFile.CardSortType2.HasFlag(CardSortType.Custom) ||
+                CardFileDb.CardFile.CardSortType2.HasFlag(CardSortType.CustomDescending) ||
+                CardFileDb.CardFile.CardSortType3.HasFlag(CardSortType.Custom) ||
+                CardFileDb.CardFile.CardSortType3.HasFlag(CardSortType.CustomDescending) ||
+                CardFileDb.CardFile.CardSortType4.HasFlag(CardSortType.Custom) ||
+                CardFileDb.CardFile.CardSortType4.HasFlag(CardSortType.CustomDescending);
+
+            LabelCardOrdering.Visible = display;
+            CardOrdering.Visible = display;
         }
 
         /// <summary>
@@ -686,11 +716,12 @@ namespace EasyCardFile.CardFileHandler
             SplitContainer = new SplitContainer {Dock = DockStyle.Fill,};
 
             // create a table layout panel for the search box and for the card list..
-            TableLayoutMain = new TableLayoutPanel {Dock = DockStyle.Fill, RowCount = 3, ColumnCount = 2,};
+            TableLayoutMain = new TableLayoutPanel {Dock = DockStyle.Fill, RowCount = 4, ColumnCount = 2,};
             TableLayoutMain.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             TableLayoutMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             TableLayoutMain.RowStyles.Add(new RowStyle{ SizeType = SizeType.AutoSize});
             TableLayoutMain.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            TableLayoutMain.RowStyles.Add(new RowStyle{ SizeType = SizeType.AutoSize});
             TableLayoutMain.RowStyles.Add(new RowStyle{ SizeType = SizeType.AutoSize});
             SplitContainer.Panel1.Controls.Add(TableLayoutMain);
 
@@ -721,9 +752,25 @@ namespace EasyCardFile.CardFileHandler
                 }
             }
 
+            // create the label to indicate that the next control will be the custom card ordering numeric up-down..
+            LabelCardOrdering = new Label {Text = CardOrderingDescription, Padding = new Padding(2), Margin = new Padding(3),};
+            TableLayoutMain.Controls.Add(LabelCardOrdering, 0, 2);
+
+            CardOrdering = new NumericUpDown
+            {
+                TextAlign = HorizontalAlignment.Right,
+                Minimum = 0,
+                Maximum = int.MaxValue,
+                Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top,
+            };
+
+            CardOrdering.ValueChanged += CardOrdering_ValueChanged;
+
+            TableLayoutMain.Controls.Add(CardOrdering, 1, 2);
+
             // create the label to indicate that the next control will be the card type combo box..
             label = new Label {Text = CardTypeDescription, Padding = new Padding(2), Margin = new Padding(3),};
-            TableLayoutMain.Controls.Add(label, 0, 2);
+            TableLayoutMain.Controls.Add(label, 0, 3);
 
             // create the combo box for the card type..
             CardTypeComboBox = new ComboBox
@@ -736,7 +783,7 @@ namespace EasyCardFile.CardFileHandler
 
             CardTypeComboBox.SelectedValueChanged += ComboBoxCardType_SelectedValueChanged;
 
-            TableLayoutMain.Controls.Add(CardTypeComboBox, 1, 2);
+            TableLayoutMain.Controls.Add(CardTypeComboBox, 1, 3);
             foreach (var cardType in CardFileDb.CardFile.CardTypes)
             {
                 CardTypeComboBox.Items.Add(cardType);
@@ -782,11 +829,16 @@ namespace EasyCardFile.CardFileHandler
 
             RichTextBox.RichTextBox.ContextMenuStrip = RichTextBoxContextMenu;
 
+            // hide or show the custom ordering controls if a custom numeric ordering is used..
+            SetCustomOrdering();
+
+            // add the split container to the tab..
             Tab.Controls.Add(SplitContainer);
             tabControl.Tabs.Add(Tab);
             tabControl.SelectedTab = Tab;
             var splitterDistance = tabControl.ClientSize.Width * 25 / 100; // size about 25%..
 
+            // there is always a change that this splitter distance will be assigned a screwed-up (?!)..
             try
             {
                 SplitContainer.SplitterDistance = splitterDistance;
@@ -945,8 +997,12 @@ namespace EasyCardFile.CardFileHandler
         /// <summary>
         /// Gets or sets the card contents before they were changed.
         /// </summary>
-        /// <value>The previous card contents.</value>
         private byte[] PreviousCardContents { get; set; }
+
+        /// <summary>
+        /// Gets or sets the previous card ordering in case the ordering was changed.
+        /// </summary>
+        private int PreviousCardOrdering { get; set; }
         #endregion
 
         #region EventHandlers
@@ -1022,7 +1078,8 @@ namespace EasyCardFile.CardFileHandler
             }
 
             var card = (Card) ListBoxCards.SelectedItem;
-            UndoRedo.AddChange(card, UndoRedoType.Modified, PreviousCardContents, card.CardType.UniqueId,
+            UndoRedo.AddChange(card, UndoRedoType.Modified, PreviousCardOrdering, PreviousCardContents,
+                card.CardType.UniqueId,
                 ((CardType) ((ComboBox) sender).SelectedItem).UniqueId);
             SelectedCardChanged?.Invoke(this, new EventArgs());
             SetCardChanges(card, ((ComboBox)sender).SelectedItem);
@@ -1030,6 +1087,30 @@ namespace EasyCardFile.CardFileHandler
             {
                 ListBoxCards.Invalidate();
             }
+        }
+
+        private void CardOrdering_ValueChanged(object sender, EventArgs e)
+        {
+            if (SuspendCardChanged)
+            {
+                return;
+            }
+
+            var numericUpDown = (NumericUpDown) sender;
+
+            var value = (int) numericUpDown.Value;
+
+            // TODO::Save the first ordering of the card!
+
+            var card = (Card) ListBoxCards.SelectedItem;
+
+            if (card != null && card.Ordering != PreviousCardOrdering)
+            {
+                UndoRedo.AddChange(card, UndoRedoType.Modified, PreviousCardOrdering, PreviousCardContents,
+                    card.CardType.UniqueId);
+            }
+
+            SetCardChanges(card, card?.CardType);
         }
 
         private void SearchTextBox_TextChanged(object sender, EventArgs e)
@@ -1080,6 +1161,16 @@ namespace EasyCardFile.CardFileHandler
         /// The <see cref="ComboBox"/> control to select and indicate the selected card type from the card list within the card file.
         /// </summary>
         private ComboBox CardTypeComboBox { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="NumericUpDown"/> control to adjust the card ordering in case a custom ordering is to be used.
+        /// </summary>
+        private NumericUpDown CardOrdering { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Label"/> control indicating to adjust the card ordering in case a custom ordering is to be used.
+        /// </summary>
+        private Label LabelCardOrdering { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="Manina.Windows.Forms.Tab"/> to which this <see cref="CardFileDb"/> belongs to.
@@ -1307,6 +1398,7 @@ namespace EasyCardFile.CardFileHandler
             if (card != null)
             {
                 PreviousCardContents = card.CardContents;
+                PreviousCardOrdering = card.Ordering;
                 SuspendCardChanged = true;
                 if (card.CardContents != null)
                 {
@@ -1339,6 +1431,7 @@ namespace EasyCardFile.CardFileHandler
             {
                 PreviousSelectedItem = cardEntity;
                 PreviousCardContents = null;
+                PreviousCardOrdering = default;
                 RichTextBox.Tag = false;
                 RichTextBox.Clear();
                 return;
@@ -1350,8 +1443,10 @@ namespace EasyCardFile.CardFileHandler
                 var newCard = (Card) cardEntity;
                 if (previousCard != null && newCard != null && previousCard != newCard)
                 {
-                    UndoRedo.AddChange(previousCard, UndoRedoType.Modified, PreviousCardContents,
+                    UndoRedo.AddChange(previousCard, UndoRedoType.Modified,
+                        PreviousCardOrdering, PreviousCardContents,
                         previousCard.CardType.UniqueId);
+
                     SelectedCardChanged?.Invoke(this, new EventArgs());
                     UndoRedoChanged?.Invoke(this, new EventArgs());
                 }

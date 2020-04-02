@@ -62,6 +62,16 @@ namespace EasyCardFile.Database.Entity.Enumerations
         internal static string CardTypeDescending { get; set; }
 
         /// <summary>
+        /// Gets or sets the localized name for the <see cref="CardSortType.Custom"/> enumeration value.
+        /// </summary>
+        internal static string EnumCardOrdering { get; set; }
+
+        /// <summary>
+        /// Gets or sets the localized name for the <see cref="CardSortType.CustomDescending"/> enumeration value.
+        /// </summary>
+        internal static string EnumCardOrderingDescending { get; set; }
+
+        /// <summary>
         /// Gets or sets the localized <see cref="CardSortType"/> enum-string pairs.
         /// </summary>
         internal static List<KeyValuePair<CardSortType, string>> LocalizedEnum { get; set; } = new List<KeyValuePair<CardSortType, string>>();
@@ -119,6 +129,11 @@ namespace EasyCardFile.Database.Entity.Enumerations
                 "Card type|A localized enumeration value for card sort style of: Card Type.");
             CardTypeDescending = DBLangEngine.GetStatMessage("msgEnumCardTypeDescendingSort",
                 "Card type descending|A localized enumeration value for card sort style of: Card Type Descending.");
+            EnumCardOrdering = DBLangEngine.GetStatMessage("msgEnumCardOrdering",
+                "User defined ordering|A localized enumeration value for card sort style of: Custom.");
+            EnumCardOrderingDescending = DBLangEngine.GetStatMessage("msgEnumCardOrderingDescending",
+                "User defined ordering descending|A localized enumeration value for card sort style of: Custom Descending.");
+
 
 
             LocalizedEnum.Add(new KeyValuePair<CardSortType, string>(CardSortType.None, EnumNone));
@@ -130,6 +145,8 @@ namespace EasyCardFile.Database.Entity.Enumerations
             LocalizedEnum.Add(new KeyValuePair<CardSortType, string>(CardSortType.CreatedDescending, EnumCreatedDescending));
             LocalizedEnum.Add(new KeyValuePair<CardSortType, string>(CardSortType.CardType, EnumCardType));
             LocalizedEnum.Add(new KeyValuePair<CardSortType, string>(CardSortType.CardTypeDescending, CardTypeDescending));
+            LocalizedEnum.Add(new KeyValuePair<CardSortType, string>(CardSortType.Custom, EnumCardOrdering));
+            LocalizedEnum.Add(new KeyValuePair<CardSortType, string>(CardSortType.CustomDescending, EnumCardOrderingDescending));
             // This is more of a flag: LocalizedEnum.Add(CardSortType.IgnoreCase, EnumIgnoreCase);
 
             Localized = true;

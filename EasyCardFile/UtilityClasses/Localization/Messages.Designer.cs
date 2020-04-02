@@ -88,6 +88,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Card ordering:|A description text for a card ordering selection in a numeric query control..
+        /// </summary>
+        internal static string msgCardOrderingDescription {
+            get {
+                return ResourceManager.GetString("msgCardOrderingDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The default card can not be deleted. Please set another card as default and then remove the selected one.|A message describing that the default card type can not be removed and another type should be set to default before removing the selected one..
         /// </summary>
         internal static string msgCardTypeDefaultCanNotDelete {
@@ -345,6 +354,24 @@ namespace EasyCardFile.UtilityClasses.Localization {
         internal static string msgEnumAlphabeticalSort {
             get {
                 return ResourceManager.GetString("msgEnumAlphabeticalSort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User defined ordering|A localized enumeration value for card sort style of: Custom..
+        /// </summary>
+        internal static string msgEnumCardOrdering {
+            get {
+                return ResourceManager.GetString("msgEnumCardOrdering", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User defined ordering descending|A localized enumeration value for card sort style of: Custom Descending..
+        /// </summary>
+        internal static string msgEnumCardOrderingDescending {
+            get {
+                return ResourceManager.GetString("msgEnumCardOrderingDescending", resourceCulture);
             }
         }
         

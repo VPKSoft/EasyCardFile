@@ -57,5 +57,15 @@ namespace EasyCardFile.Database.Entity.Enumerations
         /// Sorting by card type name descending.
         /// </summary>
         CardTypeDescending,
+
+        /// <summary>
+        /// Sorting by a user defined order number.
+        /// </summary>
+        Custom,
+
+        /// <summary>
+        /// Sorting by a user defined order number descending.
+        /// </summary>
+        CustomDescending,
     }
 }
