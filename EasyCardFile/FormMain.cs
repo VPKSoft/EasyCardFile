@@ -31,7 +31,6 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using EasyCardFile.CardFileHandler;
-using EasyCardFile.CardFileHandler.CardFileNaming;
 using EasyCardFile.CardFileHandler.CardFilePreferences;
 using EasyCardFile.CardFileHandler.LegacyCardFile;
 using EasyCardFile.Database.Entity.Enumerations;
@@ -506,17 +505,11 @@ namespace EasyCardFile
         private void tsbRenameCard_Click(object sender, EventArgs e)
         {
             var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
-            var cardFile = wrapper.CardFileDb.CardFile;
+            var changed = wrapper?.RenameCard();
 
-            if (wrapper.SelectedCard != null)
+            if (changed == true)
             {
-                if (FormDialogAddRenameCard.ShowDialogRename(this, cardFile, wrapper.SelectedCard) == DialogResult.OK)
-                {
-                    wrapper.SelectedCard.ModifiedDateTime = DateTime.Now;
-                    wrapper.Changed = true;
-                    wrapper.RefreshCardList();
-                    SetTitle();
-                }
+                SetTitle();
             }
         }
 

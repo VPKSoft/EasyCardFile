@@ -36,7 +36,10 @@
             this.cmbCardType = new System.Windows.Forms.ComboBox();
             this.lbCardType = new System.Windows.Forms.Label();
             this.pbGenerateName = new System.Windows.Forms.PictureBox();
+            this.lbCardOrdering = new System.Windows.Forms.Label();
+            this.nudCardOrdering = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pbGenerateName)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCardOrdering)).BeginInit();
             this.SuspendLayout();
             // 
             // tbCardName
@@ -116,6 +119,28 @@
             this.pbGenerateName.TabStop = false;
             this.pbGenerateName.Click += new System.EventHandler(this.pbGenerateName_Click);
             // 
+            // lbCardOrdering
+            // 
+            this.lbCardOrdering.AutoSize = true;
+            this.lbCardOrdering.Location = new System.Drawing.Point(12, 67);
+            this.lbCardOrdering.Name = "lbCardOrdering";
+            this.lbCardOrdering.Size = new System.Drawing.Size(73, 13);
+            this.lbCardOrdering.TabIndex = 35;
+            this.lbCardOrdering.Text = "Card ordering:";
+            // 
+            // nudCardOrdering
+            // 
+            this.nudCardOrdering.Location = new System.Drawing.Point(124, 65);
+            this.nudCardOrdering.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.nudCardOrdering.Name = "nudCardOrdering";
+            this.nudCardOrdering.Size = new System.Drawing.Size(120, 20);
+            this.nudCardOrdering.TabIndex = 36;
+            this.nudCardOrdering.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
             // FormDialogAddRenameCard
             // 
             this.AcceptButton = this.btOk;
@@ -123,6 +148,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btCancel;
             this.ClientSize = new System.Drawing.Size(534, 100);
+            this.Controls.Add(this.nudCardOrdering);
+            this.Controls.Add(this.lbCardOrdering);
             this.Controls.Add(this.pbGenerateName);
             this.Controls.Add(this.lbCardType);
             this.Controls.Add(this.cmbCardType);
@@ -139,6 +166,7 @@
             this.Text = "Enter a name for the card";
             this.Shown += new System.EventHandler(this.FormDialogAddRenameCard_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.pbGenerateName)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCardOrdering)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -153,5 +181,7 @@
         private System.Windows.Forms.ComboBox cmbCardType;
         private System.Windows.Forms.Label lbCardType;
         private System.Windows.Forms.PictureBox pbGenerateName;
+        private System.Windows.Forms.Label lbCardOrdering;
+        private System.Windows.Forms.NumericUpDown nudCardOrdering;
     }
 }

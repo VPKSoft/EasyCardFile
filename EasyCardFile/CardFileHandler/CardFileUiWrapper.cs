@@ -36,7 +36,6 @@ using EasyCardFile.Database.Entity.Context;
 using EasyCardFile.Database.Entity.Context.ContextCompression;
 using EasyCardFile.Database.Entity.Context.ContextEncryption;
 using EasyCardFile.Database.Entity.Entities;
-using EasyCardFile.Database.Entity.Enumerations;
 using EasyCardFile.Database.Entity.History;
 using EasyCardFile.UtilityClasses.ErrorHandling;
 using EasyCardFile.UtilityClasses.Localization;
@@ -620,7 +619,7 @@ namespace EasyCardFile.CardFileHandler
                 var index = ListBoxCards.SelectedIndex;
 
                 // add the deletion to the undo / redo class..
-                UndoRedo.AddChange(card, UndoRedoType.Deleted, card.Ordering, card.CardContents,
+                UndoRedo.AddChange(card, UndoRedoType.Deleted, card.Ordering, card.CardName, card.CardContents,
                     card.CardType.UniqueId);
 
                 CardFileDb.CardFile.Cards.Remove(card);
@@ -648,6 +647,25 @@ namespace EasyCardFile.CardFileHandler
         }
 
         /// <summary>
+        /// Renames the selected card if the user accepts the rename dialog.
+        /// </summary>
+        /// <returns><c>true</c> if the card was successfully renamed, <c>false</c> otherwise.</returns>
+        public bool RenameCard()
+        {
+            if (SelectedCard != null)
+            {
+                if (FormDialogAddRenameCard.ShowDialogRename(Application.OpenForms[0], CardFileDb.CardFile, SelectedCard) == DialogResult.OK)
+                {
+                    PushUndo(SelectedCard);
+                    RefreshCardList();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Adds a new card to the card file.
         /// </summary>
         /// <returns><c>true</c> if a card was successfully added, <c>false</c> otherwise.</returns>
@@ -660,8 +678,8 @@ namespace EasyCardFile.CardFileHandler
                 FocusRichTextBox();
 
                 // add the new card addition to the undo / redo class..
-                UndoRedo.AddChange(card, UndoRedoType.Added, card.Ordering, card.CardContents, 
-                    card.CardType.UniqueId);
+                UndoRedo.AddChange(card, UndoRedoType.Added, card.Ordering, card.CardName, 
+                    card.CardContents, card.CardType.UniqueId);
 
                 return true;
             }
@@ -674,15 +692,7 @@ namespace EasyCardFile.CardFileHandler
         /// </summary>
         public void SetCustomOrdering()
         {
-            var display =
-                CardFileDb.CardFile.CardSortType1.HasFlag(CardSortType.Custom) ||
-                CardFileDb.CardFile.CardSortType1.HasFlag(CardSortType.CustomDescending) ||
-                CardFileDb.CardFile.CardSortType2.HasFlag(CardSortType.Custom) ||
-                CardFileDb.CardFile.CardSortType2.HasFlag(CardSortType.CustomDescending) ||
-                CardFileDb.CardFile.CardSortType3.HasFlag(CardSortType.Custom) ||
-                CardFileDb.CardFile.CardSortType3.HasFlag(CardSortType.CustomDescending) ||
-                CardFileDb.CardFile.CardSortType4.HasFlag(CardSortType.Custom) ||
-                CardFileDb.CardFile.CardSortType4.HasFlag(CardSortType.CustomDescending);
+            var display = CardFileDb.CardFile.CustomSortingDefined;
 
             LabelCardOrdering.Visible = display;
             CardOrdering.Visible = display;
@@ -1000,6 +1010,17 @@ namespace EasyCardFile.CardFileHandler
         private byte[] PreviousCardContents { get; set; }
 
         /// <summary>
+        /// Gets or sets the previous card name before it was changed.
+        /// </summary>
+        private string PreviousCardName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the unique identifier of the previous card type for the card before it was changed.
+        /// </summary>
+        /// <value>The previous card type unique identifier.</value>
+        private int PreviousCardTypeUniqueId { get; set; }
+
+        /// <summary>
         /// Gets or sets the previous card ordering in case the ordering was changed.
         /// </summary>
         private int PreviousCardOrdering { get; set; }
@@ -1045,6 +1066,7 @@ namespace EasyCardFile.CardFileHandler
             var listBox = (ListBox) sender;
 
             DisplayCard(listBox.SelectedItem);
+            SelectedCardChanged?.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -1060,9 +1082,12 @@ namespace EasyCardFile.CardFileHandler
             }
 
             RichTextBox.Tag = true;
+            if (SelectedCard != null)
+            {
+                SelectedCard.CardContents = Encoding.UTF8.GetBytes(RichTextBox.Rtf);
+            }
 
             UpdateRowColumnSelection();
-            SetCardChanges(ListBoxCards.SelectedItem, null);
         }
 
         private void RichTextBox_SelectionChanged(object sender, EventArgs e)
@@ -1078,11 +1103,12 @@ namespace EasyCardFile.CardFileHandler
             }
 
             var card = (Card) ListBoxCards.SelectedItem;
-            UndoRedo.AddChange(card, UndoRedoType.Modified, PreviousCardOrdering, PreviousCardContents,
-                card.CardType.UniqueId,
-                ((CardType) ((ComboBox) sender).SelectedItem).UniqueId);
-            SelectedCardChanged?.Invoke(this, new EventArgs());
-            SetCardChanges(card, ((ComboBox)sender).SelectedItem);
+            if (card != null)
+            {
+                card.CardType = (CardType) ((ComboBox)sender).SelectedItem;
+                PushUndo(SelectedCard);
+            }
+
             if (!SuspendCardChanged)
             {
                 ListBoxCards.Invalidate();
@@ -1097,20 +1123,10 @@ namespace EasyCardFile.CardFileHandler
             }
 
             var numericUpDown = (NumericUpDown) sender;
-
             var value = (int) numericUpDown.Value;
-
-            // TODO::Save the first ordering of the card!
-
             var card = (Card) ListBoxCards.SelectedItem;
-
-            if (card != null && card.Ordering != PreviousCardOrdering)
-            {
-                UndoRedo.AddChange(card, UndoRedoType.Modified, PreviousCardOrdering, PreviousCardContents,
-                    card.CardType.UniqueId);
-            }
-
-            SetCardChanges(card, card?.CardType);
+            card.Ordering = value;
+            PushUndo(SelectedCard);
         }
 
         private void SearchTextBox_TextChanged(object sender, EventArgs e)
@@ -1389,6 +1405,32 @@ namespace EasyCardFile.CardFileHandler
         }
 
         /// <summary>
+        /// Sets the previous values of the card file <see cref="Card"/> before user changes the card somehow.
+        /// </summary>
+        /// <param name="card">The card which user-modifiable values to save.</param>
+        private void SetPreviousSaveValues(Card card)
+        {
+            if (card != null)
+            {
+                PreviousCardContents = card.CardContents;
+                PreviousCardOrdering = card.Ordering;
+                PreviousCardName = card.CardName;
+                PreviousCardTypeUniqueId = card.CardType?.UniqueId ?? default;
+            }
+        }
+
+        /// <summary>
+        /// Re-sets the previous values to their defaults.
+        /// </summary>
+        private void DefaultPreviousSavedValues()
+        {
+            PreviousCardContents = null;
+            PreviousCardName = null;
+            PreviousCardOrdering = default;
+            PreviousCardTypeUniqueId = default;
+        }
+
+        /// <summary>
         /// Displays the card contents.
         /// </summary>
         /// <param name="cardEntity">The card entity <see cref="Card"/> which contents to display.</param>
@@ -1397,8 +1439,7 @@ namespace EasyCardFile.CardFileHandler
             var card = (Card) cardEntity;
             if (card != null)
             {
-                PreviousCardContents = card.CardContents;
-                PreviousCardOrdering = card.Ordering;
+                SetPreviousSaveValues(card);
                 SuspendCardChanged = true;
                 if (card.CardContents != null)
                 {
@@ -1410,6 +1451,9 @@ namespace EasyCardFile.CardFileHandler
                     RichTextBox.Clear();
                 }
                 CardTypeComboBox.SelectedItem = card.CardType;
+
+                CardOrdering.Value = card.Ordering;
+
                 SuspendCardChanged = false;
 
                 ItemCreatedDateTime.Text = string.Format(TextEditorCardCreatedDate, card.CreateDateTime);
@@ -1422,6 +1466,72 @@ namespace EasyCardFile.CardFileHandler
         }
 
         /// <summary>
+        /// Pushes the possible changed values to the <see cref="UndoRedo"/> class instance.
+        /// </summary>
+        /// <param name="card">The card which changes to push.</param>
+        /// <returns><c>true</c> if card was changed, <c>false</c> otherwise.</returns>
+        // ReSharper disable once UnusedMethodReturnValue.Local
+        private bool PushUndo(Card card)
+        {
+            if (card == null)
+            {
+                return false;
+            }
+
+            bool CardContentsChanged()
+            {
+                if (PreviousCardContents == null && card.CardContents == null)
+                {
+                    return false;
+                }
+
+                if (PreviousCardContents == null && card.CardContents != null ||
+                    PreviousCardContents != null && card.CardContents == null)
+                {
+                    return true;
+                }
+
+                // ReSharper disable twice PossibleNullReferenceException, both null checks have been done..
+                if (PreviousCardContents.Length != card.CardContents.Length)
+                {
+                    return true;
+                }
+
+                for (int i = 0; i < PreviousCardContents.Length; i++)
+                {
+                    if (PreviousCardContents[i] != card.CardContents[i])
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            if (PreviousCardName != card.CardName ||
+                PreviousCardTypeUniqueId != card.CardType?.UniqueId ||
+                PreviousCardOrdering != card.Ordering ||
+                CardContentsChanged())
+            {
+                UndoRedo.AddChange(card, UndoRedoType.Modified,
+                    PreviousCardOrdering, PreviousCardName, PreviousCardContents,
+                    PreviousCardTypeUniqueId);
+
+                card.ModifiedDateTime = DateTime.Now;
+
+                SetPreviousSaveValues(card);
+
+                Changed = true;
+                UndoRedoChanged?.Invoke(this, new EventArgs());
+                SelectedCardChanged?.Invoke(this, new EventArgs());
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Displays the card's contents suspending the changed event handlers so the displayed card doesn't flag it self as changed.
         /// </summary>
         /// <param name="cardEntity"></param>
@@ -1430,8 +1540,7 @@ namespace EasyCardFile.CardFileHandler
             if (SuspendTextHandler)
             {
                 PreviousSelectedItem = cardEntity;
-                PreviousCardContents = null;
-                PreviousCardOrdering = default;
+                DefaultPreviousSavedValues();
                 RichTextBox.Tag = false;
                 RichTextBox.Clear();
                 return;
@@ -1439,17 +1548,7 @@ namespace EasyCardFile.CardFileHandler
 
             if ((bool)RichTextBox.Tag)
             {
-                var previousCard = (Card) PreviousSelectedItem;
-                var newCard = (Card) cardEntity;
-                if (previousCard != null && newCard != null && previousCard != newCard)
-                {
-                    UndoRedo.AddChange(previousCard, UndoRedoType.Modified,
-                        PreviousCardOrdering, PreviousCardContents,
-                        previousCard.CardType.UniqueId);
-
-                    SelectedCardChanged?.Invoke(this, new EventArgs());
-                    UndoRedoChanged?.Invoke(this, new EventArgs());
-                }
+                PushUndo((Card) PreviousSelectedItem);
             }
 
             PreviousSelectedItem = cardEntity;
@@ -1457,53 +1556,6 @@ namespace EasyCardFile.CardFileHandler
             RichTextBox.Tag = false;
 
             DisplayCardContents(cardEntity);
-        }
-
-        /// <summary>
-        /// Updates the changes to a card file card if the changes have not been suspended setting the <see cref="SuspendCardChanged"/> property value to true.
-        /// </summary>
-        /// <param name="cardEntity"></param>
-        /// <param name="cardTypeEntity"></param>
-        /// <param name="wordWrap"></param>
-        private void SetCardChanges(object cardEntity, object cardTypeEntity, bool? wordWrap = null)
-        {
-            try
-            {
-                if (SuspendCardChanged)
-                {
-                    return;
-                }
-
-                var card = (Card) cardEntity;
-
-                var cardType = (CardType) cardTypeEntity;
-
-                if (card != null)
-                {
-                    if (wordWrap != null)
-                    {
-                        card.WordWrap = (bool) wordWrap;
-                    }
-
-                    card.CardContents = Encoding.UTF8.GetBytes(RichTextBox.Rtf);
-
-                    if (cardTypeEntity != null)
-                    {
-                        card.CardType = cardType;
-                    }
-
-                    card.ModifiedDateTime = DateTime.Now; // track the change time..
-
-                    ItemModifiedDateTime.Text = string.Format(TextEditorCardChangedDate, card.ModifiedDateTime);
-
-                    Changed = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                // report the exception..
-                ExceptionLogAction?.Invoke(ex);
-            }
         }
 
         /// <summary>

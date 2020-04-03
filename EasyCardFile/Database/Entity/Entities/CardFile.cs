@@ -111,6 +111,23 @@ namespace EasyCardFile.Database.Entity.Entities
         public CardSortType CardSortType4 { get; set; } = CardSortType.None;
 
         /// <summary>
+        /// Gets a value indicating whether a custom
+        /// <see cref="CardSortType.Custom"/> and
+        /// <see cref="CardSortType.CustomDescending"/> sorting is defined in any of the four types of sorting.
+        /// </summary>
+        /// <value><c>true</c> if [custom sorting defined]; otherwise, <c>false</c>.</value>
+        [NotMapped]
+        public bool CustomSortingDefined =>
+            CardSortType1.HasFlag(CardSortType.Custom) ||
+            CardSortType1.HasFlag(CardSortType.CustomDescending) ||
+            CardSortType2.HasFlag(CardSortType.Custom) ||
+            CardSortType2.HasFlag(CardSortType.CustomDescending) ||
+            CardSortType3.HasFlag(CardSortType.Custom) ||
+            CardSortType3.HasFlag(CardSortType.CustomDescending) ||
+            CardSortType4.HasFlag(CardSortType.Custom) ||
+            CardSortType4.HasFlag(CardSortType.CustomDescending);
+
+        /// <summary>
         /// Gets the four defined card sort types <see cref="CardSortType"/> in a list format.
         /// </summary>
         [NotMapped]

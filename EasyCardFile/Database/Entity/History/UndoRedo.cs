@@ -43,11 +43,12 @@ namespace EasyCardFile.Database.Entity.History
         /// <param name="card">The card.</param>
         /// <param name="type">The type of the change save for an undo/redo possibility.</param>
         /// <param name="previousCardOrdering">The previous card ordering before the card was changed.</param>
+        /// <param name="previousCardName">The previous name of the card before a rename operation.</param>
         /// <param name="previousCardContents">The previous card contents before the card was changed.</param>
         /// <param name="previousCardTypeUniqueId">The value of <see cref="CardType.UniqueId"/> before the card type was changed.</param>
         /// <param name="newCardTypeUniqueId">The value of <see cref="CardType.UniqueId"/> after the card type was changed.</param>
-        internal void AddChange(Card card, UndoRedoType type, int previousCardOrdering, byte[] previousCardContents,
-            int previousCardTypeUniqueId, int newCardTypeUniqueId = -1)
+        internal void AddChange(Card card, UndoRedoType type, int previousCardOrdering, string previousCardName, byte[] previousCardContents,
+            int previousCardTypeUniqueId)
         {
             if (card == null)
             {
@@ -71,10 +72,10 @@ namespace EasyCardFile.Database.Entity.History
                         var cardItem = new UndoRedoItem
                             {CardItemBeforeChange = CardNoEntity.FromEntity(card, previousCardContents), UndoRedoType = type};
                         cardItem.CardItemBeforeChange.CardTypeUniqueId = previousCardTypeUniqueId;
+                        cardItem.CardItemBeforeChange.Ordering = previousCardOrdering;
+                        cardItem.CardItemBeforeChange.CardName = previousCardName;
 
                         cardItem.CardItemChanged = CardNoEntity.FromEntity(card);
-                        cardItem.CardItemChanged.CardTypeUniqueId =
-                            newCardTypeUniqueId != -1 ? newCardTypeUniqueId : card.CardType.UniqueId;
 
                         CardChanges.Insert(0, cardItem);
                     }
@@ -86,6 +87,10 @@ namespace EasyCardFile.Database.Entity.History
                         var cardItem = new UndoRedoItem
                             {CardItemChanged = CardNoEntity.FromEntity(card, previousCardContents), UndoRedoType = type};
 
+                        cardItem.CardItemChanged.CardTypeUniqueId = previousCardTypeUniqueId;
+                        cardItem.CardItemChanged.Ordering = previousCardOrdering;
+                        cardItem.CardItemChanged.CardName = previousCardName;
+
                         CardChanges.Insert(0, cardItem);
                     }
                 }
@@ -95,9 +100,6 @@ namespace EasyCardFile.Database.Entity.History
             {
                 var cardItem = new UndoRedoItem
                     {CardItemChanged = CardNoEntity.FromEntity(card), UndoRedoType = type};
-
-                cardItem.CardItemChanged.CardTypeUniqueId =
-                    newCardTypeUniqueId != -1 ? newCardTypeUniqueId : card.CardType.UniqueId;
 
                 CardChanges.Insert(0, cardItem);
             }

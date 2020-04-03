@@ -95,9 +95,6 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
                 CardFile = cardFile,
             };
 
-            form.cmbCardType.Items.AddRange(cardFile.CardTypes.ToArray<object>());
-            form.cmbCardType.SelectedItem = cardFile.DefaultCardType;
-
             var result = form.ShowDialog();
 
             addedCard = form.AddedCard;
@@ -119,13 +116,9 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
             var form = new FormDialogAddRenameCard
             {
                 tbCardName = {Text = modifiedCard.CardName}, 
-                CardFile = cardFile,
+                CardFile = cardFile, 
+                ModifiedCard = modifiedCard,
             };
-
-            form.cmbCardType.Items.AddRange(cardFile.CardTypes.ToArray<object>());
-            form.cmbCardType.SelectedItem = modifiedCard.CardType;
-
-            form.ModifiedCard = modifiedCard;
 
             var result = form.ShowDialog();
 
@@ -179,6 +172,11 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
 
         private void FormDialogAddRenameCard_Shown(object sender, EventArgs e)
         {
+            cmbCardType.Items.AddRange(CardFile.CardTypes.ToArray<object>());
+            cmbCardType.SelectedItem = ModifiedCard?.CardType ??
+                                       CardFile.DefaultCardType ?? CardFile.CardTypes.FirstOrDefault();
+            nudCardOrdering.Visible = CardFile.CustomSortingDefined;
+            lbCardOrdering.Visible = CardFile.CustomSortingDefined;
             btOk.Enabled = !string.IsNullOrWhiteSpace(tbCardName.Text) && cmbCardType.SelectedItem != null;
         }
     }
