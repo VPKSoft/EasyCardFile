@@ -97,7 +97,7 @@ namespace EasyCardFile.UtilityClasses.Miscellaneous.Dialogs
             odImage.InitialDirectory = FormMain.Settings.PathImageDialogSelectImageArea;
             if (odImage.ShowDialog(this) == DialogResult.OK)
             {
-                FormMain.Settings.PathImageDialogSelectImageArea = odImage.FileName.GetPath();
+                FormMain.Settings.PathImageDialogSelectImageArea = odImage.FileName.GetPath(FormMain.Settings.PathImageDialogSelectImageArea);
                 iasCartTypeImage.SelectImage?.Dispose();
                 iasCartTypeImage.SelectImage = Image.FromFile(odImage.FileName);
             }

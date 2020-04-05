@@ -59,7 +59,7 @@ namespace EasyCardFile.CardFileHandler.LegacyCardFile
             {
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    saveFileDialog.InitialDirectory = openFileDialog.FileName.GetPath();
+                    saveFileDialog.InitialDirectory = openFileDialog.FileName.GetPath(saveFileDialog.InitialDirectory);
                     saveFileDialog.FileName = Path.ChangeExtension(Path.GetFileName(openFileDialog.FileName), ".ecff");
                     if (saveFileDialog.ShowDialog() == DialogResult.OK)
                     {

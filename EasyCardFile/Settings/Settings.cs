@@ -25,9 +25,9 @@ SOFTWARE.
 #endregion
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Security.Policy;
 using EasyCardFile.CardFileHandler;
 using EasyCardFile.CardFileHandler.CardFilePreferences;
 using EasyCardFile.UtilityClasses.Miscellaneous.Dialogs;
@@ -61,6 +61,12 @@ namespace EasyCardFile.Settings
         /// <value>The splitter settings.</value>
         [IsSetting]
         public List<string> SplitterSettings { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Gets or sets the locale setting for the software.
+        /// </summary>
+        [IsSetting]
+        public string Locale { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to restore the session on application startup.

@@ -150,16 +150,13 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
 
         private void cmbCardType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(tbCardName.Text))
-            {
-                tbCardName.Text = CardNaming.NameCard(CardFile, DateTime.Now, (CardType) cmbCardType.SelectedItem);
-            }
+            tbCardName.Text = CardNaming.NameCard(CardFile, DateTime.Now, (CardType) cmbCardType.SelectedItem);
         }
 
         private void pbGenerateName_Click(object sender, EventArgs e)
         {
             var name = CardNaming.NameCard(CardFile, DateTime.Now, (CardType) cmbCardType.SelectedItem);
-            if (string.IsNullOrWhiteSpace(name))
+            if (!string.IsNullOrWhiteSpace(name))
             {
                 tbCardName.Text = name;
             }
@@ -173,10 +170,13 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
         private void FormDialogAddRenameCard_Shown(object sender, EventArgs e)
         {
             cmbCardType.Items.AddRange(CardFile.CardTypes.ToArray<object>());
+
             cmbCardType.SelectedItem = ModifiedCard?.CardType ??
                                        CardFile.DefaultCardType ?? CardFile.CardTypes.FirstOrDefault();
+
             nudCardOrdering.Visible = CardFile.CustomSortingDefined;
             lbCardOrdering.Visible = CardFile.CustomSortingDefined;
+
             btOk.Enabled = !string.IsNullOrWhiteSpace(tbCardName.Text) && cmbCardType.SelectedItem != null;
         }
     }

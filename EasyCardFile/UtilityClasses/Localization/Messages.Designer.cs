@@ -232,6 +232,33 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &amp;Cancel|A dialog button for &apos;Cancel&apos;. Do note the mnemonic..
+        /// </summary>
+        internal static string msgDialogButtonCancel {
+            get {
+                return ResourceManager.GetString("msgDialogButtonCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;No|A dialog button for &apos;No&apos;. Do note the mnemonic..
+        /// </summary>
+        internal static string msgDialogButtonNo {
+            get {
+                return ResourceManager.GetString("msgDialogButtonNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Yes|A dialog button for &apos;Yes&apos;. Do note the mnemonic..
+        /// </summary>
+        internal static string msgDialogButtonYes {
+            get {
+                return ResourceManager.GetString("msgDialogButtonYes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm|A title for a dialog confirming something from the user..
         /// </summary>
         internal static string msgDialogConfirmTitle {

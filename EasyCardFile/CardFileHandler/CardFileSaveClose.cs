@@ -94,6 +94,7 @@ namespace EasyCardFile.CardFileHandler
                         cardFile.CardFileDb.SaveChanges();
                     }
 
+                    cardFile.ClearUndo(true);
                     cardFile.Changed = false;
                 }
                 else
@@ -160,6 +161,7 @@ namespace EasyCardFile.CardFileHandler
                         wrapper.FileName, !wrapper.IsTemporary);
 
                     wrapper.Changed = false;
+                    wrapper.ClearUndo(true);
                     wrapper.OpenCardFile(wrapper.FileName);
                     wrapper.RefreshUi(null, true, true);
                 }
@@ -289,6 +291,7 @@ namespace EasyCardFile.CardFileHandler
                             if (!string.IsNullOrEmpty(wrapper.NewFileName))
                             {
                                 wrapper.FileName = wrapper.NewFileName;
+                                wrapper.IsTemporary = false;
                             }
                         }
                     }
@@ -309,6 +312,86 @@ namespace EasyCardFile.CardFileHandler
         }
 
         /// <summary>
+        /// Runs a save check for a <see cref="CardFileUiWrapper"/> instance.
+        /// </summary>
+        /// <param name="wrapper">The <see cref="CardFileUiWrapper"/> instance to run the save check for.</param>
+        /// <param name="owner">An implementation of <see cref="T:System.Windows.Forms.IWin32Window" /> that will own the modal dialog box in case one is required by the method.</param>
+        /// <param name="sdCardFile">A save file dialog in case new changed card files should be saved.</param>
+        /// <param name="autoSave">if set to <c>true</c> the existing card files are automatically saved.</param>
+        /// <returns><c>true</c> if the user accepted the wrapper containing the card file to be closed, <c>false</c> otherwise.</returns>
+        internal static bool RunSaveCheckWrapper(CardFileUiWrapper wrapper, IWin32Window owner, SaveFileDialog sdCardFile,
+            bool autoSave)
+        {
+            if (wrapper == null)
+            {
+                return true;
+            }
+
+            if (wrapper.CardFileDb.ChangeTracker.HasChanges())
+            {
+                wrapper.SaveFile = false;
+                wrapper.NewFileName = default;
+
+                if (wrapper.IsTemporary)
+                {
+                    var result = MessageBoxExtended.Show(owner,
+                        string.Format(LocalizeStaticProperties.CardFileChangedSaveQuery,
+                            wrapper.CardFileDb?.CardFile?.Name),
+                        LocalizeStaticProperties.CardFileChangedSaveQueryTitle,
+                        MessageBoxButtonsExtended.YesNoCancel,
+                        MessageBoxIcon.Question, true);
+
+                    if (result == DialogResultExtended.Cancel)
+                    {
+                        return false;
+                    }
+
+                    if (result == DialogResultExtended.No)
+                    {
+                        return true;
+                    }
+
+                    sdCardFile.FileName = wrapper.CardFileDb?.CardFile?.Name + EasyCardFileConstants.FileExtension;
+
+                    var saveDialogResult = sdCardFile.ShowDialog();
+
+                    if (result == DialogResultExtended.Yes && saveDialogResult == DialogResult.OK)
+                    {
+                        wrapper.SaveFile = true;
+                        wrapper.NewFileName = sdCardFile.FileName;
+                    }
+
+                    if (saveDialogResult == DialogResult.Cancel)
+                    {
+                        return false;
+                    }
+                }
+                else if (autoSave)
+                {
+                    wrapper.SaveFile = true;
+                }
+                else
+                {
+                    var result = MessageBoxExtended.Show(owner,
+                        string.Format(LocalizeStaticProperties.CardFileChangedSaveQuery,
+                            wrapper.CardFileDb?.CardFile?.Name),
+                        LocalizeStaticProperties.CardFileChangedSaveQueryTitle,
+                        MessageBoxButtonsExtended.YesNoCancel,
+                        MessageBoxIcon.Question, true);
+
+                    if (result == DialogResultExtended.Cancel)
+                    {
+                        return false;
+                    }
+
+                    wrapper.SaveFile = result == DialogResultExtended.Yes;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Runs the save check before the application close.
         /// </summary>
         /// <param name="tabControl">The tab control where the <see cref="CardFileUiWrapper"/> instances are located.</param>
@@ -323,53 +406,9 @@ namespace EasyCardFile.CardFileHandler
             {
                 var wrapper = CardFileUiWrapper.GetWrapperByTab(tab);
 
-                if (wrapper.CardFileDb.ChangeTracker.HasChanges())
+                if (!RunSaveCheckWrapper(wrapper, owner, sdCardFile, autoSave))
                 {
-                    wrapper.SaveFile = false;
-                    wrapper.NewFileName = default;
-
-                    if (wrapper.IsTemporary)
-                    {
-                        var result = MessageBoxExtended.Show(owner,
-                            string.Format(LocalizeStaticProperties.CardFileChangedSaveQuery,
-                                wrapper.CardFileDb?.CardFile?.Name),
-                            LocalizeStaticProperties.CardFileChangedSaveQueryTitle,
-                            MessageBoxButtonsExtended.YesNoCancel,
-                            MessageBoxIcon.Question, true);
-
-                        if (result == DialogResultExtended.Cancel)
-                        {
-                            return false;
-                        }
-
-                        sdCardFile.FileName = wrapper.CardFileDb?.CardFile?.Name + EasyCardFileConstants.FileExtension;
-
-                        if (result == DialogResultExtended.Yes && sdCardFile.ShowDialog() == DialogResult.OK)
-                        {
-                            wrapper.SaveFile = true;
-                            wrapper.NewFileName = sdCardFile.FileName;
-                        }
-                    }
-                    else if (autoSave)
-                    {
-                        wrapper.SaveFile = true;
-                    }
-                    else
-                    {
-                        var result = MessageBoxExtended.Show(owner,
-                            string.Format(LocalizeStaticProperties.CardFileChangedSaveQuery,
-                                wrapper.CardFileDb?.CardFile?.Name),
-                            LocalizeStaticProperties.CardFileChangedSaveQueryTitle,
-                            MessageBoxButtonsExtended.YesNoCancel,
-                            MessageBoxIcon.Question, true);
-
-                        if (result == DialogResultExtended.Cancel)
-                        {
-                            return false;
-                        }
-
-                        wrapper.SaveFile = result == DialogResultExtended.Yes;
-                    }
+                    return false;
                 }
             }
 

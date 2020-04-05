@@ -109,8 +109,6 @@ namespace EasyCardFile.Database.Entity.Context.ContextEncryption
         {
             try
             {
-                MessageBoxBase.Localize(CultureInfo.CurrentUICulture);
-
                 var password = string.Empty;
 
                 password = MessageBoxQueryPassword.Show(dialogOwner,
@@ -249,8 +247,6 @@ namespace EasyCardFile.Database.Entity.Context.ContextEncryption
         {
             try
             {
-                MessageBoxBase.Localize(CultureInfo.CurrentUICulture);
-
                 bool invalidKey = false;
 
                 for (int i = 0; i < 5; i++) // allow five tries..

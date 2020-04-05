@@ -367,6 +367,11 @@ namespace EasyCardFile.CardFileHandler
 
             var result = UndoRedo.Undo(CardFileDb, out var reListItems);
 
+            if (UndoRedo.AllChangedCanceled) // all changes were undone successfully..
+            {
+                Changed = false;
+            }
+
             SuspendTextHandler = true;
 
             if (reListItems)
@@ -405,6 +410,7 @@ namespace EasyCardFile.CardFileHandler
             if (RichTextBox.RichTextBox.CanRedo)
             {
                 RichTextBox.RichTextBox.Redo();
+                Changed = true;
                 return true;
             }
 
@@ -427,6 +433,7 @@ namespace EasyCardFile.CardFileHandler
                 {
                     ListBoxCards.SelectedItem = displayCard;
                 }
+                Changed = true;
             }
             UndoRedoChanged?.Invoke(this, new EventArgs());
             SetCardCount();
@@ -437,9 +444,14 @@ namespace EasyCardFile.CardFileHandler
         /// <summary>
         /// Clears the undo buffer of the <see cref="CardFileDb"/> of this <see cref="CardFileUiWrapper"/> instance.
         /// </summary>
-        public void ClearUndo()
+        /// <param name="clearCanceledFlag">A value indicating whether the <see cref="UndoRedo.AllChangedCanceled"/> can be re-set.</param>
+        public void ClearUndo(bool clearCanceledFlag = false)
         {
             UndoRedo.Clear();
+            if (clearCanceledFlag)
+            {
+                UndoRedo.AllChangedCanceled = true;
+            }
             UndoRedoChanged?.Invoke(this, new EventArgs());
         }
 
@@ -584,6 +596,8 @@ namespace EasyCardFile.CardFileHandler
                         return false;
                     }
                 }
+
+                ClearUndo(true);
                 return true;
             }
             catch (Exception ex)
@@ -1022,7 +1036,7 @@ namespace EasyCardFile.CardFileHandler
                     // log the exception..
                     ExceptionLogAction?.Invoke(ex);
                 }
-                
+
                 UpdateTabText();
             }
         }

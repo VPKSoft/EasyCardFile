@@ -25,6 +25,9 @@ SOFTWARE.
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Cyotek.Windows.Forms;
@@ -63,6 +66,13 @@ namespace EasyCardFile.Settings
 
             // initialize the language/localization database..
             DBLangEngine.InitializeLanguage("EasyCardFile.UtilityClasses.Localization.Messages");
+
+            // list the translated cultures..
+            List<CultureInfo> cultures = DBLangEngine.GetLocalizedCultures();
+
+            // a the translated cultures to the selection combo box..
+            // ReSharper disable once CoVariantArrayConversion
+            cmbSelectLanguageValue.Items.AddRange(cultures.ToArray());
         }
 
         /// <summary>
@@ -86,6 +96,7 @@ namespace EasyCardFile.Settings
         {
             Settings.AutoSave = cbAutoSaveExistingCardFilesAppClose.Checked;
             Settings.RestoreSessionOnStartup = cbRestorePreviousSession.Checked;
+            Settings.Locale = ((CultureInfo) cmbSelectLanguageValue.SelectedItem)?.Name;
             Settings.Save(PathHandler.GetSettingsFile(Assembly.GetEntryAssembly(), ".xml",
                 Environment.SpecialFolder.LocalApplicationData));
 
@@ -96,6 +107,11 @@ namespace EasyCardFile.Settings
         {
             cbAutoSaveExistingCardFilesAppClose.Checked = Settings.AutoSave;
             cbRestorePreviousSession.Checked = Settings.RestoreSessionOnStartup;
+            // get the current culture from the settings..
+            cmbSelectLanguageValue.SelectedItem = string.IsNullOrWhiteSpace(Settings.Locale)
+                ? new CultureInfo("en-US")
+                : new CultureInfo(Settings.Locale);
+
         }
 
         private void cwEditorToolStripColors_ColorChanged(object sender, EventArgs e)

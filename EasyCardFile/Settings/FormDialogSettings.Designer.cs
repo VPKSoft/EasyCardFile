@@ -43,6 +43,9 @@
             this.cwEditorToolStripColors = new Cyotek.Windows.Forms.ColorWheel();
             this.btOK = new System.Windows.Forms.Button();
             this.btCancel = new System.Windows.Forms.Button();
+            this.lbSelectLanguageDescription = new System.Windows.Forms.Label();
+            this.cmbSelectLanguageValue = new System.Windows.Forms.ComboBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.tcMain.SuspendLayout();
             this.tabSettingsGeneral.SuspendLayout();
             this.tabSettingsCustomizeEditor.SuspendLayout();
@@ -62,6 +65,9 @@
             // 
             // tabSettingsGeneral
             // 
+            this.tabSettingsGeneral.Controls.Add(this.textBox1);
+            this.tabSettingsGeneral.Controls.Add(this.lbSelectLanguageDescription);
+            this.tabSettingsGeneral.Controls.Add(this.cmbSelectLanguageValue);
             this.tabSettingsGeneral.Controls.Add(this.cbRestorePreviousSession);
             this.tabSettingsGeneral.Controls.Add(this.textBox2);
             this.tabSettingsGeneral.Controls.Add(this.label2);
@@ -83,7 +89,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(514, 40);
+            this.textBox2.Location = new System.Drawing.Point(525, 14);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 20);
             this.textBox2.TabIndex = 4;
@@ -116,9 +122,9 @@
             this.tabSettingsCustomizeEditor.Controls.Add(this.rtbEditorToolStripColors);
             this.tabSettingsCustomizeEditor.Controls.Add(this.lbEditorImageForeColor);
             this.tabSettingsCustomizeEditor.Controls.Add(this.cwEditorToolStripColors);
-            this.tabSettingsCustomizeEditor.Location = new System.Drawing.Point(1, 21);
+            this.tabSettingsCustomizeEditor.Location = new System.Drawing.Point(0, 0);
             this.tabSettingsCustomizeEditor.Name = "tabSettingsCustomizeEditor";
-            this.tabSettingsCustomizeEditor.Size = new System.Drawing.Size(681, 290);
+            this.tabSettingsCustomizeEditor.Size = new System.Drawing.Size(0, 0);
             this.tabSettingsCustomizeEditor.Text = "Customize editor";
             // 
             // lbEditorImageGlyphColor
@@ -134,7 +140,7 @@
             // 
             this.cwEditorImageGlyphColor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cwEditorImageGlyphColor.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cwEditorImageGlyphColor.Location = new System.Drawing.Point(167, 131);
+            this.cwEditorImageGlyphColor.Location = new System.Drawing.Point(167, -159);
             this.cwEditorImageGlyphColor.Name = "cwEditorImageGlyphColor";
             this.cwEditorImageGlyphColor.Size = new System.Drawing.Size(155, 156);
             this.cwEditorImageGlyphColor.TabIndex = 10;
@@ -153,7 +159,7 @@
             this.rtbEditorToolStripColors.Location = new System.Drawing.Point(3, 3);
             this.rtbEditorToolStripColors.MoreColorsText = "More colors...";
             this.rtbEditorToolStripColors.Name = "rtbEditorToolStripColors";
-            this.rtbEditorToolStripColors.Size = new System.Drawing.Size(681, 109);
+            this.rtbEditorToolStripColors.Size = new System.Drawing.Size(0, 109);
             this.rtbEditorToolStripColors.TabIndex = 9;
             this.rtbEditorToolStripColors.Text = resources.GetString("rtbEditorToolStripColors.Text");
             this.rtbEditorToolStripColors.WordWrap = false;
@@ -171,7 +177,7 @@
             // 
             this.cwEditorToolStripColors.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cwEditorToolStripColors.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cwEditorToolStripColors.Location = new System.Drawing.Point(6, 131);
+            this.cwEditorToolStripColors.Location = new System.Drawing.Point(6, -159);
             this.cwEditorToolStripColors.Name = "cwEditorToolStripColors";
             this.cwEditorToolStripColors.Size = new System.Drawing.Size(155, 156);
             this.cwEditorToolStripColors.TabIndex = 7;
@@ -196,6 +202,39 @@
             this.btCancel.TabIndex = 2;
             this.btCancel.Text = "Cancel";
             this.btCancel.UseVisualStyleBackColor = true;
+            // 
+            // lbSelectLanguageDescription
+            // 
+            this.lbSelectLanguageDescription.AutoSize = true;
+            this.lbSelectLanguageDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.lbSelectLanguageDescription.Location = new System.Drawing.Point(12, 78);
+            this.lbSelectLanguageDescription.Margin = new System.Windows.Forms.Padding(17, 15, 17, 15);
+            this.lbSelectLanguageDescription.Name = "lbSelectLanguageDescription";
+            this.lbSelectLanguageDescription.Size = new System.Drawing.Size(156, 13);
+            this.lbSelectLanguageDescription.TabIndex = 28;
+            this.lbSelectLanguageDescription.Text = "Language (a restart is required):";
+            this.lbSelectLanguageDescription.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cmbSelectLanguageValue
+            // 
+            this.cmbSelectLanguageValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbSelectLanguageValue.DisplayMember = "DisplayName";
+            this.cmbSelectLanguageValue.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSelectLanguageValue.FormattingEnabled = true;
+            this.cmbSelectLanguageValue.Location = new System.Drawing.Point(243, 75);
+            this.cmbSelectLanguageValue.Margin = new System.Windows.Forms.Padding(13, 12, 13, 12);
+            this.cmbSelectLanguageValue.Name = "cmbSelectLanguageValue";
+            this.cmbSelectLanguageValue.Size = new System.Drawing.Size(429, 21);
+            this.cmbSelectLanguageValue.TabIndex = 29;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(525, 40);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 30;
+            this.textBox1.Visible = false;
             // 
             // FormDialogSettings
             // 
@@ -240,5 +279,8 @@
         private Cyotek.Windows.Forms.ColorWheel cwEditorToolStripColors;
         private System.Windows.Forms.Label lbEditorImageGlyphColor;
         private Cyotek.Windows.Forms.ColorWheel cwEditorImageGlyphColor;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label lbSelectLanguageDescription;
+        private System.Windows.Forms.ComboBox cmbSelectLanguageValue;
     }
 }

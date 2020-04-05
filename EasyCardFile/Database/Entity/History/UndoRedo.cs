@@ -58,6 +58,7 @@ namespace EasyCardFile.Database.Entity.History
             {
                 CardChanges.RemoveRange(0, UndoCursorPosition - 1);
                 UndoCursorPosition = 0;
+                canCancelAllChanged = false;
             }
 
             // only modifications have these rules that..
@@ -107,6 +108,7 @@ namespace EasyCardFile.Database.Entity.History
             while (CardChanges.Count > MaximumChangeAmount)
             {
                 CardChanges.RemoveAt(CardChanges.Count - 1);
+                canCancelAllChanged = false;
             }
         }
 
@@ -130,6 +132,15 @@ namespace EasyCardFile.Database.Entity.History
         /// Gets a value whether the class has stored changes that can be redone.
         /// </summary>
         internal bool CanRedo => UndoCursorPosition > 0;
+
+        // a flag for the AllChangedCanceled property..
+        private bool canCancelAllChanged = true;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the buffer position has no changes pending to undo and the changes made are possible to undo.
+        /// </summary>
+        /// <value><c>true</c> if all changed are canceled; otherwise, <c>false</c>.</value>
+        public bool AllChangedCanceled { get => canCancelAllChanged && !CanUndo; set => canCancelAllChanged = value; }
 
         /// <summary>
         /// Undoes the the changes to a specified card <see cref="CardFileDbContext"/>.

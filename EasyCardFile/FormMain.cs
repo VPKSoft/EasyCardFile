@@ -27,6 +27,7 @@ SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
@@ -108,6 +109,11 @@ namespace EasyCardFile
             LocalizeStaticProperties.LocalizeFileDialogs(sdCardFile, odCardFile);
             LocalizeStaticProperties.LocalizeRtfDialogs(odRtf, sdRtf);
 
+            if (!string.IsNullOrWhiteSpace(Settings.Locale))
+            {
+                MessageBoxBase.Localize(new CultureInfo(Settings.Locale));
+            }
+
             tmRemoteOpenFileQueue.Enabled = true;
 
             AssociateFileExtension.AssociateApplicationToFileExtension(EasyCardFileConstants.FileExtension);
@@ -148,7 +154,12 @@ namespace EasyCardFile
             sdCardFile.InitialDirectory = Settings.PathFileDialogMainSave;
             if (CardFileSaveClose.RunSaveCheckApplicationClose(tcCardFiles, this, sdCardFile, Settings.AutoSave))
             {
-                Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath();
+                Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath(Settings.PathFileDialogMainSave);
+            }
+            else // the user didn't accept the close..
+            {
+                e.Cancel = true;
+                return;
             }
 
             CardFileSaveClose.HandleTabsAfterClose(tcCardFiles);
@@ -445,8 +456,8 @@ namespace EasyCardFile
                         sdCardFile.InitialDirectory = Settings.PathFileDialogMainSave;
                         if (OpenCardFile(sdCardFile.FileName))
                         {
-                            Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath();
-                            Settings.PathFileDialogMainOpenLegacy = odCardFileLegacy.FileName.GetPath();
+                            Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath(Settings.PathFileDialogMainSave);
+                            Settings.PathFileDialogMainOpenLegacy = odCardFileLegacy.FileName.GetPath(Settings.PathFileDialogMainSave);
                         }
                     }
                     return;
@@ -454,15 +465,25 @@ namespace EasyCardFile
 
                 if (OpenCardFile(odCardFile.FileName, true))
                 {
-                    Settings.PathFileDialogMainOpen = odCardFile.FileName.GetPath();
+                    Settings.PathFileDialogMainOpen = odCardFile.FileName.GetPath(Settings.PathFileDialogMainOpen);
                 }
             }
         }
 
         private void tcCardFiles_CloseTabButtonClick(object sender, Manina.Windows.Forms.CancelTabEventArgs e)
         {
-            using (CardFileUiWrapper.GetWrapperByTab(e.Tab))
+            var wrapper = CardFileUiWrapper.GetWrapperByTab(e.Tab);
+            if (!CardFileSaveClose.RunSaveCheckWrapper(CardFileUiWrapper.GetWrapperByTab(e.Tab), this, sdCardFile,
+                Settings.AutoSave)) 
             {
+                e.Cancel = true;
+                return;
+            }
+
+            using (wrapper)
+            {
+                sdCardFile.InitialDirectory = Settings.PathFileDialogMainSave;
+                Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath(Settings.PathFileDialogMainSave);
                 CardFileSaveClose.CloseCardFile(true, e.Tab);
                 SetGuiState();
             }
@@ -493,6 +514,7 @@ namespace EasyCardFile
             if (changed == true)
             {
                 SetTitle(true);
+                SetGuiState();
             }
         }
 
@@ -512,7 +534,7 @@ namespace EasyCardFile
             sdCardFile.InitialDirectory = Settings.PathFileDialogMainSave;
             if (CardFileSaveClose.SaveCardFileAs(tcCardFiles, sdCardFile, false))
             {
-                Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath();
+                Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath(Settings.PathFileDialogMainSave);
             }
             SetTitle(true);
         }
@@ -522,7 +544,7 @@ namespace EasyCardFile
             sdCardFile.InitialDirectory = Settings.PathFileDialogMainSave;
             if (CardFileSaveClose.SaveCardFile(tcCardFiles, sdCardFile, false))
             {
-                Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath();
+                Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath(Settings.PathFileDialogMainSave);
             }
             SetTitle(true);
         }
@@ -554,10 +576,10 @@ namespace EasyCardFile
             sdCardFile.InitialDirectory = Settings.PathFileDialogMainSave;
             if (CardFileLegacyReader.Convert(odCardFileLegacy, sdCardFile, this))
             {
-                Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath();
+                Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath(Settings.PathFileDialogMainSave);
                 if (OpenCardFile(sdCardFile.FileName))
                 {
-                    Settings.PathFileDialogMainOpenLegacy = odCardFileLegacy.FileName.GetPath();
+                    Settings.PathFileDialogMainOpenLegacy = odCardFileLegacy.FileName.GetPath(Settings.PathFileDialogMainOpenLegacy);
                 }
             }
         }
@@ -622,7 +644,7 @@ namespace EasyCardFile
                 {
                     if (wrapper.ExportRtf(sdRtf.FileName))
                     {
-                        Settings.PathFileDialogRtfSave = sdRtf.FileName.GetPath();
+                        Settings.PathFileDialogRtfSave = sdRtf.FileName.GetPath(Settings.PathFileDialogRtfSave);
                     }
                 }
             }
@@ -637,7 +659,7 @@ namespace EasyCardFile
             {
                 if (wrapper.ImportRtf(odRtf.FileName))
                 {
-                    Settings.PathFileDialogRtfOpen = odRtf.FileName.GetPath();
+                    Settings.PathFileDialogRtfOpen = odRtf.FileName.GetPath(Settings.PathFileDialogRtfOpen);
                 }
             }
         }

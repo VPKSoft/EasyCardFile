@@ -895,7 +895,7 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
 
             if (odImage.ShowDialog() == DialogResult.OK)
             {
-                FormMain.Settings.PathImageDialogPreference = odImage.FileName.GetPath();
+                FormMain.Settings.PathImageDialogPreference = odImage.FileName.GetPath(FormMain.Settings.PathImageDialogPreference);
                 var cardType = CardTypes.FirstOrDefault(f => f.CardTypeName == clbCardTypes.SelectedItem.ToString());
                 if (cardType != null)
                 {

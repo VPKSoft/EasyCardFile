@@ -39,8 +39,9 @@ namespace EasyCardFile.UtilityClasses.Miscellaneous
         /// Gets the path part of the string <see cref="Path.GetDirectoryName(string)"/>.
         /// </summary>
         /// <param name="str">The string.</param>
+        /// <param name="pathOnError">A path to return in case of an exception.</param>
         /// <returns>Directory information for path.</returns>
-        public static string GetPath(this string str)
+        public static string GetPath(this string str, string pathOnError)
         {
             try
             {
@@ -50,7 +51,7 @@ namespace EasyCardFile.UtilityClasses.Miscellaneous
             {
                 // log the exception..
                 ErrorHandlingBase.ExceptionLogAction?.Invoke(ex);
-                return "";
+                return pathOnError;
             }
         }
     }

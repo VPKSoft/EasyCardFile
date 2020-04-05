@@ -29,6 +29,7 @@ using EasyCardFile.Database.Entity.Entities;
 using EasyCardFile.UtilityClasses.Constants;
 using EasyCardFile.UtilityClasses.ErrorHandling;
 using VPKSoft.LangLib;
+using VPKSoft.MessageBoxExtended;
 
 namespace EasyCardFile.UtilityClasses.Localization
 {
@@ -313,6 +314,21 @@ namespace EasyCardFile.UtilityClasses.Localization
 
             DialogRtfFileExportTitle = DBLangEngine.GetStatMessage("msgDialogRtfFileExportTitle",
                 "Export as Rtf file|A dialog title to export the card contents to a RTF file.");
+        }
+
+        /// <summary>
+        /// Localizes the <see cref="VPKSoft.MessageBoxExtended"/> namespace dialog boxes.
+        /// </summary>
+        internal static void LocalizeExtendedMessageBox()
+        {
+            MessageBoxBase.TextYes = DBLangEngine.GetStatMessage("msgDialogButtonYes",
+                "&Yes|A dialog button for 'Yes'. Do note the mnemonic.");
+
+            MessageBoxBase.TextNo = DBLangEngine.GetStatMessage("msgDialogButtonNo",
+                "&No|A dialog button for 'No'. Do note the mnemonic.");
+
+            MessageBoxBase.TextCancel = DBLangEngine.GetStatMessage("msgDialogButtonCancel",
+                "&Cancel|A dialog button for 'Cancel'. Do note the mnemonic.");
         }
 
         /// <summary>
