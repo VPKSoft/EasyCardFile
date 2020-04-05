@@ -27,11 +27,14 @@ SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 using EasyCardFile.CardFileHandler.CardFileNaming;
 using EasyCardFile.CardFileHandler.CardFilePreferences;
 using EasyCardFile.Settings;
+using EasyCardFile.Settings.TypeConverters;
 using EasyCardFile.UtilityClasses.Constants;
 using EasyCardFile.UtilityClasses.FileAssociation;
 using EasyCardFile.UtilityClasses.Miscellaneous.Dialogs;
@@ -40,6 +43,7 @@ using VPKSoft.IPC;
 using VPKSoft.LangLib;
 using VPKSoft.PosLib;
 using VPKSoft.Utils;
+using VPKSoft.Utils.XmlSettingsMisc;
 
 namespace EasyCardFile
 {
@@ -148,6 +152,18 @@ namespace EasyCardFile
 
             AppRunning.CheckIfRunning("VPKSoft.EasyCardFile.Application.2020");
 
+            // load the settings..
+            FormMain.Settings = new Settings.Settings();
+            FormMain.Settings.RequestTypeConverter += Settings_RequestTypeConverter;
+
+            FormMain.Settings.Load(PathHandler.GetSettingsFile(Assembly.GetEntryAssembly(), ".xml",
+                Environment.SpecialFolder.LocalApplicationData));
+
+            // set the localization value..
+            DBLangEngine.UseCulture = string.IsNullOrWhiteSpace(FormMain.Settings.Locale)
+                ? CultureInfo.CurrentUICulture
+                : new CultureInfo(FormMain.Settings.Locale);
+
             foreach (var arg in args)
             {
                 if (File.Exists(arg) && Path.GetExtension(arg) != null && Path.GetExtension(arg)
@@ -175,6 +191,7 @@ namespace EasyCardFile
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMain());
             PositionCore.UnBind(); // release the event handlers used by the PosLib and save the default data
+            FormMain.Settings.RequestTypeConverter -= Settings_RequestTypeConverter;
 
             if (!Debugger.IsAttached)
             {
@@ -210,6 +227,22 @@ namespace EasyCardFile
             Process.GetCurrentProcess().Kill();
 
             // This is the end..
+        }
+
+        private static void Settings_RequestTypeConverter(object sender, RequestTypeConverterEventArgs e)
+        {
+            try
+            {
+                if (e.TypeToConvert == typeof(List<string>))
+                {
+                    e.TypeConverter = new TypeConverterPrimitiveGenericList<string>();
+                }
+            }
+            catch (Exception ex)
+            {
+                // log the exception..
+                ExceptionLogger.LogError(ex);
+            }
         }
     }
 }

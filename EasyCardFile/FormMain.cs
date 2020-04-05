@@ -25,7 +25,6 @@ SOFTWARE.
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -36,7 +35,6 @@ using EasyCardFile.CardFileHandler.CardFilePreferences;
 using EasyCardFile.CardFileHandler.LegacyCardFile;
 using EasyCardFile.Database.Entity.Enumerations;
 using EasyCardFile.Settings;
-using EasyCardFile.Settings.TypeConverters;
 using EasyCardFile.UtilityClasses.Constants;
 using EasyCardFile.UtilityClasses.FileAssociation;
 using EasyCardFile.UtilityClasses.Localization;
@@ -100,12 +98,6 @@ namespace EasyCardFile
 
             mnuTest.Visible = Debugger.IsAttached;
 
-            Settings = new Settings.Settings();
-            Settings.RequestTypeConverter += Settings_RequestTypeConverter;
-
-            Settings.Load(PathHandler.GetSettingsFile(Assembly.GetEntryAssembly(), ".xml",
-                Environment.SpecialFolder.LocalApplicationData));
-
             LocalizeStaticProperties.LocalizeFileDialogs(sdCardFile, odCardFile);
             LocalizeStaticProperties.LocalizeRtfDialogs(odRtf, sdRtf);
 
@@ -131,22 +123,6 @@ namespace EasyCardFile
         {
             SetTitle();
             SetGuiState();
-        }
-
-        private void Settings_RequestTypeConverter(object sender, RequestTypeConverterEventArgs e)
-        {
-            try
-            {
-                if (e.TypeToConvert == typeof(List<string>))
-                {
-                    e.TypeConverter = new TypeConverterPrimitiveGenericList<string>();
-                }
-            }
-            catch (Exception ex)
-            {
-                // log the exception..
-                ExceptionLogger.LogError(ex);
-            }
         }
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -178,13 +154,12 @@ namespace EasyCardFile
             }
 
             CardFileSaveClose.ClearTemporaryFiles();
-
-            Settings.RequestTypeConverter -= Settings_RequestTypeConverter;
         }
 
         private void FormMain_Shown(object sender, EventArgs e)
         {
             RestoreSession();
+            SetGuiState();
         }
 
         private void tmRemoteOpenFileQueue_Tick(object sender, EventArgs e)
