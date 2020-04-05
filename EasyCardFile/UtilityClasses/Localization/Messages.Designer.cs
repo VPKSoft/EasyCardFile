@@ -97,7 +97,7 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The default card can not be deleted. Please set another card as default and then remove the selected one.|A message describing that the default card type can not be removed and another type should be set to default before removing the selected one..
+        ///   Looks up a localized string similar to The default card type can not be deleted. Please set another card type as default and then remove the selected one.|A message describing that the default card type can not be removed and another type should be set to default before removing the selected one..
         /// </summary>
         internal static string msgCardTypeDefaultCanNotDelete {
             get {
@@ -106,7 +106,7 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The default card can not be deleted|A title of a dialog explaining to the user that the default card type can not be removed..
+        ///   Looks up a localized string similar to The default card type can not be deleted|A title of a dialog explaining to the user that the default card type can not be removed..
         /// </summary>
         internal static string msgCardTypeDefaultCanNotDeleteTitle {
             get {
@@ -183,6 +183,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         internal static string msgCartTypeSelectTypeNewForDeleted {
             get {
                 return ResourceManager.GetString("msgCartTypeSelectTypeNewForDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure|A message for a button to configure something..
+        /// </summary>
+        internal static string msgConfigure {
+            get {
+                return ResourceManager.GetString("msgConfigure", resourceCulture);
             }
         }
         
@@ -372,6 +381,24 @@ namespace EasyCardFile.UtilityClasses.Localization {
         internal static string msgEnumCardOrderingDescending {
             get {
                 return ResourceManager.GetString("msgEnumCardOrderingDescending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Card type descending|A localized enumeration value for card sort style of: Card Type Descending..
+        /// </summary>
+        internal static string msgEnumCardTypeDescendingSort {
+            get {
+                return ResourceManager.GetString("msgEnumCardTypeDescendingSort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Card type|A localized enumeration value for card sort style of: Card Type..
+        /// </summary>
+        internal static string msgEnumCardTypeSort {
+            get {
+                return ResourceManager.GetString("msgEnumCardTypeSort", resourceCulture);
             }
         }
         
@@ -664,11 +691,38 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cards: {0} / {1}|An text for a status strip to indicate the amount of cards within the card file and the amount of filtered cards via searching..
+        /// </summary>
+        internal static string msgStatusStripCardCount {
+            get {
+                return ResourceManager.GetString("msgStatusStripCardCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Row: {0}, Column: {1}, Selection {2}|A message for a status strip to describe a row, column and a selection length of a text editor..
         /// </summary>
         internal static string msgTextEditorRowColumnSelection {
             get {
                 return ResourceManager.GetString("msgTextEditorRowColumnSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tools:|An utility tool strip description text..
+        /// </summary>
+        internal static string msgToolStripDescription {
+            get {
+                return ResourceManager.GetString("msgToolStripDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word wrap|A localized tool tip for a tool strip button to toggle word wrap..
+        /// </summary>
+        internal static string msgToolStripToggleWordWrapToolTip {
+            get {
+                return ResourceManager.GetString("msgToolStripToggleWordWrapToolTip", resourceCulture);
             }
         }
     }

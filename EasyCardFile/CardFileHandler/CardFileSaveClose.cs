@@ -140,6 +140,41 @@ namespace EasyCardFile.CardFileHandler
         }
 
         /// <summary>
+        /// Reloads the card file from disk. All changes made will be lost.
+        /// </summary>
+        /// <param name="tabControl">The tab control witch the active card files reside.</param>
+        /// <returns><c>true</c> if the card file was successfully reloaded, <c>false</c> otherwise.</returns>
+        internal static bool ReloadFromDisk(Manina.Windows.Forms.TabControl tabControl)
+        {
+            try
+            {
+                var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tabControl);
+                if (wrapper != null)
+                {
+                    if (wrapper.IsTemporary) // temporary card files cannot be reloaded..
+                    {
+                        return false;
+                    }
+
+                    CardFileDbContext.ReleaseDbContext(wrapper.CardFileDb, false, true,
+                        wrapper.FileName, !wrapper.IsTemporary);
+
+                    wrapper.Changed = false;
+                    wrapper.OpenCardFile(wrapper.FileName);
+                    wrapper.RefreshUi(null, true, true);
+                }
+            }
+            catch (Exception ex)
+            {
+                // report the exception..
+                ExceptionLogAction?.Invoke(ex);
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Saves the active card file as.
         /// </summary>
         /// <param name="tabControl">The tab control witch the active card files reside.</param>

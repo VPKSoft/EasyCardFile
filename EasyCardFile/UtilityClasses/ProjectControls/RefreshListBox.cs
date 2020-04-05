@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using EasyCardFile.UtilityClasses.Miscellaneous;
+using EasyCardFile.UtilityClasses.ProjectControls.ProjectControlEventArgs;
 using Enumerable = System.Linq.Enumerable;
 
 namespace EasyCardFile.UtilityClasses.ProjectControls
@@ -112,5 +114,33 @@ namespace EasyCardFile.UtilityClasses.ProjectControls
                 ControlGraphics?.Dispose();
             }
         }
+
+        /// <summary>
+        /// Gets or sets the previously selected item of the <see cref="RefreshListBox"/>.
+        /// </summary>
+        private object PreviousSelectedItem { get; set; }
+
+        /// <summary>
+        /// Raises the <see cref="E:System.Windows.Forms.ListControl.SelectedValueChanged" /> event.
+        /// </summary>
+        /// <param name="e">An <see cref="T:System.EventArgs" /> that contains the event data.</param>
+        protected override void OnSelectedValueChanged(EventArgs e)
+        {
+            SelectedValueChanging?.Invoke(this, new ItemChangingEventArgs { NewItem = SelectedItem, PreviousItem = PreviousSelectedItem });
+            PreviousSelectedItem = SelectedItem;
+            base.OnSelectedValueChanged(e);
+        }
+
+        /// <summary>
+        /// Delegate OnItemChanging
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="ItemChangedEventArgs"/> instance containing the event data.</param>
+        public delegate void OnSelectedValueChanging(object sender, ItemChangingEventArgs e);
+
+        /// <summary>
+        /// Occurs before the selected item changed providing the previous selected item in the arguments.
+        /// </summary>
+        public event OnSelectedValueChanging SelectedValueChanging;
     }
 }

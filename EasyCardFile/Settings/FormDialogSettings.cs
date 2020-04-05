@@ -27,6 +27,7 @@ SOFTWARE.
 using System;
 using System.Reflection;
 using System.Windows.Forms;
+using Cyotek.Windows.Forms;
 using VPKSoft.LangLib;
 using VPKSoft.Utils.XmlSettingsMisc;
 
@@ -46,6 +47,10 @@ namespace EasyCardFile.Settings
         {
             InitializeComponent();
 
+            // additional name spaces to the localization..
+            // ReSharper disable once StringLiteralTypo
+            DBLangEngine.NameSpaces.Add("Manina.Windows.Forms");
+            
             // ReSharper disable once StringLiteralTypo
             DBLangEngine.DBName = "localization.sqlite"; // Do the VPKSoft.LangLib == translation..
 
@@ -91,6 +96,18 @@ namespace EasyCardFile.Settings
         {
             cbAutoSaveExistingCardFilesAppClose.Checked = Settings.AutoSave;
             cbRestorePreviousSession.Checked = Settings.RestoreSessionOnStartup;
+        }
+
+        private void cwEditorToolStripColors_ColorChanged(object sender, EventArgs e)
+        {
+            var colorWheel = (ColorWheel) sender;
+            rtbEditorToolStripColors.ColorButtonForeground = colorWheel.Color;
+        }
+
+        private void cwEditorImageGlyphColor_ColorChanged(object sender, EventArgs e)
+        {
+            var colorWheel = (ColorWheel) sender;
+            rtbEditorToolStripColors.ColorGlyph = colorWheel.Color;
         }
     }
 }

@@ -61,6 +61,7 @@
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuUndo = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuRedo = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuUndoAll = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTools = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuImportLegacy = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,6 +91,7 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbUndo = new System.Windows.Forms.ToolStripButton();
             this.tsbRedo = new System.Windows.Forms.ToolStripButton();
+            this.tsbUndoAll = new System.Windows.Forms.ToolStripButton();
             this.tab5 = new Manina.Windows.Forms.Tab();
             this.odCardFileLegacy = new System.Windows.Forms.OpenFileDialog();
             this.sdCardFile = new System.Windows.Forms.SaveFileDialog();
@@ -266,6 +268,7 @@
             // 
             this.mnuSortCards.Image = global::EasyCardFile.Properties.Resources.tools_sort_table;
             this.mnuSortCards.Name = "mnuSortCards";
+            this.mnuSortCards.ShortcutKeys = System.Windows.Forms.Keys.F5;
             this.mnuSortCards.Size = new System.Drawing.Size(218, 22);
             this.mnuSortCards.Text = "Sort cards";
             this.mnuSortCards.Click += new System.EventHandler(this.tsbSortCards_Click);
@@ -316,7 +319,8 @@
             this.mnuPasteWithoutFormatting,
             this.toolStripMenuItem5,
             this.mnuUndo,
-            this.mnuRedo});
+            this.mnuRedo,
+            this.mnuUndoAll});
             this.mnuEdit.Name = "mnuEdit";
             this.mnuEdit.Size = new System.Drawing.Size(39, 20);
             this.mnuEdit.Text = "Edit";
@@ -382,6 +386,15 @@
             this.mnuRedo.Size = new System.Drawing.Size(302, 22);
             this.mnuRedo.Text = "Redo";
             this.mnuRedo.Click += new System.EventHandler(this.tsbRedo_Click);
+            // 
+            // mnuUndoAll
+            // 
+            this.mnuUndoAll.Image = global::EasyCardFile.Properties.Resources.arrow_undo;
+            this.mnuUndoAll.Name = "mnuUndoAll";
+            this.mnuUndoAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.mnuUndoAll.Size = new System.Drawing.Size(302, 22);
+            this.mnuUndoAll.Text = "Undo all";
+            this.mnuUndoAll.Click += new System.EventHandler(this.tsbUndoAll_Click);
             // 
             // mnuTools
             // 
@@ -485,7 +498,8 @@
             this.tsbSortCards,
             this.toolStripSeparator5,
             this.tsbUndo,
-            this.tsbRedo});
+            this.tsbRedo,
+            this.tsbUndoAll});
             this.tsMain.Location = new System.Drawing.Point(0, 24);
             this.tsMain.Name = "tsMain";
             this.tsMain.Size = new System.Drawing.Size(1000, 25);
@@ -647,6 +661,16 @@
             this.tsbRedo.Text = "Redo";
             this.tsbRedo.Click += new System.EventHandler(this.tsbRedo_Click);
             // 
+            // tsbUndoAll
+            // 
+            this.tsbUndoAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbUndoAll.Image = global::EasyCardFile.Properties.Resources.arrow_undo;
+            this.tsbUndoAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbUndoAll.Name = "tsbUndoAll";
+            this.tsbUndoAll.Size = new System.Drawing.Size(23, 22);
+            this.tsbUndoAll.Text = "Undo all changes";
+            this.tsbUndoAll.Click += new System.EventHandler(this.tsbUndoAll_Click);
+            // 
             // tab5
             // 
             this.tab5.Location = new System.Drawing.Point(1, 24);
@@ -789,6 +813,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
         private System.Windows.Forms.ToolStripMenuItem mnuUndo;
         private System.Windows.Forms.ToolStripMenuItem mnuRedo;
+        private System.Windows.Forms.ToolStripButton tsbUndoAll;
+        private System.Windows.Forms.ToolStripMenuItem mnuUndoAll;
     }
 }
 

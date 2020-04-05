@@ -62,6 +62,9 @@ namespace EasyCardFile.CardFileHandler.CardFilePreferences
         {
             InitializeComponent();
 
+            // additional name spaces to the localization..
+            DBLangEngine.NameSpaces.Add("EasyCardFile.UtilityClasses.ProjectControls");
+
             // ReSharper disable once StringLiteralTypo
             DBLangEngine.DBName = "localization.sqlite"; // Do the VPKSoft.LangLib == translation..
 

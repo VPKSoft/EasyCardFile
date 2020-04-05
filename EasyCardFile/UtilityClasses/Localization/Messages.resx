@@ -130,10 +130,10 @@
     <value>Card ordering:|A description text for a card ordering selection in a numeric query control.</value>
   </data>
   <data name="msgCardTypeDefaultCanNotDelete" xml:space="preserve">
-    <value>The default card can not be deleted. Please set another card as default and then remove the selected one.|A message describing that the default card type can not be removed and another type should be set to default before removing the selected one.</value>
+    <value>The default card type can not be deleted. Please set another card type as default and then remove the selected one.|A message describing that the default card type can not be removed and another type should be set to default before removing the selected one.</value>
   </data>
   <data name="msgCardTypeDefaultCanNotDeleteTitle" xml:space="preserve">
-    <value>The default card can not be deleted|A title of a dialog explaining to the user that the default card type can not be removed.</value>
+    <value>The default card type can not be deleted|A title of a dialog explaining to the user that the default card type can not be removed.</value>
   </data>
   <data name="msgCardTypeDescription" xml:space="preserve">
     <value>Card type:|A description text for a card type selection combo box.</value>
@@ -158,6 +158,9 @@
   </data>
   <data name="msgCartTypeSelectTypeNewForDeleted" xml:space="preserve">
     <value>Select a new card type for the cards with the deleted type of: {0}|A message instructing the user to select a new card type for the cards using a card type about to be deleted.</value>
+  </data>
+  <data name="msgConfigure" xml:space="preserve">
+    <value>Configure|A message for a button to configure something.</value>
   </data>
   <data name="msgConfirmAPassword" xml:space="preserve">
     <value>Confirm the password to protect the card file.|A user is asked for a confirmation for a password in a dialog (the second time)</value>
@@ -221,6 +224,12 @@
   </data>
   <data name="msgEnumCardOrderingDescending" xml:space="preserve">
     <value>User defined ordering descending|A localized enumeration value for card sort style of: Custom Descending.</value>
+  </data>
+  <data name="msgEnumCardTypeDescendingSort" xml:space="preserve">
+    <value>Card type descending|A localized enumeration value for card sort style of: Card Type Descending.</value>
+  </data>
+  <data name="msgEnumCardTypeSort" xml:space="preserve">
+    <value>Card type|A localized enumeration value for card sort style of: Card Type.</value>
   </data>
   <data name="msgEnumCreatedDescendingSort" xml:space="preserve">
     <value>Created descending|A localized enumeration value for card sort style of: Created Descending.</value>
@@ -318,7 +327,16 @@
   <data name="msgSelectCardImageTitle" xml:space="preserve">
     <value>Select an image for the card type '[{0}]'|A title for a dialog to select a part of an image to be used with a card type.</value>
   </data>
+  <data name="msgStatusStripCardCount" xml:space="preserve">
+    <value>Cards: {0} / {1}|An text for a status strip to indicate the amount of cards within the card file and the amount of filtered cards via searching.</value>
+  </data>
   <data name="msgTextEditorRowColumnSelection" xml:space="preserve">
     <value>Row: {0}, Column: {1}, Selection {2}|A message for a status strip to describe a row, column and a selection length of a text editor.</value>
+  </data>
+  <data name="msgToolStripDescription" xml:space="preserve">
+    <value>Tools:|An utility tool strip description text.</value>
+  </data>
+  <data name="msgToolStripToggleWordWrapToolTip" xml:space="preserve">
+    <value>Word wrap|A localized tool tip for a tool strip button to toggle word wrap.</value>
   </data>
 </root>

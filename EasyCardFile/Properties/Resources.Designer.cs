@@ -73,6 +73,16 @@ namespace EasyCardFile.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap arrow_undo {
+            get {
+                object obj = ResourceManager.GetObject("arrow-undo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap card_file_preferences {
             get {
                 object obj = ResourceManager.GetObject("card_file_preferences", resourceCulture);
@@ -436,6 +446,26 @@ namespace EasyCardFile.Properties {
         internal static System.Drawing.Bitmap view_refresh_5 {
             get {
                 object obj = ResourceManager.GetObject("view-refresh-5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap word_wrap {
+            get {
+                object obj = ResourceManager.GetObject("word-wrap", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap word_wrapped {
+            get {
+                object obj = ResourceManager.GetObject("word_wrapped", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

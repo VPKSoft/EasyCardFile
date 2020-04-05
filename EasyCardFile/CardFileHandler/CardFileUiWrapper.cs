@@ -190,6 +190,21 @@ namespace EasyCardFile.CardFileHandler
         private static string ConfirmDeleteCardQuery { get; set; }
 
         /// <summary>
+        /// Gets or sets the localized utility tool strip description text.
+        /// </summary>
+        private static string ToolStripDescription { get; set; }
+
+        /// <summary>
+        /// Gets or sets the localized tool tip for a tool strip button to toggle word wrap.
+        /// </summary>
+        private static string ToolStripToggleWordWrapToolTip { get; set; }
+
+        /// <summary>
+        /// Gets or sets the localized text for a status strip to indicate the amount of cards within the card file and the amount of filtered cards via searching.
+        /// </summary>
+        private static string StatusStripCardCount { get; set; }
+
+        /// <summary>
         /// Localizes the texts used with the CardFile UI.
         /// </summary>
         internal static void LocalizeTexts()
@@ -232,6 +247,17 @@ namespace EasyCardFile.CardFileHandler
 
             CardOrderingDescription = DBLangEngine.GetStatMessage("msgCardOrderingDescription",
                 "Card ordering:|A description text for a card ordering selection in a numeric query control.");
+
+            ToolStripDescription = DBLangEngine.GetStatMessage("msgToolStripDescription",
+                "Tools:|An utility tool strip description text.");
+
+            ToolStripToggleWordWrapToolTip = DBLangEngine.GetStatMessage("msgToolStripToggleWordWrapToolTip",
+                // ReSharper disable twice CommentTypo
+                "Word wrap|A localized tool tip for a tool strip button to toggle word wrap."); // FIN = Automaattinen rivitys...
+
+            StatusStripCardCount = DBLangEngine.GetStatMessage("msgStatusStripCardCount",
+                "Cards: {0} / {1}|An text for a status strip to indicate the amount of cards within the card file and the amount of filtered cards via searching.");
+
         }
         #endregion
 
@@ -254,6 +280,11 @@ namespace EasyCardFile.CardFileHandler
         public EventHandler CardFileChanged;
 
         /// <summary>
+        /// Occurs when the <see cref="Card"/> contents in the editor have been changed.
+        /// </summary>
+        public EventHandler CardContentsChanged;
+
+        /// <summary>
         /// Occurs when the <see cref="CardFile"/> undo and redo possibility if of the card file has been changed.
         /// </summary>
         public EventHandler UndoRedoChanged;
@@ -263,17 +294,22 @@ namespace EasyCardFile.CardFileHandler
         /// <summary>
         /// Gets a value indicating whether the selected card changes can be undone.
         /// </summary>
-        public bool CanUndo => UndoRedo.CanUndo;
+        public bool CanUndo => UndoRedo.CanUndo || RichTextBox.RichTextBox.CanUndo;
 
         /// <summary>
         /// Gets a value indicating whether the selected card changes can be redone.
         /// </summary>
-        public bool CanRedo => UndoRedo.CanRedo;
+        public bool CanRedo => UndoRedo.CanRedo || RichTextBox.RichTextBox.CanRedo;
 
         /// <summary>
         /// Gets a value indicating whether the selected card has changed.
         /// </summary>
         public bool CardChanged => CanRedo | CanUndo;
+
+        /// <summary>
+        /// Gets or set a value indicating whether the underlying database context has been changed.
+        /// </summary>
+        public bool DbContextChanged => CardFileDb?.ChangeTracker?.HasChanges() == true;
 
         /// <summary>
         /// Determines whether you can paste information from the <see cref="Clipboard"/> to the <see cref="RichTextBox"/> control.
@@ -355,6 +391,8 @@ namespace EasyCardFile.CardFileHandler
 
             SuspendTextHandler = false;
             UndoRedoChanged?.Invoke(this, new EventArgs());
+            SetCardCount();
+
             return result != default;
         }
 
@@ -391,6 +429,8 @@ namespace EasyCardFile.CardFileHandler
                 }
             }
             UndoRedoChanged?.Invoke(this, new EventArgs());
+            SetCardCount();
+
             return result != default;
         }
 
@@ -636,6 +676,7 @@ namespace EasyCardFile.CardFileHandler
                 }
 
                 FocusRichTextBox();
+                SetCardCount();
 
                 Changed = true;
                 // notify of the change..
@@ -680,6 +721,8 @@ namespace EasyCardFile.CardFileHandler
                 // add the new card addition to the undo / redo class..
                 UndoRedo.AddChange(card, UndoRedoType.Added, card.Ordering, card.CardName, 
                     card.CardContents, card.CardType.UniqueId);
+
+                SetCardCount();
 
                 return true;
             }
@@ -726,11 +769,12 @@ namespace EasyCardFile.CardFileHandler
             SplitContainer = new SplitContainer {Dock = DockStyle.Fill,};
 
             // create a table layout panel for the search box and for the card list..
-            TableLayoutMain = new TableLayoutPanel {Dock = DockStyle.Fill, RowCount = 4, ColumnCount = 2,};
+            TableLayoutMain = new TableLayoutPanel {Dock = DockStyle.Fill, RowCount = 5, ColumnCount = 2,};
             TableLayoutMain.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             TableLayoutMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             TableLayoutMain.RowStyles.Add(new RowStyle{ SizeType = SizeType.AutoSize});
             TableLayoutMain.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            TableLayoutMain.RowStyles.Add(new RowStyle{ SizeType = SizeType.AutoSize});
             TableLayoutMain.RowStyles.Add(new RowStyle{ SizeType = SizeType.AutoSize});
             TableLayoutMain.RowStyles.Add(new RowStyle{ SizeType = SizeType.AutoSize});
             SplitContainer.Panel1.Controls.Add(TableLayoutMain);
@@ -778,9 +822,26 @@ namespace EasyCardFile.CardFileHandler
 
             TableLayoutMain.Controls.Add(CardOrdering, 1, 2);
 
+            // TODO::Add label!
+            
+            label = new Label {Text = ToolStripDescription, Padding = new Padding(2), Margin = new Padding(3),};
+            TableLayoutMain.Controls.Add(label, 0, 3);
+
+            var toolStrip = new ToolStrip();
+            TableLayoutMain.Controls.Add(toolStrip, 1, 3);
+
+            WordWrapButton = new ToolStripButton(Properties.Resources.word_wrapped)
+                {DisplayStyle = ToolStripItemDisplayStyle.Image};
+
+            WordWrapButton.Click += WordWrapButton_Click;
+            WordWrapButton.Text = ToolStripToggleWordWrapToolTip;
+            WordWrapButton.ToolTipText = ToolStripToggleWordWrapToolTip;
+
+            toolStrip.Items.Add(WordWrapButton);
+
             // create the label to indicate that the next control will be the card type combo box..
             label = new Label {Text = CardTypeDescription, Padding = new Padding(2), Margin = new Padding(3),};
-            TableLayoutMain.Controls.Add(label, 0, 3);
+            TableLayoutMain.Controls.Add(label, 0, 4);
 
             // create the combo box for the card type..
             CardTypeComboBox = new ComboBox
@@ -793,7 +854,7 @@ namespace EasyCardFile.CardFileHandler
 
             CardTypeComboBox.SelectedValueChanged += ComboBoxCardType_SelectedValueChanged;
 
-            TableLayoutMain.Controls.Add(CardTypeComboBox, 1, 3);
+            TableLayoutMain.Controls.Add(CardTypeComboBox, 1, 4);
             foreach (var cardType in CardFileDb.CardFile.CardTypes)
             {
                 CardTypeComboBox.Items.Add(cardType);
@@ -827,6 +888,10 @@ namespace EasyCardFile.CardFileHandler
             ItemRowColumnSelection = statusStrip.Items.Add(string.Format(TextEditorRowColumnSelection, 1, 1, 0));
             ItemModifiedDateTime = statusStrip.Items.Add("");
             ItemCreatedDateTime = statusStrip.Items.Add("");
+
+            // set the card count status strip text..
+            var cardCount = CardFileDb?.CardFile?.Cards?.Count ?? 0;
+            ItemCardCount = statusStrip.Items.Add(string.Format(StatusStripCardCount, cardCount, cardCount));
 
             // add the controls to right split panel..
             SplitContainer.Panel2.Controls.Add(TableLayoutMain);
@@ -1040,7 +1105,6 @@ namespace EasyCardFile.CardFileHandler
             }
         }
 
-
         private void ListBoxCards_MouseMove(object sender, MouseEventArgs e)
         {
             var listBox = (RefreshListBox) sender;
@@ -1085,6 +1149,7 @@ namespace EasyCardFile.CardFileHandler
             if (SelectedCard != null)
             {
                 SelectedCard.CardContents = Encoding.UTF8.GetBytes(RichTextBox.Rtf);
+                CardContentsChanged?.Invoke(this, new EventArgs());
             }
 
             UpdateRowColumnSelection();
@@ -1112,6 +1177,25 @@ namespace EasyCardFile.CardFileHandler
             if (!SuspendCardChanged)
             {
                 ListBoxCards.Invalidate();
+            }
+        }
+
+        private void WordWrapButton_Click(object sender, EventArgs e)
+        {
+            if (SuspendCardChanged)
+            {
+                return;
+            }
+
+            var button = (ToolStripButton) sender;
+            button.Checked = !button.Checked;
+
+            var card = (Card) ListBoxCards.SelectedItem;
+            if (card != null)
+            {
+                card.WordWrap = button.Checked;
+                PushUndo(SelectedCard, true);
+                DisplayCard(card);
             }
         }
 
@@ -1156,6 +1240,11 @@ namespace EasyCardFile.CardFileHandler
         /// Gets or sets the main <see cref="TableLayoutPanel"/> instance.
         /// </summary>
         internal TableLayoutPanel TableLayoutMain { get; set; }
+
+        /// <summary>
+        /// Gets or sets the button to enable / disable word wrap in the text editor.
+        /// </summary>
+        internal ToolStripButton WordWrapButton { get; set; }
 
         /// <summary>
         /// The <see cref="RefreshListBox"/> control with a filtered list of card within the card file.
@@ -1207,6 +1296,11 @@ namespace EasyCardFile.CardFileHandler
         /// Gets or sets the <see cref="ToolStripItem"/> indicating the date and time the card was created.
         /// </summary>
         private ToolStripItem ItemCreatedDateTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="ToolStripItem"/> indicating the amount of card within the <see cref="CardFile"/> and the amount of filtered cards (the visible view).
+        /// </summary>
+        private ToolStripItem ItemCardCount { get; set; }
         #endregion
 
         #region HelperMethods        
@@ -1261,9 +1355,13 @@ namespace EasyCardFile.CardFileHandler
             {
                 ListBoxCards.SelectedItem = selectCard;
             }
-            else
+            else if (index > 0 && index < ListBoxCards.Items.Count)
             {
                 ListBoxCards.SelectedIndex = index;
+            }
+            else
+            {
+                ListBoxCards.SelectedIndex = -1;
             }
 
             SuspendTextHandler = false;
@@ -1274,6 +1372,7 @@ namespace EasyCardFile.CardFileHandler
                 CardTypeComboBox.Items.Add(cardType);
             }
 
+            SetCardCount();
             DisplayCard(ListBoxCards.SelectedItem);
             RepaintCardListBox();
         }
@@ -1454,6 +1553,9 @@ namespace EasyCardFile.CardFileHandler
 
                 CardOrdering.Value = card.Ordering;
 
+                WordWrapButton.Checked = card.WordWrap;
+                RichTextBox.RichTextBox.WordWrap = card.WordWrap;
+
                 SuspendCardChanged = false;
 
                 ItemCreatedDateTime.Text = string.Format(TextEditorCardCreatedDate, card.CreateDateTime);
@@ -1469,9 +1571,10 @@ namespace EasyCardFile.CardFileHandler
         /// Pushes the possible changed values to the <see cref="UndoRedo"/> class instance.
         /// </summary>
         /// <param name="card">The card which changes to push.</param>
+        /// <param name="wordWrap">A value indicating that the word wrap property was changed for the card.</param>
         /// <returns><c>true</c> if card was changed, <c>false</c> otherwise.</returns>
         // ReSharper disable once UnusedMethodReturnValue.Local
-        private bool PushUndo(Card card)
+        private bool PushUndo(Card card, bool wordWrap = false)
         {
             if (card == null)
             {
@@ -1508,7 +1611,8 @@ namespace EasyCardFile.CardFileHandler
                 return false;
             }
 
-            if (PreviousCardName != card.CardName ||
+            if (wordWrap ||
+                PreviousCardName != card.CardName ||
                 PreviousCardTypeUniqueId != card.CardType?.UniqueId ||
                 PreviousCardOrdering != card.Ordering ||
                 CardContentsChanged())
@@ -1578,6 +1682,16 @@ namespace EasyCardFile.CardFileHandler
         }
 
         /// <summary>
+        /// Sets the text for the status strip to display the amount of cards and the amount of filtered cards.
+        /// </summary>
+        internal void SetCardCount()
+        {
+            // set the card count status strip text..
+            var cardCount = CardFileDb?.CardFile?.Cards?.Count ?? 0;
+            ItemCardCount.Text = string.Format(StatusStripCardCount, cardCount, ListBoxCards.Items.Count);
+        }
+
+        /// <summary>
         /// Filters the card file list box <see cref="ListBoxCards"/> contents based on the given <paramref name="filterText"/> text.
         /// </summary>
         /// <param name="filterText">The optional search text text to filter the cards. If set to an empty string all the cards within the card file are listed.</param>
@@ -1605,6 +1719,7 @@ namespace EasyCardFile.CardFileHandler
                         }
                     }
                 }
+                SetCardCount();
             }
         }
         #endregion
@@ -1625,6 +1740,8 @@ namespace EasyCardFile.CardFileHandler
                 SearchTextBox.TextChanged -= SearchTextBox_TextChanged;
                 ListBoxCards.SelectedValueChanged -= ListBoxCards_SelectedValueChanged;
                 RichTextBoxContextMenu.Opening -= RichTextBoxContextMenu_Opening;
+                WordWrapButton.Click -= WordWrapButton_Click;
+                ListBoxCards.MouseMove -= ListBoxCards_MouseMove;
 
                 CardFileDbContext.ReleaseDbContext(CardFileDb, !IsTemporary && SaveChangesOnClose, true);
                 CardFileDb = null;

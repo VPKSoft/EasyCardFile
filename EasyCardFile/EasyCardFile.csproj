@@ -43,6 +43,9 @@
     <ApplicationIcon>62941cardfilebox_109271.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cyotek.Windows.Forms.ColorPicker.1.7.2\lib\net35\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -200,6 +203,7 @@
     </Compile>
     <Compile Include="UtilityClasses\Miscellaneous\Pair.cs" />
     <Compile Include="UtilityClasses\Miscellaneous\StringHelperGetPath.cs" />
+    <Compile Include="UtilityClasses\ProjectControls\ProjectControlEventArgs\ItemChangingEventArgs.cs" />
     <Compile Include="UtilityClasses\ProjectControls\RefreshCheckListBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -282,6 +286,9 @@
     <None Include="Resources\import_document2.png" />
     <None Include="Resources\edit-undo-5.png" />
     <None Include="Resources\edit-redo-5.png" />
+    <None Include="Resources\arrow-undo.png" />
+    <None Include="Resources\word-wrap.png" />
+    <None Include="Resources\word_wrapped.png" />
     <Content Include="VPKSoft.ico" />
     <None Include="Resources\About.png" />
     <None Include="Resources\document-print-preview-4.png" />

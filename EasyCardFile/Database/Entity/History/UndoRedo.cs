@@ -46,7 +46,6 @@ namespace EasyCardFile.Database.Entity.History
         /// <param name="previousCardName">The previous name of the card before a rename operation.</param>
         /// <param name="previousCardContents">The previous card contents before the card was changed.</param>
         /// <param name="previousCardTypeUniqueId">The value of <see cref="CardType.UniqueId"/> before the card type was changed.</param>
-        /// <param name="newCardTypeUniqueId">The value of <see cref="CardType.UniqueId"/> after the card type was changed.</param>
         internal void AddChange(Card card, UndoRedoType type, int previousCardOrdering, string previousCardName, byte[] previousCardContents,
             int previousCardTypeUniqueId)
         {
@@ -162,31 +161,54 @@ namespace EasyCardFile.Database.Entity.History
             }
             
             // invert the deletion..
-            if (CardChanges[UndoCursorPosition].UndoRedoType == UndoRedoType.Deleted) 
+            if (CardChanges[UndoCursorPosition].UndoRedoType == UndoRedoType.Deleted)
             {
-                var card = new Card();
-                CardNoEntity.ToEntity(card, CardChanges[UndoCursorPosition].CardItemChanged, context.CardFile.CardTypes);
-                card.UniqueId = CardChanges[UndoCursorPosition].CardItemChanged.UniqueId;
-                card.CardFile = context.CardFile;
-                context.CardFile.Cards.Add(card);
-                UndoCursorPosition++;
                 cardAmountChanged = true;
-                return card.UniqueId;
+                return SpawnCard(context, 1);
             }
 
             // invert the addition..
             if (CardChanges[UndoCursorPosition].UndoRedoType == UndoRedoType.Added)
             {
-                var card = context.CardFile.Cards.FirstOrDefault(f =>
-                    f.UniqueId == CardChanges[UndoCursorPosition].CardItemChanged.UniqueId);
-
-                context.CardFile.Cards.Remove(card);
-                UndoCursorPosition++;
                 cardAmountChanged = true;
-                return card?.UniqueId ?? default;
+                return UnSpawnCard(context, 1);
             }
 
             return default;
+        }
+
+        /// <summary>
+        /// Spawns the <see cref="Card"/> instance from the undo / redo history back to the database context.
+        /// </summary>
+        /// <param name="context">The database context.</param>
+        /// <param name="currentPositionModifyAmount">The amount to modify the current cursor position within the buffer.</param>
+        /// <returns>The <see cref="Card.UniqueId"/> value of the spawned card entity.</returns>
+        private int SpawnCard(CardFileDbContext context, int currentPositionModifyAmount = 0)
+        {
+            var card = new Card();
+            CardNoEntity.ToEntity(card, CardChanges[UndoCursorPosition].CardItemChanged, context.CardFile.CardTypes);
+            card.UniqueId = CardChanges[UndoCursorPosition].CardItemChanged.UniqueId;
+            card.CardFile = context.CardFile;
+            context.CardFile.Cards.Add(card);
+            UndoCursorPosition += currentPositionModifyAmount;
+            return card.UniqueId;
+        }
+
+        /// <summary>
+        /// Removes the <see cref="Card"/> instance from the database context back to the undo / redo history.
+        /// </summary>
+        /// <param name="context">The database context.</param>
+        /// <param name="currentPositionModifyAmount">The amount to modify the current cursor position within the buffer.</param>
+        /// <returns>The <see cref="Card.UniqueId"/> value of the removed card entity.</returns>
+        private int UnSpawnCard(CardFileDbContext context, int currentPositionModifyAmount = 0)
+        {
+            var card = context.CardFile.Cards.FirstOrDefault(f =>
+                f.UniqueId == CardChanges[UndoCursorPosition].CardItemChanged.UniqueId);
+
+            context.CardFile.Cards.Remove(card);
+            UndoCursorPosition += currentPositionModifyAmount;
+
+            return card?.UniqueId ?? default;
         }
 
         /// <summary>
@@ -217,24 +239,13 @@ namespace EasyCardFile.Database.Entity.History
             // to redo a deletion would be to delete a card, I hope..
             if (CardChanges[UndoCursorPosition].UndoRedoType == UndoRedoType.Deleted)
             {
-                var card = context.CardFile.Cards.FirstOrDefault(f =>
-                    f.UniqueId == CardChanges[UndoCursorPosition].CardItemChanged.UniqueId);
-
-                context.CardFile.Cards.Remove(card);
-                cardAmountChanged = true;
-                return card?.UniqueId ?? default;
+                return UnSpawnCard(context);
             }
 
             // to redo an addition would be to add a card, I hope..
             if (CardChanges[UndoCursorPosition].UndoRedoType == UndoRedoType.Added)
             {
-                var card = new Card();
-                CardNoEntity.ToEntity(card, CardChanges[UndoCursorPosition].CardItemChanged, context.CardFile.CardTypes);
-                card.UniqueId = CardChanges[UndoCursorPosition].CardItemChanged.UniqueId;
-                card.CardFile = context.CardFile;
-                context.CardFile.Cards.Add(card);
-                cardAmountChanged = true;
-                return card.UniqueId;
+                return SpawnCard(context);
             }
 
             return default;
@@ -245,6 +256,7 @@ namespace EasyCardFile.Database.Entity.History
         /// </summary>
         internal void Clear()
         {
+            UndoCursorPosition = default;
             CardChanges.Clear();
         }
 

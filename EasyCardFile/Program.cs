@@ -37,6 +37,7 @@ using EasyCardFile.UtilityClasses.FileAssociation;
 using EasyCardFile.UtilityClasses.Miscellaneous.Dialogs;
 using VPKSoft.ErrorLogger;
 using VPKSoft.IPC;
+using VPKSoft.LangLib;
 using VPKSoft.PosLib;
 using VPKSoft.Utils;
 

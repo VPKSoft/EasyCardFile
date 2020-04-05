@@ -25,14 +25,8 @@ SOFTWARE.
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EasyCardFile.UtilityClasses.ProjectControls
@@ -118,6 +112,7 @@ namespace EasyCardFile.UtilityClasses.ProjectControls
         /// <summary>
         /// Gets or sets the width of the button.
         /// </summary>
+        [Category("Appearance")]
         public int ButtonWidth
         {
             get => (int) tlpButtons.ColumnStyles[1].Width; 
@@ -127,11 +122,13 @@ namespace EasyCardFile.UtilityClasses.ProjectControls
         /// <summary>
         /// Gets or sets the button text.
         /// </summary>
+        [Category("Appearance")]
         public string ButtonText { get => lbButton.Text; set => lbButton.Text = value; }
 
         /// <summary>
         /// Gets or sets the text associated with this control.
         /// </summary>
+        [Category("Appearance")]
         public override string Text { get => tbButton.Text; set => tbButton.Text = value; }
 
         /// <summary>
