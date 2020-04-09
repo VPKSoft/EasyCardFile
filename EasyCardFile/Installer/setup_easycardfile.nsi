@@ -123,7 +123,7 @@ Section -Main SEC0000
     File ..\UtilityClasses\Localization\localization.sqlite
 	
 	#English dictionaries..
-    SetOutPath "$LOCALAPPDATA\ScriptNotepad\Dictionaries\en"
+    SetOutPath "$LOCALAPPDATA\EasyCardFile\dictionaries\en"
 
     File .\dictionaries\en\en_US.dic  
     File .\dictionaries\en\en_US.aff  	
