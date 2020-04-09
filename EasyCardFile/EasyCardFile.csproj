@@ -55,6 +55,9 @@
     <Reference Include="ICSharpCode.SharpZipLib, Version=1.2.0.246, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.1.2.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Ookii.Dialogs.WinForms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=66aa232afad40158, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ookii.Dialogs.WinForms.1.1.0\lib\net45\Ookii.Dialogs.WinForms.dll</HintPath>
+    </Reference>
     <Reference Include="PagedControl, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedControl.2.2.0\lib\net35\PagedControl.dll</HintPath>
     </Reference>
@@ -62,6 +65,9 @@
       <HintPath>..\packages\SQLite.CodeFirst.1.5.3.29\lib\net45\SQLite.CodeFirst.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.112.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
@@ -73,6 +79,18 @@
     <Reference Include="System.Data.SQLite.Linq, Version=1.0.112.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.112.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Design" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.1\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -103,6 +121,12 @@
     <Reference Include="VPKSoft.RichTextEdit, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.RichTextEdit.1.0.0.3\lib\net47\VPKSoft.RichTextEdit.dll</HintPath>
     </Reference>
+    <Reference Include="VPKSoft.SpellCheckUtility, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VPKSoft.SpellCheckUtility.1.0.0.2\lib\net47\VPKSoft.SpellCheckUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="VPKSoft.SpellCheckUtility.WinForms, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VPKSoft.SpellCheckUtility.WinForms.1.0.0.1\lib\net47\VPKSoft.SpellCheckUtility.WinForms.dll</HintPath>
+    </Reference>
     <Reference Include="VPKSoft.TextEditIcons, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.TextEditIcons.1.0.0\lib\net45\VPKSoft.TextEditIcons.dll</HintPath>
     </Reference>
@@ -114,6 +138,9 @@
     </Reference>
     <Reference Include="VPKSoft.WinFormsRtfPrint, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VPKSoft.WinFormsRtfPrint.1.0.0.3\lib\net47\VPKSoft.WinFormsRtfPrint.dll</HintPath>
+    </Reference>
+    <Reference Include="WeCantSpell.Hunspell, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WeCantSpell.Hunspell.3.0.1\lib\net45\WeCantSpell.Hunspell.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -189,6 +216,8 @@
     <Compile Include="UtilityClasses\Constants\EasyCardFileConstants.cs" />
     <Compile Include="UtilityClasses\ErrorHandling\ErrorHandlingBase.cs" />
     <Compile Include="UtilityClasses\FileAssociation\AssociateFileExtension.cs" />
+    <Compile Include="UtilityClasses\IO\DirectoryCrawler.cs" />
+    <Compile Include="UtilityClasses\IO\DirectoryCrawlerEventArgs.cs" />
     <Compile Include="UtilityClasses\Localization\LocalizeStaticProperties.cs" />
     <Compile Include="UtilityClasses\Localization\Messages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -219,6 +248,8 @@
     <Compile Include="UtilityClasses\ProjectControls\TextBoxButton.Designer.cs">
       <DependentUpon>TextBoxButton.cs</DependentUpon>
     </Compile>
+    <Compile Include="UtilityClasses\SpellCheck\HunspellData.cs" />
+    <Compile Include="UtilityClasses\SpellCheck\HunspellDictionaryCrawler.cs" />
     <Compile Include="UtilityClasses\TextUtility\RegexMatchLengthReplace.cs" />
     <EmbeddedResource Include="CardFileHandler\CardFileNaming\FormDialogAddRenameCard.resx">
       <DependentUpon>FormDialogAddRenameCard.cs</DependentUpon>
@@ -251,6 +282,9 @@
       <DependentUpon>TextBoxButton.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="EasyCardfile.licenseheader" />
+    <None Include="Installer\dictionaries\en\en_US.aff" />
+    <None Include="Installer\dictionaries\en\en_US.dic" />
+    <None Include="Installer\DotNetChecker.nsh" />
     <None Include="Installer\setup_easycardfile.nsi" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -262,6 +296,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="UtilityClasses\Localization\CopyLang.bat" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -289,6 +324,12 @@
     <None Include="Resources\arrow-undo.png" />
     <None Include="Resources\word-wrap.png" />
     <None Include="Resources\word_wrapped.png" />
+    <Content Include="Installer\languages.ico" />
+    <Content Include="Installer\un_icon.ico" />
+    <None Include="Resources\tools-check-spelling-7.png" />
+    <None Include="Resources\tools-check-spelling-2.png" />
+    <None Include="Resources\tools-check-spelling-4.png" />
+    <Content Include="UtilityClasses\Localization\localization.sqlite" />
     <Content Include="VPKSoft.ico" />
     <None Include="Resources\About.png" />
     <None Include="Resources\document-print-preview-4.png" />

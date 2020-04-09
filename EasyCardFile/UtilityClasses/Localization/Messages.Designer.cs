@@ -322,6 +322,33 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select an affix file|A title for an open file dialog to indicate user that the user is selecting a Hunspell affix file for the spell checking.
+        /// </summary>
+        internal static string msgDialogSelectAffixFile {
+            get {
+                return ResourceManager.GetString("msgDialogSelectAffixFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a dictionary file|A title for an open file dialog to indicate user that the user is selecting a dictionary file for the spell checking.
+        /// </summary>
+        internal static string msgDialogSelectDicFile {
+            get {
+                return ResourceManager.GetString("msgDialogSelectDicFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the dictionary folder|A message describing that the user should select a folder where the Hunspell dictionaries reside.
+        /// </summary>
+        internal static string msgDirectoryDialogDictionary {
+            get {
+                return ResourceManager.GetString("msgDirectoryDialogDictionary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created: {0}|A message for a status strip to indicate a date and time the card was created..
         /// </summary>
         internal static string msgEditorCardCreated {
@@ -493,11 +520,29 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hunspell affix file |*.aff|A text in a file dialog filter to indicate a Hunspell affix file.
+        /// </summary>
+        internal static string msgFileAffix {
+            get {
+                return ResourceManager.GetString("msgFileAffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [•]|An indicator text to be used with the card file&apos;s file name to indicate that the file has been changed..
         /// </summary>
         internal static string msgFileChangedIndicatorText {
             get {
                 return ResourceManager.GetString("msgFileChangedIndicatorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hunspell dictionary file|*.dic|A text in a file dialog filter to indicate a Hunspell dictionary file.
+        /// </summary>
+        internal static string msgFileDic {
+            get {
+                return ResourceManager.GetString("msgFileDic", resourceCulture);
             }
         }
         
@@ -714,6 +759,24 @@ namespace EasyCardFile.UtilityClasses.Localization {
         internal static string msgSelectCardImageTitle {
             get {
                 return ResourceManager.GetString("msgSelectCardImageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No errors were found during the spell checking process.|A message indicating that a card file spell checking yielded no errors..
+        /// </summary>
+        internal static string msgSpellCheckingPassed {
+            get {
+                return ResourceManager.GetString("msgSpellCheckingPassed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passed|A title for a message box indicating that a card file spell checking yielded no errors..
+        /// </summary>
+        internal static string msgSpellCheckingPassedTitle {
+            get {
+                return ResourceManager.GetString("msgSpellCheckingPassedTitle", resourceCulture);
             }
         }
         

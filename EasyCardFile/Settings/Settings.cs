@@ -24,12 +24,13 @@ SOFTWARE.
 */
 #endregion
 
+using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using EasyCardFile.CardFileHandler;
 using EasyCardFile.CardFileHandler.CardFilePreferences;
+using EasyCardFile.UtilityClasses.ErrorHandling;
 using EasyCardFile.UtilityClasses.Miscellaneous.Dialogs;
 using VPKSoft.Utils;
 using VPKSoft.Utils.XmlSettingsMisc;
@@ -121,6 +122,82 @@ namespace EasyCardFile.Settings
         /// </summary>
         [IsSetting]
         public string PathFileDialogRtfSave { get; set; }
+
+        #region SpellCheck
+        /// <summary>
+        /// Gets or sets the initial directory for an open file dialog to open a Hunspell affix file from the <see cref="FormDialogSettings"/> form.
+        /// </summary>
+        [IsSetting]
+        public string FileLocationOpenAffix { get; set; }
+
+        /// <summary>
+        /// Gets or sets the initial directory for an open file dialog to open a Hunspell dictionary file from the <see cref="FormDialogSettings"/> form.
+        /// </summary>
+        [IsSetting]
+        public string FileLocationOpenDictionary { get; set; }
+
+        private string editorHunspellDictionaryPath;
+
+        /// <summary>
+        /// Gets or sets a value of the Hunspell dictionary file to be used with spell checking for the spell checking.
+        /// </summary>
+        [IsSetting]
+        public string EditorHunspellDictionaryPath
+        {
+            get
+            {
+                if (editorHunspellDictionaryPath == default || !Directory.Exists(editorHunspellDictionaryPath))
+                {
+                    editorHunspellDictionaryPath = Path.Combine(Paths.GetAppSettingsFolder(), "dictionaries", "en");
+                }
+
+                return editorHunspellDictionaryPath;
+            }
+
+            set
+            {
+                if (value == default || !Directory.Exists(value))
+                {
+                    editorHunspellDictionaryPath = Path.Combine(Paths.GetAppSettingsFolder(), "dictionaries", "en");
+                    return;
+                }
+
+                editorHunspellDictionaryPath = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value of the Hunspell dictionary file to be used with spell checking for the card file cards.
+        /// </summary>
+        [IsSetting]
+        public string EditorHunspellDictionaryFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value of the Hunspell affix file to be used with spell checking for the card file cards.
+        /// </summary>
+        [IsSetting]
+        public string EditorHunspellAffixFile { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the spell checking is enabled.
+        /// </summary>
+        public bool SpellCheckingEnabled
+        {
+            get
+            {
+                try
+                {
+                    return File.Exists(EditorHunspellAffixFile) && File.Exists(EditorHunspellDictionaryFile);
+                }
+                catch (Exception ex)
+                {
+                    // log the exception..
+                    ErrorHandlingBase.ExceptionLogAction?.Invoke(ex);
+                    return false;
+                }
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Sets the files belonging to the current session.

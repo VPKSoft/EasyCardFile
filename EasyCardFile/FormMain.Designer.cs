@@ -62,6 +62,9 @@
             this.mnuUndo = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuRedo = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuUndoAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuSpellCheckCard = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuSpellCheckAllCards = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTools = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuImportLegacy = new System.Windows.Forms.ToolStripMenuItem();
@@ -92,6 +95,8 @@
             this.tsbUndo = new System.Windows.Forms.ToolStripButton();
             this.tsbRedo = new System.Windows.Forms.ToolStripButton();
             this.tsbUndoAll = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbSpellCheckCard = new System.Windows.Forms.ToolStripButton();
             this.tab5 = new Manina.Windows.Forms.Tab();
             this.odCardFileLegacy = new System.Windows.Forms.OpenFileDialog();
             this.sdCardFile = new System.Windows.Forms.SaveFileDialog();
@@ -320,7 +325,10 @@
             this.toolStripMenuItem5,
             this.mnuUndo,
             this.mnuRedo,
-            this.mnuUndoAll});
+            this.mnuUndoAll,
+            this.toolStripMenuItem7,
+            this.mnuSpellCheckCard,
+            this.mnuSpellCheckAllCards});
             this.mnuEdit.Name = "mnuEdit";
             this.mnuEdit.Size = new System.Drawing.Size(39, 20);
             this.mnuEdit.Text = "Edit";
@@ -395,6 +403,28 @@
             this.mnuUndoAll.Size = new System.Drawing.Size(302, 22);
             this.mnuUndoAll.Text = "Undo all";
             this.mnuUndoAll.Click += new System.EventHandler(this.tsbUndoAll_Click);
+            // 
+            // toolStripMenuItem7
+            // 
+            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+            this.toolStripMenuItem7.Size = new System.Drawing.Size(299, 6);
+            // 
+            // mnuSpellCheckCard
+            // 
+            this.mnuSpellCheckCard.Image = global::EasyCardFile.Properties.Resources.tools_check_spelling_2;
+            this.mnuSpellCheckCard.Name = "mnuSpellCheckCard";
+            this.mnuSpellCheckCard.ShortcutKeys = System.Windows.Forms.Keys.F7;
+            this.mnuSpellCheckCard.Size = new System.Drawing.Size(302, 22);
+            this.mnuSpellCheckCard.Text = "Spell check the selected card";
+            // 
+            // mnuSpellCheckAllCards
+            // 
+            this.mnuSpellCheckAllCards.Image = global::EasyCardFile.Properties.Resources.tools_check_spelling_4;
+            this.mnuSpellCheckAllCards.Name = "mnuSpellCheckAllCards";
+            this.mnuSpellCheckAllCards.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F7)));
+            this.mnuSpellCheckAllCards.Size = new System.Drawing.Size(302, 22);
+            this.mnuSpellCheckAllCards.Text = "Spell check all the cards";
+            this.mnuSpellCheckAllCards.Click += new System.EventHandler(this.mnuSpellCheckAllCards_Click);
             // 
             // mnuTools
             // 
@@ -499,7 +529,9 @@
             this.toolStripSeparator5,
             this.tsbUndo,
             this.tsbRedo,
-            this.tsbUndoAll});
+            this.tsbUndoAll,
+            this.toolStripSeparator6,
+            this.tsbSpellCheckCard});
             this.tsMain.Location = new System.Drawing.Point(0, 24);
             this.tsMain.Name = "tsMain";
             this.tsMain.Size = new System.Drawing.Size(1000, 25);
@@ -671,6 +703,21 @@
             this.tsbUndoAll.Text = "Undo all changes";
             this.tsbUndoAll.Click += new System.EventHandler(this.tsbUndoAll_Click);
             // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsbSpellCheckCard
+            // 
+            this.tsbSpellCheckCard.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbSpellCheckCard.Image = global::EasyCardFile.Properties.Resources.tools_check_spelling_2;
+            this.tsbSpellCheckCard.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbSpellCheckCard.Name = "tsbSpellCheckCard";
+            this.tsbSpellCheckCard.Size = new System.Drawing.Size(23, 22);
+            this.tsbSpellCheckCard.Text = "Spell check the card";
+            this.tsbSpellCheckCard.Click += new System.EventHandler(this.tsbSpellCheckCard_Click);
+            // 
             // tab5
             // 
             this.tab5.Location = new System.Drawing.Point(1, 24);
@@ -815,6 +862,11 @@
         private System.Windows.Forms.ToolStripMenuItem mnuRedo;
         private System.Windows.Forms.ToolStripButton tsbUndoAll;
         private System.Windows.Forms.ToolStripMenuItem mnuUndoAll;
+        private System.Windows.Forms.ToolStripButton tsbSpellCheckCard;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
+        private System.Windows.Forms.ToolStripMenuItem mnuSpellCheckCard;
+        private System.Windows.Forms.ToolStripMenuItem mnuSpellCheckAllCards;
     }
 }
 

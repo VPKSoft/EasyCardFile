@@ -24,15 +24,21 @@ SOFTWARE.
 */
 #endregion
 
+using Cyotek.Windows.Forms;
+using EasyCardFile.UtilityClasses.Miscellaneous;
+using EasyCardFile.UtilityClasses.SpellCheck;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using Cyotek.Windows.Forms;
 using VPKSoft.LangLib;
+using VPKSoft.SpellCheckUtility;
+using VPKSoft.Utils;
 using VPKSoft.Utils.XmlSettingsMisc;
+using Utils = VPKSoft.LangLib.Utils;
 
 namespace EasyCardFile.Settings
 {
@@ -73,7 +79,10 @@ namespace EasyCardFile.Settings
             // a the translated cultures to the selection combo box..
             // ReSharper disable once CoVariantArrayConversion
             cmbSelectLanguageValue.Items.AddRange(cultures.ToArray());
+
+            LocalizeDialogs();
         }
+
 
         /// <summary>
         /// Gets or sets the settings.
@@ -81,22 +90,33 @@ namespace EasyCardFile.Settings
         private Settings Settings { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether event handlers should be temporarily suspended.
+        /// </summary>
+        private bool SuspendEvents { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the user spell checking dictionary was deleted and should be cleared.
+        /// </summary>
+        private bool UserDictionaryDeleted { get; set; }
+
+        /// <summary>
         /// Shows the dialog.
         /// </summary>
         /// <param name="owner">The owner.</param>
         /// <param name="settings">The settings.</param>
+        /// <param name="userDictionaryDeleted"></param>
         /// <returns>DialogResult.</returns>
-        public static DialogResult ShowDialog(IWin32Window owner, Settings settings)
+        public static DialogResult ShowDialog(IWin32Window owner, Settings settings, out bool userDictionaryDeleted)
         {
-            var form = new FormDialogSettings {Settings = settings};
-            return form.ShowDialog(owner);
+            var form = new FormDialogSettings {Settings = settings, UserDictionaryDeleted = false,};
+            var result = form.ShowDialog(owner);
+            userDictionaryDeleted = form.UserDictionaryDeleted;
+            return result;
         }
 
         private void btOK_Click(object sender, EventArgs e)
         {
-            Settings.AutoSave = cbAutoSaveExistingCardFilesAppClose.Checked;
-            Settings.RestoreSessionOnStartup = cbRestorePreviousSession.Checked;
-            Settings.Locale = ((CultureInfo) cmbSelectLanguageValue.SelectedItem)?.Name;
+            ApplySettings();
             Settings.Save(PathHandler.GetSettingsFile(Assembly.GetEntryAssembly(), ".xml",
                 Environment.SpecialFolder.LocalApplicationData));
 
@@ -105,13 +125,44 @@ namespace EasyCardFile.Settings
 
         private void FormDialogSettings_Shown(object sender, EventArgs e)
         {
+            cmbInstalledDictionaries.Items.AddRange(HunspellDictionaryCrawler
+                .CrawlDirectory(Settings.EditorHunspellDictionaryPath).OrderBy(f => f.ToString().ToLowerInvariant())
+                .ToArray<object>());
+
+            DisplaySettings();
+        }
+
+        private void DisplaySettings()
+        {
             cbAutoSaveExistingCardFilesAppClose.Checked = Settings.AutoSave;
-            cbRestorePreviousSession.Checked = Settings.RestoreSessionOnStartup;
+            cbRestorePreviousSession.Checked = Settings.RestoreSessionOnStartup;            
+
             // get the current culture from the settings..
             cmbSelectLanguageValue.SelectedItem = string.IsNullOrWhiteSpace(Settings.Locale)
                 ? new CultureInfo("en-US")
                 : new CultureInfo(Settings.Locale);
 
+            if (Settings.SpellCheckingEnabled)
+            {
+                SuspendEvents = true;
+                cmbInstalledDictionaries.SelectedItem = cmbInstalledDictionaries.Items.Cast<HunspellData>()
+                    .FirstOrDefault(f => f.DictionaryFile == Settings.EditorHunspellDictionaryFile);
+                SuspendEvents = false;
+            }
+
+            tbHunspellAffixFile.Text = Settings.EditorHunspellAffixFile;
+            tbHunspellDictionary.Text = Settings.EditorHunspellDictionaryFile;
+            tbDictionaryPath.Text = Settings.EditorHunspellDictionaryPath;
+        }
+
+        private void ApplySettings()
+        {
+            Settings.AutoSave = cbAutoSaveExistingCardFilesAppClose.Checked;
+            Settings.RestoreSessionOnStartup = cbRestorePreviousSession.Checked;
+            Settings.Locale = ((CultureInfo) cmbSelectLanguageValue.SelectedItem)?.Name;
+            Settings.EditorHunspellAffixFile = tbHunspellAffixFile.Text;
+            Settings.EditorHunspellDictionaryFile = tbHunspellDictionary.Text;
+            Settings.EditorHunspellDictionaryPath = tbDictionaryPath.Text;
         }
 
         private void cwEditorToolStripColors_ColorChanged(object sender, EventArgs e)
@@ -124,6 +175,100 @@ namespace EasyCardFile.Settings
         {
             var colorWheel = (ColorWheel) sender;
             rtbEditorToolStripColors.ColorGlyph = colorWheel.Color;
+        }
+
+        private void btDictionaryPath_Click(object sender, EventArgs e)
+        {
+            var dialog = fbFolder;
+
+            var textBox = tbDictionaryPath;
+
+            if (textBox != null)
+            {
+                if (Directory.Exists(tbDictionaryPath.Text))
+                {
+                    dialog.SelectedPath = textBox.Text;
+                }
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    textBox.Text = dialog.SelectedPath;
+                }
+            }
+        }
+
+        private void btHunspellDictionary_Click(object sender, EventArgs e)
+        {
+            odDictionaryFile.InitialDirectory = string.IsNullOrWhiteSpace(Settings.FileLocationOpenDictionary)
+                ? Settings.EditorHunspellDictionaryPath
+                : Settings.FileLocationOpenDictionary;
+
+            if (odDictionaryFile.ShowDialog() == DialogResult.OK)
+            {
+                Settings.FileLocationOpenDictionary = odDictionaryFile.FileName.GetPath(Settings.FileLocationOpenDictionary);
+                tbHunspellDictionary.Text = odDictionaryFile.FileName;
+            }
+        }
+
+        private void btHunspellAffixFile_Click(object sender, EventArgs e)
+        {
+            odAffixFile.InitialDirectory = string.IsNullOrWhiteSpace(Settings.FileLocationOpenAffix)
+                ? Settings.EditorHunspellDictionaryPath
+                : Settings.FileLocationOpenAffix;
+
+            if (odAffixFile.ShowDialog() == DialogResult.OK)
+            {
+                Settings.FileLocationOpenAffix = odAffixFile.FileName.GetPath(Settings.FileLocationOpenAffix);
+                tbHunspellAffixFile.Text = odAffixFile.FileName;
+            }
+        }
+
+        private void cmbInstalledDictionaries_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (SuspendEvents)
+            {
+                return;
+            }
+            var comboBox = (ComboBox) sender;
+            
+            if (comboBox.SelectedIndex != -1)
+            {
+                HunspellData data = (HunspellData) comboBox.Items[comboBox.SelectedIndex];
+                tbHunspellDictionary.Text = data.DictionaryFile;
+                tbHunspellAffixFile.Text = data.AffixFile;
+            }
+        }
+
+        /// <summary>
+        /// Localizes the file dialogs used in this dialog.
+        /// </summary>
+        private void LocalizeDialogs()
+        {
+            odAffixFile.Title = DBLangEngine.GetMessage("msgDialogSelectAffixFile",
+                "Select an affix file|A title for an open file dialog to indicate user that the user is selecting a Hunspell affix file for the spell checking");
+
+            odAffixFile.Filter = DBLangEngine.GetMessage("msgFileAffix",
+                "Hunspell affix file |*.aff|A text in a file dialog filter to indicate a Hunspell affix file");
+
+            fbFolder.Description = DBLangEngine.GetMessage("msgDirectoryDialogDictionary",
+                "Select the dictionary folder|A message describing that the user should select a folder where the Hunspell dictionaries reside");
+
+            odDictionaryFile.Title = DBLangEngine.GetMessage("msgDialogSelectDicFile",
+                "Select a dictionary file|A title for an open file dialog to indicate user that the user is selecting a dictionary file for the spell checking");
+
+            odDictionaryFile.Filter = DBLangEngine.GetMessage("msgFileDic",
+                "Hunspell dictionary file|*.dic|A text in a file dialog filter to indicate a Hunspell dictionary file");
+        }
+
+        private void btClearUserDictionary_Click(object sender, EventArgs e)
+        {
+            var userDictionaryFile = Path.Combine(Paths.GetAppSettingsFolder(), "user.dictionary");
+
+            if (File.Exists(userDictionaryFile))
+            {
+                File.Delete(userDictionaryFile);
+                UserDictionaryDeleted = true;
+            }
         }
     }
 }

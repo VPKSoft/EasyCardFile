@@ -31,6 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDialogSettings));
             this.tcMain = new Manina.Windows.Forms.TabControl();
             this.tabSettingsGeneral = new Manina.Windows.Forms.Tab();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.lbSelectLanguageDescription = new System.Windows.Forms.Label();
+            this.cmbSelectLanguageValue = new System.Windows.Forms.ComboBox();
             this.cbRestorePreviousSession = new System.Windows.Forms.CheckBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -41,20 +44,35 @@
             this.rtbEditorToolStripColors = new VPKSoft.RichTextEdit.RichTextBoxWithToolStrip();
             this.lbEditorImageForeColor = new System.Windows.Forms.Label();
             this.cwEditorToolStripColors = new Cyotek.Windows.Forms.ColorWheel();
+            this.tabSpelling = new Manina.Windows.Forms.Tab();
+            this.cmbInstalledDictionaries = new System.Windows.Forms.ComboBox();
+            this.lbInstalledDictionaries = new System.Windows.Forms.Label();
+            this.btDictionaryPath = new System.Windows.Forms.Button();
+            this.tbDictionaryPath = new System.Windows.Forms.TextBox();
+            this.lbDictionaryPath = new System.Windows.Forms.Label();
+            this.btHunspellAffixFile = new System.Windows.Forms.Button();
+            this.tbHunspellAffixFile = new System.Windows.Forms.TextBox();
+            this.lbHunspellAffixFile = new System.Windows.Forms.Label();
+            this.btHunspellDictionary = new System.Windows.Forms.Button();
+            this.tbHunspellDictionary = new System.Windows.Forms.TextBox();
+            this.lbHunspellDictionary = new System.Windows.Forms.Label();
             this.btOK = new System.Windows.Forms.Button();
             this.btCancel = new System.Windows.Forms.Button();
-            this.lbSelectLanguageDescription = new System.Windows.Forms.Label();
-            this.cmbSelectLanguageValue = new System.Windows.Forms.ComboBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.odAffixFile = new System.Windows.Forms.OpenFileDialog();
+            this.odDictionaryFile = new System.Windows.Forms.OpenFileDialog();
+            this.fbFolder = new Ookii.Dialogs.WinForms.VistaFolderBrowserDialog();
+            this.btClearUserDictionary = new System.Windows.Forms.Button();
             this.tcMain.SuspendLayout();
             this.tabSettingsGeneral.SuspendLayout();
             this.tabSettingsCustomizeEditor.SuspendLayout();
+            this.tabSpelling.SuspendLayout();
             this.SuspendLayout();
             // 
             // tcMain
             // 
             this.tcMain.Controls.Add(this.tabSettingsGeneral);
             this.tcMain.Controls.Add(this.tabSettingsCustomizeEditor);
+            this.tcMain.Controls.Add(this.tabSpelling);
             this.tcMain.Location = new System.Drawing.Point(12, 12);
             this.tcMain.Name = "tcMain";
             this.tcMain.SelectedIndex = 0;
@@ -62,6 +80,7 @@
             this.tcMain.TabIndex = 0;
             this.tcMain.Tabs.Add(this.tabSettingsGeneral);
             this.tcMain.Tabs.Add(this.tabSettingsCustomizeEditor);
+            this.tcMain.Tabs.Add(this.tabSpelling);
             // 
             // tabSettingsGeneral
             // 
@@ -76,6 +95,39 @@
             this.tabSettingsGeneral.Name = "tabSettingsGeneral";
             this.tabSettingsGeneral.Size = new System.Drawing.Size(681, 290);
             this.tabSettingsGeneral.Text = "General";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(525, 40);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 30;
+            this.textBox1.Visible = false;
+            // 
+            // lbSelectLanguageDescription
+            // 
+            this.lbSelectLanguageDescription.AutoSize = true;
+            this.lbSelectLanguageDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.lbSelectLanguageDescription.Location = new System.Drawing.Point(12, 78);
+            this.lbSelectLanguageDescription.Margin = new System.Windows.Forms.Padding(17, 15, 17, 15);
+            this.lbSelectLanguageDescription.Name = "lbSelectLanguageDescription";
+            this.lbSelectLanguageDescription.Size = new System.Drawing.Size(156, 13);
+            this.lbSelectLanguageDescription.TabIndex = 28;
+            this.lbSelectLanguageDescription.Text = "Language (a restart is required):";
+            this.lbSelectLanguageDescription.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cmbSelectLanguageValue
+            // 
+            this.cmbSelectLanguageValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbSelectLanguageValue.DisplayMember = "DisplayName";
+            this.cmbSelectLanguageValue.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSelectLanguageValue.FormattingEnabled = true;
+            this.cmbSelectLanguageValue.Location = new System.Drawing.Point(243, 75);
+            this.cmbSelectLanguageValue.Margin = new System.Windows.Forms.Padding(13, 12, 13, 12);
+            this.cmbSelectLanguageValue.Name = "cmbSelectLanguageValue";
+            this.cmbSelectLanguageValue.Size = new System.Drawing.Size(425, 21);
+            this.cmbSelectLanguageValue.TabIndex = 29;
             // 
             // cbRestorePreviousSession
             // 
@@ -183,6 +235,137 @@
             this.cwEditorToolStripColors.TabIndex = 7;
             this.cwEditorToolStripColors.ColorChanged += new System.EventHandler(this.cwEditorToolStripColors_ColorChanged);
             // 
+            // tabSpelling
+            // 
+            this.tabSpelling.Controls.Add(this.btClearUserDictionary);
+            this.tabSpelling.Controls.Add(this.cmbInstalledDictionaries);
+            this.tabSpelling.Controls.Add(this.lbInstalledDictionaries);
+            this.tabSpelling.Controls.Add(this.btDictionaryPath);
+            this.tabSpelling.Controls.Add(this.tbDictionaryPath);
+            this.tabSpelling.Controls.Add(this.lbDictionaryPath);
+            this.tabSpelling.Controls.Add(this.btHunspellAffixFile);
+            this.tabSpelling.Controls.Add(this.tbHunspellAffixFile);
+            this.tabSpelling.Controls.Add(this.lbHunspellAffixFile);
+            this.tabSpelling.Controls.Add(this.btHunspellDictionary);
+            this.tabSpelling.Controls.Add(this.tbHunspellDictionary);
+            this.tabSpelling.Controls.Add(this.lbHunspellDictionary);
+            this.tabSpelling.Location = new System.Drawing.Point(1, 21);
+            this.tabSpelling.Name = "tabSpelling";
+            this.tabSpelling.Size = new System.Drawing.Size(681, 290);
+            this.tabSpelling.Text = "Spell checking";
+            // 
+            // cmbInstalledDictionaries
+            // 
+            this.cmbInstalledDictionaries.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbInstalledDictionaries.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cmbInstalledDictionaries.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cmbInstalledDictionaries.DisplayMember = "DisplayName";
+            this.cmbInstalledDictionaries.FormattingEnabled = true;
+            this.cmbInstalledDictionaries.Location = new System.Drawing.Point(14, 173);
+            this.cmbInstalledDictionaries.Margin = new System.Windows.Forms.Padding(13, 12, 13, 12);
+            this.cmbInstalledDictionaries.Name = "cmbInstalledDictionaries";
+            this.cmbInstalledDictionaries.Size = new System.Drawing.Size(616, 21);
+            this.cmbInstalledDictionaries.TabIndex = 55;
+            this.cmbInstalledDictionaries.SelectedIndexChanged += new System.EventHandler(this.cmbInstalledDictionaries_SelectedIndexChanged);
+            // 
+            // lbInstalledDictionaries
+            // 
+            this.lbInstalledDictionaries.AutoSize = true;
+            this.lbInstalledDictionaries.Location = new System.Drawing.Point(11, 148);
+            this.lbInstalledDictionaries.Name = "lbInstalledDictionaries";
+            this.lbInstalledDictionaries.Size = new System.Drawing.Size(149, 13);
+            this.lbInstalledDictionaries.TabIndex = 54;
+            this.lbInstalledDictionaries.Text = "Installed Hunspell dictionaries:";
+            // 
+            // btDictionaryPath
+            // 
+            this.btDictionaryPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btDictionaryPath.Location = new System.Drawing.Point(641, 173);
+            this.btDictionaryPath.Name = "btDictionaryPath";
+            this.btDictionaryPath.Size = new System.Drawing.Size(31, 21);
+            this.btDictionaryPath.TabIndex = 53;
+            this.btDictionaryPath.Tag = "tbDictionaryPath";
+            this.btDictionaryPath.Text = "...";
+            this.btDictionaryPath.UseVisualStyleBackColor = true;
+            this.btDictionaryPath.Click += new System.EventHandler(this.btDictionaryPath_Click);
+            // 
+            // tbDictionaryPath
+            // 
+            this.tbDictionaryPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbDictionaryPath.Location = new System.Drawing.Point(14, 125);
+            this.tbDictionaryPath.Name = "tbDictionaryPath";
+            this.tbDictionaryPath.Size = new System.Drawing.Size(658, 20);
+            this.tbDictionaryPath.TabIndex = 52;
+            // 
+            // lbDictionaryPath
+            // 
+            this.lbDictionaryPath.AutoSize = true;
+            this.lbDictionaryPath.Location = new System.Drawing.Point(11, 102);
+            this.lbDictionaryPath.Name = "lbDictionaryPath";
+            this.lbDictionaryPath.Size = new System.Drawing.Size(139, 13);
+            this.lbDictionaryPath.TabIndex = 51;
+            this.lbDictionaryPath.Text = "Hunspell dictionary file path:";
+            // 
+            // btHunspellAffixFile
+            // 
+            this.btHunspellAffixFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btHunspellAffixFile.Location = new System.Drawing.Point(641, 79);
+            this.btHunspellAffixFile.Name = "btHunspellAffixFile";
+            this.btHunspellAffixFile.Size = new System.Drawing.Size(31, 20);
+            this.btHunspellAffixFile.TabIndex = 50;
+            this.btHunspellAffixFile.Text = "...";
+            this.btHunspellAffixFile.UseVisualStyleBackColor = true;
+            this.btHunspellAffixFile.Click += new System.EventHandler(this.btHunspellAffixFile_Click);
+            // 
+            // tbHunspellAffixFile
+            // 
+            this.tbHunspellAffixFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbHunspellAffixFile.Location = new System.Drawing.Point(14, 79);
+            this.tbHunspellAffixFile.Name = "tbHunspellAffixFile";
+            this.tbHunspellAffixFile.Size = new System.Drawing.Size(621, 20);
+            this.tbHunspellAffixFile.TabIndex = 49;
+            // 
+            // lbHunspellAffixFile
+            // 
+            this.lbHunspellAffixFile.AutoSize = true;
+            this.lbHunspellAffixFile.Location = new System.Drawing.Point(11, 56);
+            this.lbHunspellAffixFile.Name = "lbHunspellAffixFile";
+            this.lbHunspellAffixFile.Size = new System.Drawing.Size(128, 13);
+            this.lbHunspellAffixFile.TabIndex = 48;
+            this.lbHunspellAffixFile.Text = "Hunspell affix file (UTF-8):";
+            // 
+            // btHunspellDictionary
+            // 
+            this.btHunspellDictionary.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btHunspellDictionary.Location = new System.Drawing.Point(641, 32);
+            this.btHunspellDictionary.Name = "btHunspellDictionary";
+            this.btHunspellDictionary.Size = new System.Drawing.Size(31, 21);
+            this.btHunspellDictionary.TabIndex = 47;
+            this.btHunspellDictionary.Text = "...";
+            this.btHunspellDictionary.UseVisualStyleBackColor = true;
+            this.btHunspellDictionary.Click += new System.EventHandler(this.btHunspellDictionary_Click);
+            // 
+            // tbHunspellDictionary
+            // 
+            this.tbHunspellDictionary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbHunspellDictionary.Location = new System.Drawing.Point(14, 33);
+            this.tbHunspellDictionary.Name = "tbHunspellDictionary";
+            this.tbHunspellDictionary.Size = new System.Drawing.Size(621, 20);
+            this.tbHunspellDictionary.TabIndex = 46;
+            // 
+            // lbHunspellDictionary
+            // 
+            this.lbHunspellDictionary.AutoSize = true;
+            this.lbHunspellDictionary.Location = new System.Drawing.Point(11, 10);
+            this.lbHunspellDictionary.Name = "lbHunspellDictionary";
+            this.lbHunspellDictionary.Size = new System.Drawing.Size(154, 13);
+            this.lbHunspellDictionary.TabIndex = 45;
+            this.lbHunspellDictionary.Text = "Hunspell dictionary file (UTF-8):";
+            // 
             // btOK
             // 
             this.btOK.Location = new System.Drawing.Point(538, 336);
@@ -203,38 +386,29 @@
             this.btCancel.Text = "Cancel";
             this.btCancel.UseVisualStyleBackColor = true;
             // 
-            // lbSelectLanguageDescription
+            // odAffixFile
             // 
-            this.lbSelectLanguageDescription.AutoSize = true;
-            this.lbSelectLanguageDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.lbSelectLanguageDescription.Location = new System.Drawing.Point(12, 78);
-            this.lbSelectLanguageDescription.Margin = new System.Windows.Forms.Padding(17, 15, 17, 15);
-            this.lbSelectLanguageDescription.Name = "lbSelectLanguageDescription";
-            this.lbSelectLanguageDescription.Size = new System.Drawing.Size(156, 13);
-            this.lbSelectLanguageDescription.TabIndex = 28;
-            this.lbSelectLanguageDescription.Text = "Language (a restart is required):";
-            this.lbSelectLanguageDescription.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.odAffixFile.Filter = "Hunspell affix dictionary description file|*.aff";
             // 
-            // cmbSelectLanguageValue
+            // odDictionaryFile
             // 
-            this.cmbSelectLanguageValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.odDictionaryFile.Filter = "Hunspell dictionary file|*.dic";
+            // 
+            // fbFolder
+            // 
+            this.fbFolder.UseDescriptionForTitle = true;
+            // 
+            // btClearUserDictionary
+            // 
+            this.btClearUserDictionary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbSelectLanguageValue.DisplayMember = "DisplayName";
-            this.cmbSelectLanguageValue.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSelectLanguageValue.FormattingEnabled = true;
-            this.cmbSelectLanguageValue.Location = new System.Drawing.Point(243, 75);
-            this.cmbSelectLanguageValue.Margin = new System.Windows.Forms.Padding(13, 12, 13, 12);
-            this.cmbSelectLanguageValue.Name = "cmbSelectLanguageValue";
-            this.cmbSelectLanguageValue.Size = new System.Drawing.Size(429, 21);
-            this.cmbSelectLanguageValue.TabIndex = 29;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(525, 40);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 30;
-            this.textBox1.Visible = false;
+            this.btClearUserDictionary.Location = new System.Drawing.Point(14, 209);
+            this.btClearUserDictionary.Name = "btClearUserDictionary";
+            this.btClearUserDictionary.Size = new System.Drawing.Size(658, 23);
+            this.btClearUserDictionary.TabIndex = 56;
+            this.btClearUserDictionary.Text = "Delete user personal dictionary";
+            this.btClearUserDictionary.UseVisualStyleBackColor = true;
+            this.btClearUserDictionary.Click += new System.EventHandler(this.btClearUserDictionary_Click);
             // 
             // FormDialogSettings
             // 
@@ -259,6 +433,8 @@
             this.tabSettingsGeneral.PerformLayout();
             this.tabSettingsCustomizeEditor.ResumeLayout(false);
             this.tabSettingsCustomizeEditor.PerformLayout();
+            this.tabSpelling.ResumeLayout(false);
+            this.tabSpelling.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -282,5 +458,21 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label lbSelectLanguageDescription;
         private System.Windows.Forms.ComboBox cmbSelectLanguageValue;
+        private Manina.Windows.Forms.Tab tabSpelling;
+        private System.Windows.Forms.ComboBox cmbInstalledDictionaries;
+        private System.Windows.Forms.Label lbInstalledDictionaries;
+        private System.Windows.Forms.Button btDictionaryPath;
+        private System.Windows.Forms.TextBox tbDictionaryPath;
+        private System.Windows.Forms.Label lbDictionaryPath;
+        private System.Windows.Forms.Button btHunspellAffixFile;
+        private System.Windows.Forms.TextBox tbHunspellAffixFile;
+        private System.Windows.Forms.Label lbHunspellAffixFile;
+        private System.Windows.Forms.Button btHunspellDictionary;
+        private System.Windows.Forms.TextBox tbHunspellDictionary;
+        private System.Windows.Forms.Label lbHunspellDictionary;
+        private System.Windows.Forms.OpenFileDialog odAffixFile;
+        private System.Windows.Forms.OpenFileDialog odDictionaryFile;
+        private Ookii.Dialogs.WinForms.VistaFolderBrowserDialog fbFolder;
+        private System.Windows.Forms.Button btClearUserDictionary;
     }
 }

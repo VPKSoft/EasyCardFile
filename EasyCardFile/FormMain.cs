@@ -43,6 +43,8 @@ using VPKSoft.ErrorLogger;
 using VPKSoft.LangLib;
 using VPKSoft.MessageBoxExtended;
 using VPKSoft.PosLib;
+using VPKSoft.SpellCheckUtility;
+using VPKSoft.SpellCheckUtility.WinForms;
 using VPKSoft.Utils.XmlSettingsMisc;
 using VPKSoft.VersionCheck.Forms;
 using VPKSoft.WinFormsRtfPrint;
@@ -85,8 +87,8 @@ namespace EasyCardFile
             // localize the "UI engine"..
             CardFileUiWrapper.LocalizeTexts();
 
-            var appDataPath = VU.Paths.MakeAppSettingsFolder();
-            CardFileSaveClose.TemporaryPath = Path.Combine(appDataPath + "Temporary");
+            AppDataPath = VU.Paths.MakeAppSettingsFolder();
+            CardFileSaveClose.TemporaryPath = Path.Combine(AppDataPath + "Temporary");
             if (!Directory.Exists(CardFileSaveClose.TemporaryPath))
             {
                 Directory.CreateDirectory(CardFileSaveClose.TemporaryPath);
@@ -111,12 +113,28 @@ namespace EasyCardFile
             AssociateFileExtension.AssociateApplicationToFileExtension(EasyCardFileConstants.FileExtension);
 
             RtfPrint.Owner = this; // mother of all dialogs..
+
+            LoadSpellChecking();
+            FormDialogSpellCheck.OwnerWindow = this;
+            FormDialogSpellCheck.Locale = Settings.Locale;
+
+            // subscribe to the event which is called by the SpellChecker class on progressing with the spell checking;
+            // there is no reason to subscribe this event if the checking isn't visualized or done in real-time..
+            SpellChecker.SpellCheckLocationChanged += SpellChecker_SpellCheckLocationChanged;
         }
 
+        #region PublicAndInternalProperties
         /// <summary>
         /// Gets the application settings.
         /// </summary>
         public static Settings.Settings Settings { get; set; }
+
+        /// <summary>
+        /// Gets or sets the application data path.
+        /// </summary>
+        /// <value>The application data path.</value>
+        internal static string AppDataPath { get; set; }
+        #endregion
 
         #region InternalEvents
         private void tcCardFiles_PageChanged(object sender, Manina.Windows.Forms.PageChangedEventArgs e)
@@ -137,6 +155,8 @@ namespace EasyCardFile
                 e.Cancel = true;
                 return;
             }
+
+            SpellChecker.SaveUserDictionary(Path.Combine(AppDataPath, "user.dictionary"));
 
             CardFileSaveClose.HandleTabsAfterClose(tcCardFiles);
 
@@ -193,7 +213,13 @@ namespace EasyCardFile
         }
         #endregion
 
-        #region PrivateProperties        
+        #region PrivateProperties
+        /// <summary>
+        /// Gets or sets the text offset correction. This is used in the real time spell checking..
+        /// </summary>
+        /// <value>The text offset correction.</value>
+        private int TextOffsetCorrection { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether the previous session was restored upon the software startup.
         /// </summary>
@@ -201,6 +227,26 @@ namespace EasyCardFile
         #endregion
 
         #region PrivateMethods        
+        /// <summary>
+        /// Loads the spell checking data.
+        /// </summary>
+        private void LoadSpellChecking()
+        {
+            // except the Hunspell affix and dictionary files to exists and load them..
+            if (Settings.SpellCheckingEnabled)
+            {
+                SpellChecker.LoadDictionary(Settings.EditorHunspellDictionaryFile,
+                    Settings.EditorHunspellAffixFile);
+
+                var userDictionaryFile = Path.Combine(AppDataPath, "user.dictionary");
+
+                if (File.Exists(userDictionaryFile))
+                {
+                    SpellChecker.LoadUserDictionary(userDictionaryFile);
+                }
+            }
+        }
+
         /// <summary>
         /// Attaches the events to a given <see cref="CardFileUiWrapper"/>.
         /// </summary>
@@ -374,6 +420,11 @@ namespace EasyCardFile
             tsbSaveAs.Enabled = wrapper != null;
             mnuSaveAs.Enabled = wrapper != null;
 
+            mnuSpellCheckCard.Enabled = wrapper?.SelectedCard != null && Settings.SpellCheckingEnabled;
+            tsbSpellCheckCard.Enabled = wrapper?.SelectedCard != null && Settings.SpellCheckingEnabled;
+            var cardCount = wrapper?.CardFileDb?.CardFile?.Cards?.Count;
+            mnuSpellCheckAllCards.Enabled = cardCount != null && cardCount > 0 && Settings.SpellCheckingEnabled;
+
             // undo / redo..
             SetUndoRedoState();
         }
@@ -479,7 +530,21 @@ namespace EasyCardFile
 
         private void mnuSettings_Click(object sender, EventArgs e)
         {
-            FormDialogSettings.ShowDialog(this, Settings);
+            bool previousSpellingEnabled = Settings.SpellCheckingEnabled;
+            if (FormDialogSettings.ShowDialog(this, Settings, out var dictionaryDeleted) == DialogResult.OK)
+            {
+                if (dictionaryDeleted)
+                {
+                    SpellChecker.ClearUserDictionary();
+                }
+                if (previousSpellingEnabled != Settings.SpellCheckingEnabled)
+                {
+                    if (Settings.SpellCheckingEnabled)
+                    {
+                        LoadSpellChecking();
+                    }
+                }
+            }
         }
 
         private void tsbNewCard_Click(object sender, EventArgs e)
@@ -694,6 +759,107 @@ namespace EasyCardFile
                 // log the exception..
                 ExceptionLogger.LogError(ex, "Localization dump");
             }
+        }
+        #endregion
+
+
+        #region SpellCheck
+        private void tsbSpellCheckCard_Click(object sender, EventArgs e)
+        {
+            var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
+            if (SpellCheckCurrent(wrapper, out _) && !SpellChecker.ChecksDoneOnPreviousRun)
+            {
+                MessageBox.Show(this,
+                    DBLangEngine.GetMessage("msgSpellCheckingPassed",
+                        "No errors were found during the spell checking process.|A message indicating that a card file spell checking yielded no errors."),
+                    DBLangEngine.GetStatMessage("msgSpellCheckingPassedTitle",
+                        "Passed|A title for a message box indicating that a card file spell checking yielded no errors."),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            }
+        }
+
+        private void mnuSpellCheckAllCards_Click(object sender, EventArgs e)
+        {
+            var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
+            if (wrapper == null)
+            {
+                return;
+            }
+
+            var checksDone = false;
+
+            for (int i = 0; i < wrapper.ListBoxCards.Items.Count; i++)
+            {
+                wrapper.ListBoxCards.SelectedIndex = i;
+                SpellCheckCurrent(wrapper, out var userCanceled);
+                if (userCanceled)
+                {
+                    return;
+                }
+
+                checksDone |= SpellChecker.ChecksDoneOnPreviousRun;
+            }
+
+            if (!checksDone)
+            {
+                MessageBox.Show(this,
+                    DBLangEngine.GetMessage("msgSpellCheckingPassed",
+                        "No errors were found during the spell checking process.|A message indicating that a card file spell checking yielded no errors."),
+                    DBLangEngine.GetStatMessage("msgSpellCheckingPassedTitle",
+                        "Passed|A title for a message box indicating that a card file spell checking yielded no errors."),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            }
+        }
+
+        private bool SpellCheckCurrent(CardFileUiWrapper wrapper, out bool userCanceled)
+        {
+            userCanceled = false;
+            if (wrapper == null)
+            {
+                return false;
+            }
+
+            TextOffsetCorrection = 0; // re-set the offset..
+            // create a new instance of the spell checker class..
+            var spellChecker = new SpellChecker();
+
+            // create a new spell checking dialog (implementing the ISpellCheck) interface..
+
+            var spellingDialog = new FormDialogSpellCheck();
+
+            // run the spell check..
+            var result = spellChecker.RunSpellCheckInterface(spellingDialog, wrapper.RichTextBox.Text, true);
+
+            userCanceled = result == null;
+
+            return result != null && result.Count == 0;
+        }
+
+        // the real-time spell checking event..
+        private void SpellChecker_SpellCheckLocationChanged(object sender, VPKSoft.SpellCheckUtility.UtilityClasses.SpellCheckLocationChangeEventArgs e)
+        {
+            var richTextBox = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles)?.RichTextBox.RichTextBox;
+            if (richTextBox == null)
+            {
+                return;
+            }
+
+            // set the selection for the misspelled word..
+            richTextBox.SelectionStart = e.SpellingError.StartLocation + TextOffsetCorrection;
+            richTextBox.SelectionLength = e.SpellingError.Length;
+
+            // if a correction for the spelling error was made..
+            if (e.AfterSpellCheck) 
+            {
+                // ..fix the error in real time..
+                richTextBox.SelectedText = e.SpellingError.CorrectedWord;
+
+                // ..set the offset, so this doesn't get messy..
+                TextOffsetCorrection += e.SpellingError.CorrectedWord.Length - e.SpellingError.Length;
+            }
+
+            // scroll the "view" into visibility..
+            richTextBox.ScrollToCaret();
         }
         #endregion
     }

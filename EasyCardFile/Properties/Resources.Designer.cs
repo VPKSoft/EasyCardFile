@@ -423,6 +423,36 @@ namespace EasyCardFile.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap tools_check_spelling_2 {
+            get {
+                object obj = ResourceManager.GetObject("tools-check-spelling-2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tools_check_spelling_4 {
+            get {
+                object obj = ResourceManager.GetObject("tools-check-spelling-4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tools_check_spelling_7 {
+            get {
+                object obj = ResourceManager.GetObject("tools-check-spelling-7", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap tools_sort_table {
             get {
                 object obj = ResourceManager.GetObject("tools-sort-table", resourceCulture);

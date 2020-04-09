@@ -204,6 +204,15 @@
   <data name="msgDialogRtfFileImportTitle" xml:space="preserve">
     <value>Import Rtf file|A dialog title to import a RTF file to the card contents.</value>
   </data>
+  <data name="msgDialogSelectAffixFile" xml:space="preserve">
+    <value>Select an affix file|A title for an open file dialog to indicate user that the user is selecting a Hunspell affix file for the spell checking</value>
+  </data>
+  <data name="msgDialogSelectDicFile" xml:space="preserve">
+    <value>Select a dictionary file|A title for an open file dialog to indicate user that the user is selecting a dictionary file for the spell checking</value>
+  </data>
+  <data name="msgDirectoryDialogDictionary" xml:space="preserve">
+    <value>Select the dictionary folder|A message describing that the user should select a folder where the Hunspell dictionaries reside</value>
+  </data>
   <data name="msgEditorCardCreated" xml:space="preserve">
     <value>Created: {0}|A message for a status strip to indicate a date and time the card was created.</value>
   </data>
@@ -261,8 +270,14 @@
   <data name="msgError" xml:space="preserve">
     <value>Error|A message describing that some kind of error occurred.</value>
   </data>
+  <data name="msgFileAffix" xml:space="preserve">
+    <value>Hunspell affix file |*.aff|A text in a file dialog filter to indicate a Hunspell affix file</value>
+  </data>
   <data name="msgFileChangedIndicatorText" xml:space="preserve">
     <value>[•]|An indicator text to be used with the card file's file name to indicate that the file has been changed.</value>
+  </data>
+  <data name="msgFileDic" xml:space="preserve">
+    <value>Hunspell dictionary file|*.dic|A text in a file dialog filter to indicate a Hunspell dictionary file</value>
   </data>
   <data name="msgGiveAPassword" xml:space="preserve">
     <value>Give a password to protect the card file.|A user is asked for a password in a dialog</value>
@@ -335,6 +350,12 @@
   </data>
   <data name="msgSelectCardImageTitle" xml:space="preserve">
     <value>Select an image for the card type '[{0}]'|A title for a dialog to select a part of an image to be used with a card type.</value>
+  </data>
+  <data name="msgSpellCheckingPassed" xml:space="preserve">
+    <value>No errors were found during the spell checking process.|A message indicating that a card file spell checking yielded no errors.</value>
+  </data>
+  <data name="msgSpellCheckingPassedTitle" xml:space="preserve">
+    <value>Passed|A title for a message box indicating that a card file spell checking yielded no errors.</value>
   </data>
   <data name="msgStatusStripCardCount" xml:space="preserve">
     <value>Cards: {0} / {1}|An text for a status strip to indicate the amount of cards within the card file and the amount of filtered cards via searching.</value>

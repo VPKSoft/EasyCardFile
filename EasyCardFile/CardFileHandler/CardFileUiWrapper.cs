@@ -1263,7 +1263,7 @@ namespace EasyCardFile.CardFileHandler
         /// <summary>
         /// The <see cref="RefreshListBox"/> control with a filtered list of card within the card file.
         /// </summary>
-        private RefreshListBoxCards ListBoxCards { get; set; }
+        internal RefreshListBoxCards ListBoxCards { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="ToolTip"/> used by the card file list box.

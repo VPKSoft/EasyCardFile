@@ -122,6 +122,12 @@ Section -Main SEC0000
     SetOutPath "$LOCALAPPDATA\EasyCardFile"
     File ..\UtilityClasses\Localization\localization.sqlite
 	
+	#English dictionaries..
+    SetOutPath "$LOCALAPPDATA\ScriptNotepad\Dictionaries\en"
+
+    File .\dictionaries\en\en_US.dic  
+    File .\dictionaries\en\en_US.aff  	
+	
    
 	SetOutPath $SMPROGRAMS\$StartMenuGroup
     CreateShortcut "$SMPROGRAMS\$StartMenuGroup\EasyCardFile.lnk" $INSTDIR\EasyCardFile.exe	
