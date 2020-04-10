@@ -39,6 +39,7 @@ using EasyCardFile.UtilityClasses.Constants;
 using EasyCardFile.UtilityClasses.FileAssociation;
 using EasyCardFile.UtilityClasses.Localization;
 using EasyCardFile.UtilityClasses.Miscellaneous;
+using Microsoft.Win32;
 using VPKSoft.ErrorLogger;
 using VPKSoft.LangLib;
 using VPKSoft.MessageBoxExtended;
@@ -84,6 +85,8 @@ namespace EasyCardFile
             // initialize the language/localization database..
             DBLangEngine.InitializeLanguage("EasyCardFile.UtilityClasses.Localization.Messages");
 
+            SystemEvents.SessionEnding += SystemEvents_SessionEnding;
+
             // localize the "UI engine"..
             CardFileUiWrapper.LocalizeTexts();
 
@@ -121,6 +124,8 @@ namespace EasyCardFile
             // subscribe to the event which is called by the SpellChecker class on progressing with the spell checking;
             // there is no reason to subscribe this event if the checking isn't visualized or done in real-time..
             SpellChecker.SpellCheckLocationChanged += SpellChecker_SpellCheckLocationChanged;
+
+            CreateRecentFilesMenu();
         }
 
         #region PublicAndInternalProperties
@@ -137,6 +142,12 @@ namespace EasyCardFile
         #endregion
 
         #region InternalEvents
+        private void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
+        {
+            SystemEvents.SessionEnding -= SystemEvents_SessionEnding;
+            Close();
+        }
+
         private void tcCardFiles_PageChanged(object sender, Manina.Windows.Forms.PageChangedEventArgs e)
         {
             SetTitle();
@@ -226,7 +237,15 @@ namespace EasyCardFile
         private bool SessionRestored { get; set; }
         #endregion
 
-        #region PrivateMethods        
+        #region PrivateMethods
+        /// <summary>
+        /// Creates a recent files menu.
+        /// </summary>
+        private void CreateRecentFilesMenu()
+        {
+            Settings.CreateRecentFilesMenu(mnuRecentFiles, tcCardFiles, MenuRecentFileClick, mnuSeparatorRecentFiles);
+        }
+
         /// <summary>
         /// Loads the spell checking data.
         /// </summary>
@@ -496,6 +515,16 @@ namespace EasyCardFile
             }
         }
 
+        private void MenuRecentFileClick(object sender, EventArgs e)
+        {
+            var item = (ToolStripMenuItem) sender;
+
+            if (OpenCardFile(item.Tag.ToString()))
+            {
+                CreateRecentFilesMenu();
+            }
+        }
+
         private void tcCardFiles_CloseTabButtonClick(object sender, Manina.Windows.Forms.CancelTabEventArgs e)
         {
             var wrapper = CardFileUiWrapper.GetWrapperByTab(e.Tab);
@@ -508,11 +537,13 @@ namespace EasyCardFile
 
             using (wrapper)
             {
+                Settings.AddRecentFile(wrapper);
                 sdCardFile.InitialDirectory = Settings.PathFileDialogMainSave;
                 Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath(Settings.PathFileDialogMainSave);
                 CardFileSaveClose.CloseCardFile(true, e.Tab);
                 SetGuiState();
             }
+            CreateRecentFilesMenu();
         }
 
         private void mnuAbout_Click(object sender, EventArgs e)
@@ -576,6 +607,10 @@ namespace EasyCardFile
             {
                 Settings.PathFileDialogMainSave = sdCardFile.FileName.GetPath(Settings.PathFileDialogMainSave);
             }
+
+            var wrapper = CardFileUiWrapper.GetActiveUiWrapper(tcCardFiles);
+            wrapper.Changed = false;
+
             SetTitle(true);
         }
 
@@ -761,7 +796,6 @@ namespace EasyCardFile
             }
         }
         #endregion
-
 
         #region SpellCheck
         private void tsbSpellCheckCard_Click(object sender, EventArgs e)

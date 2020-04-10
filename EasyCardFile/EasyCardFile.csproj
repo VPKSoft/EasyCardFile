@@ -329,6 +329,7 @@
     <None Include="Resources\tools-check-spelling-7.png" />
     <None Include="Resources\tools-check-spelling-2.png" />
     <None Include="Resources\tools-check-spelling-4.png" />
+    <None Include="Resources\History.png" />
     <Content Include="UtilityClasses\Localization\localization.sqlite" />
     <Content Include="VPKSoft.ico" />
     <None Include="Resources\About.png" />

@@ -150,13 +150,14 @@ namespace EasyCardFile.CardFileHandler.CardFileNaming
 
         private void cmbCardType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            tbCardName.Text = CardNaming.NameCard(CardFile, DateTime.Now, (CardType) cmbCardType.SelectedItem);
+            var name = CardNaming.NameCard(CardFile, DateTime.Now, (CardType) cmbCardType.SelectedItem);
+            tbCardName.Text = string.IsNullOrEmpty(name) ? tbCardName.Text : name;
         }
 
         private void pbGenerateName_Click(object sender, EventArgs e)
         {
             var name = CardNaming.NameCard(CardFile, DateTime.Now, (CardType) cmbCardType.SelectedItem);
-            if (!string.IsNullOrWhiteSpace(name))
+            if (!string.IsNullOrEmpty(name))
             {
                 tbCardName.Text = name;
             }

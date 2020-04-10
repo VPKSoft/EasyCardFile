@@ -250,6 +250,7 @@ namespace EasyCardFile.CardFileHandler
                                 {
                                     throw new InvalidOperationException("Error opening the card file: " + wrapper.FileName);
                                 }
+                                wrapper.Changed = false;
                                 wrapper.RefreshUi();
                             }
                         }

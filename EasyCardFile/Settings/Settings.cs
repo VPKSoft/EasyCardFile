@@ -28,6 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using EasyCardFile.CardFileHandler;
 using EasyCardFile.CardFileHandler.CardFilePreferences;
 using EasyCardFile.UtilityClasses.ErrorHandling;
@@ -122,6 +123,117 @@ namespace EasyCardFile.Settings
         /// </summary>
         [IsSetting]
         public string PathFileDialogRtfSave { get; set; }
+
+        #region RecentFiles
+        /// <summary>
+        /// Gets or sets the recent files.
+        /// </summary>
+        [IsSetting]
+        public List<string> RecentFiles { get; set; }
+
+        /// <summary>
+        /// Tidies the recent file list.
+        /// </summary>
+        private void TidyRecentFileList()
+        {
+            if (RecentFiles == null)
+            {
+                RecentFiles = new List<string>();
+            }
+
+            for (int i = RecentFiles.Count - 1; i >= 0; i--)
+            {
+                if (!File.Exists(RecentFiles[i]))
+                {
+                    RecentFiles.RemoveAt(i);
+                }
+            }
+
+            while (RecentFiles.Count > 20)
+            {
+                RecentFiles.RemoveAt(0);
+            }
+        }
+
+        /// <summary>
+        /// Adds a given <see cref="CardFileUiWrapper"/> instance file name to the recent files.
+        /// </summary>
+        /// <param name="wrapper">The wrapper which file name to add to the recent files.</param>
+        public void AddRecentFile(CardFileUiWrapper wrapper)
+        {
+            if (wrapper == null)
+            {
+                return;
+            }
+            AddRecentFile(wrapper.FileName);
+        }
+
+        /// <summary>
+        /// Adds a given file name to the recent files.
+        /// </summary>
+        /// <param name="fileName">Name of the file to add to the recent files collection.</param>
+        public void AddRecentFile(string fileName)
+        {
+            if (RecentFiles == null)
+            {
+                RecentFiles = new List<string>();
+            }
+
+            if (!RecentFiles.Contains(fileName))
+            {
+                RecentFiles.Add(fileName);
+            }
+            else
+            {
+                RecentFiles.Remove(fileName);
+                RecentFiles.Add(fileName);
+            }
+
+            TidyRecentFileList();
+        }
+
+        /// <summary>
+        /// Creates the recent files menu.
+        /// </summary>
+        /// <param name="item">The menu item which <see cref="ToolStripDropDownItem.DropDownItems"/> should contain the recent file list.</param>
+        /// <param name="tabControl">The tab control which the currently opened <see cref="CardFileUiWrapper"/> instances reside.</param>
+        /// <param name="clickHandlerAction">The action to perform when a recent menu item is clicked.</param>
+        /// <param name="hideSplitters">The <see cref="ToolStripItem"/> items which should be hidden if the recent files menu is empty.</param>
+        public void CreateRecentFilesMenu(ToolStripMenuItem item, Manina.Windows.Forms.TabControl tabControl,
+            Action<object, EventArgs> clickHandlerAction,
+            params ToolStripItem [] hideSplitters)
+        {
+            TidyRecentFileList();
+            item.DropDownItems.Clear();
+
+            var result = new List<string>(RecentFiles.ToArray());
+            foreach (var tab in tabControl.Tabs)
+            {
+                var wrapper = CardFileUiWrapper.GetWrapperByTab(tab);
+                if (wrapper == null)
+                {
+                    continue;
+                }
+                result.Remove(wrapper.FileName);
+            }
+
+            result.Reverse();
+
+            foreach (var recentFile in result)
+            {
+                item.DropDownItems.Add(new ToolStripMenuItem(recentFile, null,
+                    delegate(object sender, EventArgs args) { clickHandlerAction(sender, args); }) {Tag = recentFile});
+            }
+
+            item.Visible = result.Count > 0;
+            foreach (var splitter in hideSplitters)
+            {
+                splitter.Visible = result.Count > 0;
+            }
+        }
+
+        #endregion
+
 
         #region SpellCheck
         /// <summary>
