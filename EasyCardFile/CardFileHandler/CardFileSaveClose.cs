@@ -330,6 +330,13 @@ namespace EasyCardFile.CardFileHandler
 
             if (wrapper.CardFileDb.ChangeTracker.HasChanges())
             {
+                if (!wrapper.Changed)
+                {
+                    wrapper.SaveFile = false;
+                    wrapper.NewFileName = default;
+                    return true;
+                }
+
                 wrapper.SaveFile = false;
                 wrapper.NewFileName = default;
 

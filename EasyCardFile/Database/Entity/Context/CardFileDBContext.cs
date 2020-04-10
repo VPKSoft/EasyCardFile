@@ -187,7 +187,7 @@ namespace EasyCardFile.Database.Entity.Context
 
                         using (connection)
                         {
-                            context.VacuumDatabase();
+                            //context.VacuumDatabase();
 
                             connection.Close();
                             if (forceGarbageCollection)
