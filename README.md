@@ -8,6 +8,7 @@ A card file software based on the [Easy Cardfile Professional](https://www.vpkso
 * Tabbed interface
 * Printing support
 * Spell checking support
+* Currently supported GUI languages: en-US, fi-FI (new translations are accepted for free 🥳)
 * Can be used for various purposes, e.g. store passwords, food recipes, keep a diary, catalog CD/DVD/Blu-ray media, etc...
 
 ### ScreenShots
