@@ -187,7 +187,11 @@ namespace EasyCardFile.Database.Entity.Context
 
                         using (connection)
                         {
-                            //context.VacuumDatabase();
+                            // if set to save and is compressed, then vacuum..
+                            if (save && context.CardFile.Compressed) 
+                            {
+                                context.VacuumDatabase();
+                            }
 
                             connection.Close();
                             if (forceGarbageCollection)

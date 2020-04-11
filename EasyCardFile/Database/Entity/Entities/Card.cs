@@ -73,6 +73,14 @@ namespace EasyCardFile.Database.Entity.Entities
             return GetCardContentsPlain(false);
         }
 
+        /// <summary>
+        /// Gets the card the contents as a string.
+        /// </summary>
+        /// <returns>A string containing the entire card contents.</returns>
+        public string CardContentsString()
+        {
+            return Encoding.UTF8.GetString(CardContents);
+        }
 
         /// <summary>
         /// Gets the card contents as plain text for searching purposes.

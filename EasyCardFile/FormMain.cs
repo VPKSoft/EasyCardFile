@@ -217,6 +217,11 @@ namespace EasyCardFile
             SetUndoRedoState();
         }
 
+        private void SelectedCardChanged(object sender, EventArgs e)
+        {
+            SetUndoRedoState();
+        }
+
         private void UndoRedoChanged(object sender, EventArgs e)
         {
             // undo / redo..
@@ -275,6 +280,7 @@ namespace EasyCardFile
             wrapper.CardFileChanged += CardFileChanged;
             wrapper.UndoRedoChanged += UndoRedoChanged;
             wrapper.CardContentsChanged += CardContentsChanged;
+            wrapper.SelectedCardChanged += SelectedCardChanged;
         }
 
         /// <summary>
@@ -287,6 +293,7 @@ namespace EasyCardFile
             wrapper.CardFileChanged -= CardFileChanged;
             wrapper.UndoRedoChanged -= UndoRedoChanged;
             wrapper.CardContentsChanged -= CardContentsChanged;
+            wrapper.SelectedCardChanged -= SelectedCardChanged;
         }
 
         /// <summary>
@@ -575,6 +582,11 @@ namespace EasyCardFile
                         LoadSpellChecking();
                     }
                 }
+            }
+
+            foreach (var tab in tcCardFiles.Tabs)
+            {
+                CardFileUiWrapper.GetWrapperByTab(tab)?.SetEditorButtonColors();
             }
         }
 

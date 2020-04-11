@@ -39,12 +39,14 @@
             this.label2 = new System.Windows.Forms.Label();
             this.cbAutoSaveExistingCardFilesAppClose = new System.Windows.Forms.CheckBox();
             this.tabSettingsCustomizeEditor = new Manina.Windows.Forms.Tab();
+            this.btButtonColorRestoreDefaults = new System.Windows.Forms.Button();
+            this.btEditorImageGlyphColor = new System.Windows.Forms.Button();
+            this.btEditorImageForeColor = new System.Windows.Forms.Button();
             this.lbEditorImageGlyphColor = new System.Windows.Forms.Label();
-            this.cwEditorImageGlyphColor = new Cyotek.Windows.Forms.ColorWheel();
             this.rtbEditorToolStripColors = new VPKSoft.RichTextEdit.RichTextBoxWithToolStrip();
             this.lbEditorImageForeColor = new System.Windows.Forms.Label();
-            this.cwEditorToolStripColors = new Cyotek.Windows.Forms.ColorWheel();
             this.tabSpelling = new Manina.Windows.Forms.Tab();
+            this.btClearUserDictionary = new System.Windows.Forms.Button();
             this.cmbInstalledDictionaries = new System.Windows.Forms.ComboBox();
             this.lbInstalledDictionaries = new System.Windows.Forms.Label();
             this.btDictionaryPath = new System.Windows.Forms.Button();
@@ -61,7 +63,6 @@
             this.odAffixFile = new System.Windows.Forms.OpenFileDialog();
             this.odDictionaryFile = new System.Windows.Forms.OpenFileDialog();
             this.fbFolder = new Ookii.Dialogs.WinForms.VistaFolderBrowserDialog();
-            this.btClearUserDictionary = new System.Windows.Forms.Button();
             this.tcMain.SuspendLayout();
             this.tabSettingsGeneral.SuspendLayout();
             this.tabSettingsCustomizeEditor.SuspendLayout();
@@ -169,15 +170,46 @@
             // 
             // tabSettingsCustomizeEditor
             // 
+            this.tabSettingsCustomizeEditor.Controls.Add(this.btButtonColorRestoreDefaults);
+            this.tabSettingsCustomizeEditor.Controls.Add(this.btEditorImageGlyphColor);
+            this.tabSettingsCustomizeEditor.Controls.Add(this.btEditorImageForeColor);
             this.tabSettingsCustomizeEditor.Controls.Add(this.lbEditorImageGlyphColor);
-            this.tabSettingsCustomizeEditor.Controls.Add(this.cwEditorImageGlyphColor);
             this.tabSettingsCustomizeEditor.Controls.Add(this.rtbEditorToolStripColors);
             this.tabSettingsCustomizeEditor.Controls.Add(this.lbEditorImageForeColor);
-            this.tabSettingsCustomizeEditor.Controls.Add(this.cwEditorToolStripColors);
-            this.tabSettingsCustomizeEditor.Location = new System.Drawing.Point(0, 0);
+            this.tabSettingsCustomizeEditor.Location = new System.Drawing.Point(1, 21);
             this.tabSettingsCustomizeEditor.Name = "tabSettingsCustomizeEditor";
-            this.tabSettingsCustomizeEditor.Size = new System.Drawing.Size(0, 0);
+            this.tabSettingsCustomizeEditor.Size = new System.Drawing.Size(681, 290);
             this.tabSettingsCustomizeEditor.Text = "Customize editor";
+            // 
+            // btButtonColorRestoreDefaults
+            // 
+            this.btButtonColorRestoreDefaults.Location = new System.Drawing.Point(6, 160);
+            this.btButtonColorRestoreDefaults.Name = "btButtonColorRestoreDefaults";
+            this.btButtonColorRestoreDefaults.Size = new System.Drawing.Size(298, 23);
+            this.btButtonColorRestoreDefaults.TabIndex = 14;
+            this.btButtonColorRestoreDefaults.Text = "Restore defaults";
+            this.btButtonColorRestoreDefaults.UseVisualStyleBackColor = true;
+            this.btButtonColorRestoreDefaults.Click += new System.EventHandler(this.btButtonColorRestoreDefaults_Click);
+            // 
+            // btEditorImageGlyphColor
+            // 
+            this.btEditorImageGlyphColor.Location = new System.Drawing.Point(158, 131);
+            this.btEditorImageGlyphColor.Name = "btEditorImageGlyphColor";
+            this.btEditorImageGlyphColor.Size = new System.Drawing.Size(146, 23);
+            this.btEditorImageGlyphColor.TabIndex = 13;
+            this.btEditorImageGlyphColor.Tag = "1";
+            this.btEditorImageGlyphColor.UseVisualStyleBackColor = true;
+            this.btEditorImageGlyphColor.Click += new System.EventHandler(this.btEditorImageForeColor_Click);
+            // 
+            // btEditorImageForeColor
+            // 
+            this.btEditorImageForeColor.Location = new System.Drawing.Point(6, 131);
+            this.btEditorImageForeColor.Name = "btEditorImageForeColor";
+            this.btEditorImageForeColor.Size = new System.Drawing.Size(146, 23);
+            this.btEditorImageForeColor.TabIndex = 12;
+            this.btEditorImageForeColor.Tag = "0";
+            this.btEditorImageForeColor.UseVisualStyleBackColor = true;
+            this.btEditorImageForeColor.Click += new System.EventHandler(this.btEditorImageForeColor_Click);
             // 
             // lbEditorImageGlyphColor
             // 
@@ -187,16 +219,6 @@
             this.lbEditorImageGlyphColor.Size = new System.Drawing.Size(123, 13);
             this.lbEditorImageGlyphColor.TabIndex = 11;
             this.lbEditorImageGlyphColor.Text = "Button image glyph color";
-            // 
-            // cwEditorImageGlyphColor
-            // 
-            this.cwEditorImageGlyphColor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.cwEditorImageGlyphColor.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cwEditorImageGlyphColor.Location = new System.Drawing.Point(167, -159);
-            this.cwEditorImageGlyphColor.Name = "cwEditorImageGlyphColor";
-            this.cwEditorImageGlyphColor.Size = new System.Drawing.Size(155, 156);
-            this.cwEditorImageGlyphColor.TabIndex = 10;
-            this.cwEditorImageGlyphColor.ColorChanged += new System.EventHandler(this.cwEditorImageGlyphColor_ColorChanged);
             // 
             // rtbEditorToolStripColors
             // 
@@ -211,7 +233,7 @@
             this.rtbEditorToolStripColors.Location = new System.Drawing.Point(3, 3);
             this.rtbEditorToolStripColors.MoreColorsText = "More colors...";
             this.rtbEditorToolStripColors.Name = "rtbEditorToolStripColors";
-            this.rtbEditorToolStripColors.Size = new System.Drawing.Size(0, 109);
+            this.rtbEditorToolStripColors.Size = new System.Drawing.Size(675, 109);
             this.rtbEditorToolStripColors.TabIndex = 9;
             this.rtbEditorToolStripColors.Text = resources.GetString("rtbEditorToolStripColors.Text");
             this.rtbEditorToolStripColors.WordWrap = false;
@@ -224,16 +246,6 @@
             this.lbEditorImageForeColor.Size = new System.Drawing.Size(149, 13);
             this.lbEditorImageForeColor.TabIndex = 8;
             this.lbEditorImageForeColor.Text = "Button image foreground color";
-            // 
-            // cwEditorToolStripColors
-            // 
-            this.cwEditorToolStripColors.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.cwEditorToolStripColors.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cwEditorToolStripColors.Location = new System.Drawing.Point(6, -159);
-            this.cwEditorToolStripColors.Name = "cwEditorToolStripColors";
-            this.cwEditorToolStripColors.Size = new System.Drawing.Size(155, 156);
-            this.cwEditorToolStripColors.TabIndex = 7;
-            this.cwEditorToolStripColors.ColorChanged += new System.EventHandler(this.cwEditorToolStripColors_ColorChanged);
             // 
             // tabSpelling
             // 
@@ -254,6 +266,18 @@
             this.tabSpelling.Size = new System.Drawing.Size(681, 290);
             this.tabSpelling.Text = "Spell checking";
             // 
+            // btClearUserDictionary
+            // 
+            this.btClearUserDictionary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btClearUserDictionary.Location = new System.Drawing.Point(14, 209);
+            this.btClearUserDictionary.Name = "btClearUserDictionary";
+            this.btClearUserDictionary.Size = new System.Drawing.Size(658, 23);
+            this.btClearUserDictionary.TabIndex = 56;
+            this.btClearUserDictionary.Text = "Delete user personal dictionary";
+            this.btClearUserDictionary.UseVisualStyleBackColor = true;
+            this.btClearUserDictionary.Click += new System.EventHandler(this.btClearUserDictionary_Click);
+            // 
             // cmbInstalledDictionaries
             // 
             this.cmbInstalledDictionaries.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -265,7 +289,7 @@
             this.cmbInstalledDictionaries.Location = new System.Drawing.Point(14, 173);
             this.cmbInstalledDictionaries.Margin = new System.Windows.Forms.Padding(13, 12, 13, 12);
             this.cmbInstalledDictionaries.Name = "cmbInstalledDictionaries";
-            this.cmbInstalledDictionaries.Size = new System.Drawing.Size(616, 21);
+            this.cmbInstalledDictionaries.Size = new System.Drawing.Size(658, 21);
             this.cmbInstalledDictionaries.TabIndex = 55;
             this.cmbInstalledDictionaries.SelectedIndexChanged += new System.EventHandler(this.cmbInstalledDictionaries_SelectedIndexChanged);
             // 
@@ -281,7 +305,7 @@
             // btDictionaryPath
             // 
             this.btDictionaryPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btDictionaryPath.Location = new System.Drawing.Point(641, 173);
+            this.btDictionaryPath.Location = new System.Drawing.Point(641, 125);
             this.btDictionaryPath.Name = "btDictionaryPath";
             this.btDictionaryPath.Size = new System.Drawing.Size(31, 21);
             this.btDictionaryPath.TabIndex = 53;
@@ -296,7 +320,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbDictionaryPath.Location = new System.Drawing.Point(14, 125);
             this.tbDictionaryPath.Name = "tbDictionaryPath";
-            this.tbDictionaryPath.Size = new System.Drawing.Size(658, 20);
+            this.tbDictionaryPath.Size = new System.Drawing.Size(621, 20);
             this.tbDictionaryPath.TabIndex = 52;
             // 
             // lbDictionaryPath
@@ -398,18 +422,6 @@
             // 
             this.fbFolder.UseDescriptionForTitle = true;
             // 
-            // btClearUserDictionary
-            // 
-            this.btClearUserDictionary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btClearUserDictionary.Location = new System.Drawing.Point(14, 209);
-            this.btClearUserDictionary.Name = "btClearUserDictionary";
-            this.btClearUserDictionary.Size = new System.Drawing.Size(658, 23);
-            this.btClearUserDictionary.TabIndex = 56;
-            this.btClearUserDictionary.Text = "Delete user personal dictionary";
-            this.btClearUserDictionary.UseVisualStyleBackColor = true;
-            this.btClearUserDictionary.Click += new System.EventHandler(this.btClearUserDictionary_Click);
-            // 
             // FormDialogSettings
             // 
             this.AcceptButton = this.btOK;
@@ -452,9 +464,7 @@
         private Manina.Windows.Forms.Tab tabSettingsCustomizeEditor;
         private VPKSoft.RichTextEdit.RichTextBoxWithToolStrip rtbEditorToolStripColors;
         private System.Windows.Forms.Label lbEditorImageForeColor;
-        private Cyotek.Windows.Forms.ColorWheel cwEditorToolStripColors;
         private System.Windows.Forms.Label lbEditorImageGlyphColor;
-        private Cyotek.Windows.Forms.ColorWheel cwEditorImageGlyphColor;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label lbSelectLanguageDescription;
         private System.Windows.Forms.ComboBox cmbSelectLanguageValue;
@@ -474,5 +484,8 @@
         private System.Windows.Forms.OpenFileDialog odDictionaryFile;
         private Ookii.Dialogs.WinForms.VistaFolderBrowserDialog fbFolder;
         private System.Windows.Forms.Button btClearUserDictionary;
+        private System.Windows.Forms.Button btEditorImageGlyphColor;
+        private System.Windows.Forms.Button btEditorImageForeColor;
+        private System.Windows.Forms.Button btButtonColorRestoreDefaults;
     }
 }

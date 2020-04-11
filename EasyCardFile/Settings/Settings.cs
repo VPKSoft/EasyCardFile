@@ -311,6 +311,20 @@ namespace EasyCardFile.Settings
         }
         #endregion
 
+        #region Colors        
+        /// <summary>
+        /// Gets or sets the color of the editor button.
+        /// </summary>
+        [IsSetting]
+        public string EditorButtonColor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the color of the editor glyph.
+        /// </summary>
+        [IsSetting]
+        public string EditorGlyphColor { get; set; }
+        #endregion
+
         /// <summary>
         /// Sets the files belonging to the current session.
         /// </summary>

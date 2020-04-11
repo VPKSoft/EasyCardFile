@@ -138,10 +138,10 @@ namespace EasyCardFile.Database.Entity.Entities
         /// </summary>
         public void SortCards()
         {
-            Cards = SortCardList(Cards, CardSortType1)?.ToList();
-            Cards = SortCardList(Cards, CardSortType2)?.ToList();
-            Cards = SortCardList(Cards, CardSortType3)?.ToList();
             Cards = SortCardList(Cards, CardSortType4)?.ToList();
+            Cards = SortCardList(Cards, CardSortType3)?.ToList();
+            Cards = SortCardList(Cards, CardSortType2)?.ToList();
+            Cards = SortCardList(Cards, CardSortType1)?.ToList();
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace EasyCardFile.Database.Entity.Entities
 
             if (cardSortType.HasFlag(CardSortType.CardType))
             {
-                return cards?.OrderByDescending(f => f.CardType?.CardTypeName,
+                return cards?.OrderBy(f => f.CardType?.CardTypeName,
                     ignoreCase ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
             }
 

@@ -29,13 +29,13 @@ using EasyCardFile.UtilityClasses.Miscellaneous;
 using EasyCardFile.UtilityClasses.SpellCheck;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using VPKSoft.LangLib;
-using VPKSoft.SpellCheckUtility;
 using VPKSoft.Utils;
 using VPKSoft.Utils.XmlSettingsMisc;
 using Utils = VPKSoft.LangLib.Utils;
@@ -153,6 +153,14 @@ namespace EasyCardFile.Settings
             tbHunspellAffixFile.Text = Settings.EditorHunspellAffixFile;
             tbHunspellDictionary.Text = Settings.EditorHunspellDictionaryFile;
             tbDictionaryPath.Text = Settings.EditorHunspellDictionaryPath;
+
+            btEditorImageForeColor.BackColor = string.IsNullOrEmpty(Settings.EditorButtonColor)
+                ? Color.Black
+                : ColorTranslator.FromHtml(Settings.EditorButtonColor);
+
+            btEditorImageGlyphColor.BackColor = string.IsNullOrEmpty(Settings.EditorGlyphColor)
+                ? Color.Blue
+                : ColorTranslator.FromHtml(Settings.EditorGlyphColor);
         }
 
         private void ApplySettings()
@@ -163,18 +171,8 @@ namespace EasyCardFile.Settings
             Settings.EditorHunspellAffixFile = tbHunspellAffixFile.Text;
             Settings.EditorHunspellDictionaryFile = tbHunspellDictionary.Text;
             Settings.EditorHunspellDictionaryPath = tbDictionaryPath.Text;
-        }
-
-        private void cwEditorToolStripColors_ColorChanged(object sender, EventArgs e)
-        {
-            var colorWheel = (ColorWheel) sender;
-            rtbEditorToolStripColors.ColorButtonForeground = colorWheel.Color;
-        }
-
-        private void cwEditorImageGlyphColor_ColorChanged(object sender, EventArgs e)
-        {
-            var colorWheel = (ColorWheel) sender;
-            rtbEditorToolStripColors.ColorGlyph = colorWheel.Color;
+            Settings.EditorButtonColor = ColorTranslator.ToHtml(btEditorImageForeColor.BackColor);
+            Settings.EditorGlyphColor = ColorTranslator.ToHtml(btEditorImageGlyphColor.BackColor);
         }
 
         private void btDictionaryPath_Click(object sender, EventArgs e)
@@ -269,6 +267,52 @@ namespace EasyCardFile.Settings
                 File.Delete(userDictionaryFile);
                 UserDictionaryDeleted = true;
             }
+        }
+
+        private void btEditorImageForeColor_Click(object sender, EventArgs e)
+        {
+            var dialog = new ColorPickerDialog();
+            var button = (Button) sender;
+            dialog.Color = button.BackColor;
+            var saveColor = button.BackColor;
+            dialog.Tag = button.Tag;
+            dialog.PreviewColorChanged += Dialog_PreviewColorChanged;
+            if (dialog.ShowDialog(this) == DialogResult.OK)
+            {
+                button.BackColor = dialog.Color;
+            }
+            else
+            {
+                if (dialog.Tag.ToString() == "0")
+                {
+                    rtbEditorToolStripColors.ColorButtonForeground = saveColor;
+                }
+                else
+                {
+                    rtbEditorToolStripColors.ColorGlyph = saveColor;
+                }
+            }
+        }
+
+        private void Dialog_PreviewColorChanged(object sender, EventArgs e)
+        {
+            var dialog = (ColorPickerDialog) sender;
+            if (dialog.Tag.ToString() == "0")
+            {
+                rtbEditorToolStripColors.ColorButtonForeground = dialog.Color;
+            }
+            else
+            {
+                rtbEditorToolStripColors.ColorGlyph = dialog.Color;
+            }
+        }
+
+        private void btButtonColorRestoreDefaults_Click(object sender, EventArgs e)
+        {
+            rtbEditorToolStripColors.ColorButtonForeground = Color.Black;
+            rtbEditorToolStripColors.ColorGlyph = Color.Blue;
+            btEditorImageForeColor.BackColor = Color.Black;
+            btEditorImageGlyphColor.BackColor = Color.Blue;
         }
     }
 }

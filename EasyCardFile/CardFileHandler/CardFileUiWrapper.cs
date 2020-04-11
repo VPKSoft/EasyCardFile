@@ -27,6 +27,7 @@ SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -362,6 +363,11 @@ namespace EasyCardFile.CardFileHandler
             if (RichTextBox.RichTextBox.CanUndo)
             {
                 RichTextBox.RichTextBox.Undo();
+                if (!UndoRedo.CanUndo && !RichTextBox.RichTextBox.CanUndo && 
+                    UndoRedo.AllChangedCanceled)
+                {
+                    Changed = false;
+                }
                 return true;
             }
 
@@ -884,6 +890,8 @@ namespace EasyCardFile.CardFileHandler
             RichTextBox = new RichTextBoxWithToolStrip {Dock = DockStyle.Fill, Tag = false,};
             RichTextBox.TextChanged += RichTextBox_TextChanged;
             RichTextBox.RichTextBox.SelectionChanged += RichTextBox_SelectionChanged;
+            SetEditorButtonColors();
+
 
             // localize the few properties..
             RichTextBox.AutomaticColorText = AutomaticColorText;
@@ -943,6 +951,20 @@ namespace EasyCardFile.CardFileHandler
             {
                 ListBoxCards.SelectedIndex = 0;
             }
+        }
+
+        /// <summary>
+        /// Sets the editor button colors.
+        /// </summary>
+        internal void SetEditorButtonColors()
+        {
+            RichTextBox.ColorButtonForeground = string.IsNullOrEmpty(FormMain.Settings.EditorButtonColor)
+                ? Color.Black
+                : ColorTranslator.FromHtml(FormMain.Settings.EditorButtonColor);
+
+            RichTextBox.ColorGlyph = string.IsNullOrEmpty(FormMain.Settings.EditorGlyphColor)
+                ? Color.Blue
+                : ColorTranslator.FromHtml(FormMain.Settings.EditorGlyphColor);
         }
 
         private Card PreviousItemAtMousePoint { get; set; }
@@ -1024,20 +1046,23 @@ namespace EasyCardFile.CardFileHandler
                 }
 
                 firstSetChanged = false;
-                changed = value;
-
-                try
+                if (changed != value)
                 {
-                    // inform the event subscriber(s) of the changes..
-                    CardFileChanged?.Invoke(this, new EventArgs());
-                }
-                catch (Exception ex)
-                {
-                    // log the exception..
-                    ExceptionLogAction?.Invoke(ex);
-                }
+                    changed = value;
 
-                UpdateTabText();
+                    try
+                    {
+                        // inform the event subscriber(s) of the changes..
+                        CardFileChanged?.Invoke(this, new EventArgs());
+                    }
+                    catch (Exception ex)
+                    {
+                        // log the exception..
+                        ExceptionLogAction?.Invoke(ex);
+                    }
+
+                    UpdateTabText();
+                }
             }
         }
 
@@ -1163,6 +1188,7 @@ namespace EasyCardFile.CardFileHandler
             if (SelectedCard != null)
             {
                 SelectedCard.CardContents = Encoding.UTF8.GetBytes(RichTextBox.Rtf);
+                Changed = true;
                 CardContentsChanged?.Invoke(this, new EventArgs());
             }
 
@@ -1727,6 +1753,7 @@ namespace EasyCardFile.CardFileHandler
                     {
                         if (card.CardName.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) != -1 ||
                             card.GetCardContentsPlain().IndexOf(filterText, StringComparison.OrdinalIgnoreCase) != -1 ||
+//                            card.CardContentsString().IndexOf(filterText, StringComparison.OrdinalIgnoreCase) != -1 ||
                             card.CardType.CardTypeName.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) != -1)
                         {
                             ListBoxCards.Items.Add(card);

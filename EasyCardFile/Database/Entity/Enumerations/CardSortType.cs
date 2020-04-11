@@ -51,21 +51,21 @@ namespace EasyCardFile.Database.Entity.Enumerations
         /// <summary>
         /// Sorting by card type name ascending.
         /// </summary>
-        CardType,
+        CardType = 128,
 
         /// <summary>
         /// Sorting by card type name descending.
         /// </summary>
-        CardTypeDescending,
+        CardTypeDescending = 256,
 
         /// <summary>
         /// Sorting by a user defined order number.
         /// </summary>
-        Custom,
+        Custom = 1024,
 
         /// <summary>
         /// Sorting by a user defined order number descending.
         /// </summary>
-        CustomDescending,
+        CustomDescending = 2048,
     }
 }
