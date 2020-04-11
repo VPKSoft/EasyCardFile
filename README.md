@@ -15,6 +15,9 @@ A card file software based on the [Easy Cardfile Professional](https://www.vpkso
 *The main window displaying my garden plant collection*
 ![image](https://user-images.githubusercontent.com/40712699/79038715-2ca51e00-7be4-11ea-90fa-b5f0f305e4aa.png)
 
+*A bit more complex card types in the TODO card file*
+![image](https://user-images.githubusercontent.com/40712699/79039219-75f76c80-7be8-11ea-9ec3-cd1e139e7219.png)
+
 ### Thanks to
 * [JetBrains](https://www.jetbrains.com/?from=EasyCardFile) for their open source license(s)
 
