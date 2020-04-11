@@ -1,14 +1,20 @@
 # EasyCardFile
-A Card file software renewed.
+A card file software based on the [Easy Cardfile Professional](https://www.vpksoft.net/2015-03-31-13-33-28/2015-04-06-13-11-50/easy-cardfile-professional) from the year 2008.
 
-## About
-This should replace an already discontinued software called [Easy Cardfile Professional](https://www.vpksoft.net/2015-03-31-13-33-28/2015-04-06-13-11-50/easy-cardfile-professional) from the beginning of the year 2008. So about 12 years old software.
-* This is in alpha phase, thus useless at the time.
+## Features
+* Rich text cards
+* [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard) encryption support
+* Multiple card types
+* Tabbed interface
+* Printing support
+* Spell checking support
+* Can be used for various purposes, e.g. store passwords, food recipes, keep a diary, catalog CD/DVD/Blu-ray media, etc...
 
-*An early screenshot*
-![image](https://user-images.githubusercontent.com/40712699/71476632-a6a8c700-27ee-11ea-8ed0-273c264ef072.png)
+### ScreenShots
+*The main window displaying my garden plant collection*
+![image](https://user-images.githubusercontent.com/40712699/79038715-2ca51e00-7be4-11ea-90fa-b5f0f305e4aa.png)
 
 ### Thanks to
-* JetBrains for their open source license(s)
+* [JetBrains](https://www.jetbrains.com/?from=EasyCardFile) for their open source license(s)
 
 ![JetBrains](http://www.vpksoft.net/site/External/JetBrains/jetbrains.svg)
