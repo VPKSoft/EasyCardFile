@@ -25,7 +25,6 @@ SOFTWARE.
 #endregion
 
 using Cyotek.Windows.Forms;
-using EasyCardFile.UtilityClasses.Miscellaneous;
 using EasyCardFile.UtilityClasses.SpellCheck;
 using System;
 using System.Collections.Generic;
@@ -35,6 +34,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using EasyCardFile.UtilityClasses.Miscellaneous;
+using VPKSoft.ErrorLogger;
+using VPKSoft.ExternalDictionaryPackage;
 using VPKSoft.LangLib;
 using VPKSoft.Utils;
 using VPKSoft.Utils.XmlSettingsMisc;
@@ -135,7 +137,10 @@ namespace EasyCardFile.Settings
         private void DisplaySettings()
         {
             cbAutoSaveExistingCardFilesAppClose.Checked = Settings.AutoSave;
-            cbRestorePreviousSession.Checked = Settings.RestoreSessionOnStartup;            
+            cbRestorePreviousSession.Checked = Settings.RestoreSessionOnStartup;
+
+            cbUseCustomSpellCheckingLibrary.Checked = Settings.EditorSpellUseCustomDictionary;
+            tbSpellCheckingLibraryFile.Text = Settings.EditorSpellCustomDictionaryDefinitionFile;
 
             // get the current culture from the settings..
             cmbSelectLanguageValue.SelectedItem = string.IsNullOrWhiteSpace(Settings.Locale)
@@ -173,6 +178,8 @@ namespace EasyCardFile.Settings
             Settings.EditorHunspellDictionaryPath = tbDictionaryPath.Text;
             Settings.EditorButtonColor = ColorTranslator.ToHtml(btEditorImageForeColor.BackColor);
             Settings.EditorGlyphColor = ColorTranslator.ToHtml(btEditorImageGlyphColor.BackColor);
+            Settings.EditorSpellUseCustomDictionary = cbUseCustomSpellCheckingLibrary.Checked;
+            Settings.EditorSpellCustomDictionaryDefinitionFile = tbSpellCheckingLibraryFile.Text;
         }
 
         private void btDictionaryPath_Click(object sender, EventArgs e)
@@ -256,6 +263,12 @@ namespace EasyCardFile.Settings
 
             odDictionaryFile.Filter = DBLangEngine.GetMessage("msgFileDic",
                 "Hunspell dictionary file|*.dic|A text in a file dialog filter to indicate a Hunspell dictionary file");
+
+            odSpellCheckerPackage.Title = DBLangEngine.GetMessage("msgDialogSelectCustomSpellChecker",
+                "Select a spell checker library package|A title for an open file dialog to indicate user that the user is selecting a compressed zip file containing an assembly providing custom spell checking functionality");
+
+            odSpellCheckerPackage.Filter = DBLangEngine.GetStatMessage("msgCustomSpellCheckerZipFile",
+                "Custom spell check library|*.zip|A text in a file dialog filter to indicate a custom spell checker library in a compressed zip package");
         }
 
         private void btClearUserDictionary_Click(object sender, EventArgs e)
@@ -313,6 +326,71 @@ namespace EasyCardFile.Settings
             rtbEditorToolStripColors.ColorGlyph = Color.Blue;
             btEditorImageForeColor.BackColor = Color.Black;
             btEditorImageGlyphColor.BackColor = Color.Blue;
+        }
+
+        private void cbUseCustomSpellCheckingLibrary_CheckedChanged(object sender, EventArgs e)
+        {
+            var checkBox = (CheckBox) sender;
+            pnEditorSpellCustomSetting.Visible = checkBox.Checked;
+            if (checkBox.Checked)
+            {
+                pnEditorSpellCustomSetting.Location = new Point(0, lbHunspellDictionary.Top);
+                btClearUserDictionary.Location = new Point(btClearUserDictionary.Location.X, 90);
+            }
+            else
+            {
+                btClearUserDictionary.Location = new Point(btClearUserDictionary.Location.X, 186);
+            }
+        }
+
+        private void btInstallSpellCheckerFromFile_Click(object sender, EventArgs e)
+        {
+            odSpellCheckerPackage.Title = DBLangEngine.GetMessage("msgDialogSelectCustomSpellChecker",
+                "Select a spell checker library package|A title for an open file dialog to indicate user that the user is selecting a compressed zip file containing an assembly providing custom spell checking functionality");
+
+            odSpellCheckerPackage.InitialDirectory = Settings.CustomSpellCheckerLoadPath;
+            if (odSpellCheckerPackage.ShowDialog() == DialogResult.OK)
+            {
+                var zip = odSpellCheckerPackage.FileName;
+                var package = DictionaryPackage.InstallPackage(zip, Settings.EditorSpellCustomDictionaryInstallPath);
+                tbSpellCheckingLibraryFile.Text = package;
+                Settings.CustomSpellCheckerLoadPath = odDictionaryFile.FileName.GetPath(Settings.CustomSpellCheckerLoadPath);
+            }
+        }
+
+        private void btRemoveInstalledSpellChecker_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var info = DictionaryPackage.GetXmlDefinitionDataFromDefinitionFile(tbSpellCheckingLibraryFile.Text);
+                var result =
+                    MessageBox.Show(this,
+                        DBLangEngine.GetMessage("msgQueryDeleteSpellCheckLibrary",
+                            "Really remove spell check library '{0}' ({1}) ?|A message confirming that the user is removing a custom spell checker library", info.name, info.lib),
+                        DBLangEngine.GetMessage("msgConfirm", "Confirm|A caption text for a confirm dialog"),
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+                if (result == DialogResult.Yes)
+                {
+                    var deletePath = Path.GetDirectoryName(tbSpellCheckingLibraryFile.Text);
+                    if (Directory.Exists(deletePath))
+                    {
+                        Directory.Delete(deletePath, true);
+                    }
+
+                    tbSpellCheckingLibraryFile.Text =
+                        DBLangEngine.GetMessage("msgNA", "N/A|A message indicating a none value");
+                }
+            }
+            catch (Exception ex)
+            {
+                // log the exception..
+                ExceptionLogger.LogError(ex);
+            }
+        }
+
+        private void pbAbout_Click(object sender, EventArgs e)
+        {
+            FormDialogCustomSpellCheckerInfo.ShowDialog(this, tbSpellCheckingLibraryFile.Text);
         }
     }
 }

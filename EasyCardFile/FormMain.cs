@@ -39,6 +39,7 @@ using EasyCardFile.UtilityClasses.Constants;
 using EasyCardFile.UtilityClasses.FileAssociation;
 using EasyCardFile.UtilityClasses.Localization;
 using EasyCardFile.UtilityClasses.Miscellaneous;
+using EasyCardFile.UtilityClasses.SpellCheck;
 using Microsoft.Win32;
 using VPKSoft.ErrorLogger;
 using VPKSoft.LangLib;
@@ -185,6 +186,7 @@ namespace EasyCardFile
             }
 
             CardFileSaveClose.ClearTemporaryFiles();
+            ExternalSpellChecker.DisposeResources();
         }
 
         private void FormMain_Shown(object sender, EventArgs e)
@@ -259,8 +261,15 @@ namespace EasyCardFile
             // except the Hunspell affix and dictionary files to exists and load them..
             if (Settings.SpellCheckingEnabled)
             {
-                SpellChecker.LoadDictionary(Settings.EditorHunspellDictionaryFile,
-                    Settings.EditorHunspellAffixFile);
+                if (Settings.EditorSpellUseCustomDictionary)
+                {
+                    ExternalSpellChecker.Load();
+                }
+                else
+                {
+                    SpellChecker.LoadDictionary(Settings.EditorHunspellDictionaryFile,
+                        Settings.EditorHunspellAffixFile);
+                }
 
                 var userDictionaryFile = Path.Combine(AppDataPath, "user.dictionary");
 

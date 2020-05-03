@@ -108,6 +108,8 @@ namespace EasyCardFile
                     new FormDialogSettings();
                     // ReSharper disable once ObjectCreationAsStatement
                     new FormDialogSelectImageArea();
+                    // ReSharper disable once ObjectCreationAsStatement
+                    new FormDialogCustomSpellCheckerInfo();
 
                     if (!Debugger.IsAttached)
                     {

@@ -162,6 +162,9 @@
   <data name="msgConfigure" xml:space="preserve">
     <value>Configure|A message for a button to configure something.</value>
   </data>
+  <data name="msgConfirm" xml:space="preserve">
+    <value>Confirm|A caption text for a confirm dialog</value>
+  </data>
   <data name="msgConfirmAPassword" xml:space="preserve">
     <value>Confirm the password to protect the card file.|A user is asked for a confirmation for a password in a dialog (the second time)</value>
   </data>
@@ -170,6 +173,9 @@
   </data>
   <data name="msgCopy" xml:space="preserve">
     <value>Copy|A message for a menu item indicating a copy function.</value>
+  </data>
+  <data name="msgCustomSpellCheckerZipFile" xml:space="preserve">
+    <value>Custom spell check library|*.zip|A text in a file dialog filter to indicate a custom spell checker library in a compressed zip package</value>
   </data>
   <data name="msgCut" xml:space="preserve">
     <value>Cut|A message for a menu item indicating a cut function.</value>
@@ -206,6 +212,9 @@
   </data>
   <data name="msgDialogSelectAffixFile" xml:space="preserve">
     <value>Select an affix file|A title for an open file dialog to indicate user that the user is selecting a Hunspell affix file for the spell checking</value>
+  </data>
+  <data name="msgDialogSelectCustomSpellChecker" xml:space="preserve">
+    <value>Select a spell checker library package|A title for an open file dialog to indicate user that the user is selecting a compressed zip file containing an assembly providing custom spell checking functionality</value>
   </data>
   <data name="msgDialogSelectDicFile" xml:space="preserve">
     <value>Select a dictionary file|A title for an open file dialog to indicate user that the user is selecting a dictionary file for the spell checking</value>
@@ -300,6 +309,9 @@
   <data name="msgMoreColorsText" xml:space="preserve">
     <value>More colors..|A message for a ToolStrip color selection drop down text for more colors.</value>
   </data>
+  <data name="msgNA" xml:space="preserve">
+    <value>N/A|A message indicating a none value</value>
+  </data>
   <data name="msgNewCardFileName" xml:space="preserve">
     <value>New {0}|A text for a new file name or a new card file internal name.</value>
   </data>
@@ -338,6 +350,9 @@
   </data>
   <data name="msgQueryConfirmDeleteCard" xml:space="preserve">
     <value>Delete the card: '{0}'?|A message asking from the user for confirmation of deletion of a card from the card file.</value>
+  </data>
+  <data name="msgQueryDeleteSpellCheckLibrary" xml:space="preserve">
+    <value>Really remove spell check library '{0}' ({1}) ?|A message confirming that the user is removing a custom spell checker library</value>
   </data>
   <data name="msgQueryPassword1" xml:space="preserve">
     <value>Enter a password to protect the card file|A message querying the user to enter a password for the first time to protect the card file</value>

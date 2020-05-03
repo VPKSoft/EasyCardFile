@@ -82,6 +82,7 @@ namespace EasyCardFile.Settings
         [IsSetting]
         public int SessionActiveTabIndex { get; set; }
 
+        #region DialogPaths
         /// <summary>
         /// Gets or sets the path of the image dialog in the <see cref="FormDialogCardFilePreferences"/> dialog.
         /// </summary>
@@ -123,6 +124,13 @@ namespace EasyCardFile.Settings
         /// </summary>
         [IsSetting]
         public string PathFileDialogRtfSave { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path of the file dialog to install custom spell checker library in the <see cref="FormDialogSettings"/> from.
+        /// </summary>
+        [IsSetting]
+        public string CustomSpellCheckerLoadPath { get; set; }
+        #endregion
 
         #region RecentFiles
         /// <summary>
@@ -234,7 +242,6 @@ namespace EasyCardFile.Settings
 
         #endregion
 
-
         #region SpellCheck
         /// <summary>
         /// Gets or sets the initial directory for an open file dialog to open a Hunspell affix file from the <see cref="FormDialogSettings"/> form.
@@ -275,6 +282,44 @@ namespace EasyCardFile.Settings
                 }
 
                 editorHunspellDictionaryPath = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the spell checker should use a custom dictionary (an external assembly) for the spell checking.
+        /// </summary>
+        [IsSetting]
+        public bool EditorSpellUseCustomDictionary { get; set; }
+
+        /// <summary>
+        /// Gets or sets the editor spell custom dictionary (an external assembly) definition file.
+        /// </summary>
+        [IsSetting]
+        public string EditorSpellCustomDictionaryDefinitionFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the editor spell custom dictionary install path.
+        /// </summary>
+        public string EditorSpellCustomDictionaryInstallPath
+        {
+            get
+            {
+                var path = Path.Combine(Paths.GetAppSettingsFolder(), "CustomDictionaries");
+
+                try
+                {
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // log the exception..
+                    ErrorHandlingBase.ExceptionLogAction?.Invoke(ex);
+                }
+
+                return path;
             }
         }
 

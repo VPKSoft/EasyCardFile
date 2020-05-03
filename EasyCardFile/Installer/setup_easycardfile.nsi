@@ -27,7 +27,7 @@ Name "Easy CardFile"
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)" 
-!define VERSION 1.0.0.0
+!define VERSION 1.0.0.1
 !define COMPANY VPKSoft
 !define URL http://www.vpksoft.net
 
@@ -80,7 +80,7 @@ Var StartMenuGroup
 !insertmacro MUI_LANGUAGE Finnish
 
 # Installer attributes
-OutFile setup_easycardfile_1_0_0_0.exe
+OutFile setup_easycardfile_1_0_0_1.exe
 InstallDir "$PROGRAMFILES64\EasyCardFile"
 CRCCheck on
 XPStyle on

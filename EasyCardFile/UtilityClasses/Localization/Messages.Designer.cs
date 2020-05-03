@@ -196,6 +196,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm|A caption text for a confirm dialog.
+        /// </summary>
+        internal static string msgConfirm {
+            get {
+                return ResourceManager.GetString("msgConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm the password to protect the card file.|A user is asked for a confirmation for a password in a dialog (the second time).
         /// </summary>
         internal static string msgConfirmAPassword {
@@ -219,6 +228,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         internal static string msgCopy {
             get {
                 return ResourceManager.GetString("msgCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom spell check library|*.zip|A text in a file dialog filter to indicate a custom spell checker library in a compressed zip package.
+        /// </summary>
+        internal static string msgCustomSpellCheckerZipFile {
+            get {
+                return ResourceManager.GetString("msgCustomSpellCheckerZipFile", resourceCulture);
             }
         }
         
@@ -327,6 +345,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         internal static string msgDialogSelectAffixFile {
             get {
                 return ResourceManager.GetString("msgDialogSelectAffixFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a spell checker library package|A title for an open file dialog to indicate user that the user is selecting a compressed zip file containing an assembly providing custom spell checking functionality.
+        /// </summary>
+        internal static string msgDialogSelectCustomSpellChecker {
+            get {
+                return ResourceManager.GetString("msgDialogSelectCustomSpellChecker", resourceCulture);
             }
         }
         
@@ -610,6 +637,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to N/A|A message indicating a none value.
+        /// </summary>
+        internal static string msgNA {
+            get {
+                return ResourceManager.GetString("msgNA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New {0}|A text for a new file name or a new card file internal name..
         /// </summary>
         internal static string msgNewCardFileName {
@@ -723,6 +759,15 @@ namespace EasyCardFile.UtilityClasses.Localization {
         internal static string msgQueryConfirmDeleteCard {
             get {
                 return ResourceManager.GetString("msgQueryConfirmDeleteCard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Really remove spell check library &apos;{0}&apos; ({1}) ?|A message confirming that the user is removing a custom spell checker library.
+        /// </summary>
+        internal static string msgQueryDeleteSpellCheckLibrary {
+            get {
+                return ResourceManager.GetString("msgQueryDeleteSpellCheckLibrary", resourceCulture);
             }
         }
         

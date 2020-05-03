@@ -657,7 +657,10 @@ namespace EasyCardFile.CardFileHandler
         /// </summary>
         public void RefreshCardList()
         {
+            var previousValue = SuspendCardChanged;
+            SuspendCardChanged = true;
             ListBoxCards?.RefreshItems();
+            SuspendCardChanged = previousValue;
         }
 
         /// <summary>
