@@ -36,6 +36,7 @@ using EasyCardFile.CardFileHandler.LegacyCardFile;
 using EasyCardFile.Database.Entity.Enumerations;
 using EasyCardFile.Settings;
 using EasyCardFile.UtilityClasses.Constants;
+using EasyCardFile.UtilityClasses.ErrorHandling;
 using EasyCardFile.UtilityClasses.FileAssociation;
 using EasyCardFile.UtilityClasses.Localization;
 using EasyCardFile.UtilityClasses.Miscellaneous;
@@ -72,6 +73,9 @@ namespace EasyCardFile
             PositionForms.Add(this);
 
             InitializeComponent();
+
+            // add exception handling for classes implementing the ErrorHandlingBase exception handling..
+            ErrorHandlingBase.ExceptionLogAction = ExceptionLogAction;
 
             // ReSharper disable once StringLiteralTypo
             DBLangEngine.DBName = "localization.sqlite"; // Do the VPKSoft.LangLib == translation..
@@ -128,7 +132,6 @@ namespace EasyCardFile
 
             CreateRecentFilesMenu();
         }
-
         #region PublicAndInternalProperties
         /// <summary>
         /// Gets the application settings.
@@ -143,6 +146,12 @@ namespace EasyCardFile
         #endregion
 
         #region InternalEvents
+        private void ExceptionLogAction(Exception ex)
+        {
+            // log a delegated exceptions..
+            ExceptionLogger.LogError(ex);
+        }
+
         private void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
         {
             SystemEvents.SessionEnding -= SystemEvents_SessionEnding;
